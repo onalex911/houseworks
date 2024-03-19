@@ -1,43 +1,37 @@
 public class hw1803 {
     public static void main(String[] args){
-        byte colRow = 8;
-        byte colCol = (byte) (colRow*2 - 1);
-        byte zvStart = colRow;
-        byte zvEnd = (byte)(colRow - 1);
 
         //равнобедренный треугольник
+        byte colRow = 8; //кол-во строк
+        byte zvStart = colRow; //начальная позиция, с которой будем рисовать звездочки
+        byte zvEnd = (byte)(colRow - 1);//упредительное уменьшение конечной позиции
         for(byte i = 0; i < colRow; i++){
             zvStart--;
             zvEnd++;
-            for (byte j = 0; j < colCol; j++) {
-                 if(j<zvStart)
+            for (byte j = 0; j < zvEnd; j++) {
+                 if(j<zvStart) //до начала звездочек рисуем пробелы
                      System.out.print(" ");
-                 else if(j<zvEnd)
+                 else //рисуем звездочки до конечной позиции
                      System.out.print("*");
-                 else
-                     continue;
             }
             System.out.println();
         }
         System.out.println("----------------------");
+
         //прямоугольный треугольник
         colRow = 7;
-        for (byte i = 0; i < colRow;){
-            ++i;
-            for (byte j = 0; j < i ; j++)
+        for (byte i = 0; i < colRow; i++){
+            for (byte j = 0; j <= i; j++)
                 System.out.print("*");
-
             System.out.println();
         }
         System.out.println("----------------------");
-        //прямоугольный треугольник основанием вверх
-        //нак
-        colRow = 7;
-        for (byte i = 0; i < colRow;){
-            for (byte j = 0; j < (colRow - i) ; j++)
-                System.out.print("*");
 
-            i++;
+        //прямоугольный треугольник основанием вверх
+        //colRow = 7;
+        for (byte i = 0; i < colRow; i++){
+            for (byte j = 0; j < (colRow - i); j++)
+                System.out.print("*");
             System.out.println();
         }
         System.out.println("----------------------");
@@ -53,8 +47,9 @@ public class hw1803 {
             System.out.println();
         }
         System.out.println("----------------------");
+
         //линия, наклоненная вправо
-        colRow = 8;
+        //colRow = 8;
         for (byte i = 0; i < colRow;){
             for (byte j = 0; j < (colRow - i) ; j++) {
                 char s = j < (colRow - i - 1) ? ' ' : '*';
@@ -67,24 +62,38 @@ public class hw1803 {
 
         //ромб
         colRow = 17;
-        zvStart = (byte)((colRow+1)/2);
-        zvEnd = (byte)(zvStart - 1);
+        byte mid = (byte)((colRow+1)/2); //кол-во символов от начала до середины фигуры
+        zvStart = mid; //начальная позиция, с которой будем рисовать звездочки
+        zvEnd = (byte)(mid - 1); //упредительное уменьшение конечной позиции
         for(byte i = 0; i < colRow; i++){
-
-            zvStart = (i < (colRow+1)/2) ? (byte) (zvStart - 1) : (byte) (zvStart + 1);
-            zvEnd = (i < (colRow+1)/2) ? (byte) (zvEnd + 1) : (byte) (zvEnd - 1);
-
-            for (byte j = 0; j < colRow; j++) {
-                if(j<zvStart)
+            if(i < mid){ //ромб расширяется
+                zvStart--;
+                zvEnd++;
+            }
+            else { //ромб сужается
+                zvStart++;
+                zvEnd--;
+            }
+            //рисуем пробелы до начальной позиции звездочек
+            for (byte j = 0; j < zvEnd; j++) {
+                if(j<zvStart) //до начала звездочек рисуем пробелы
                     System.out.print(" ");
-                else if(j<zvEnd)
+                else //рисуем звездочки до конечной позиции
                     System.out.print("*");
-                else
-                    continue;
             }
             System.out.println();
         }
-//        System.out.println((byte)(colRow / 2));
         System.out.println("----------------------");
+
+        //прямоугольник
+        zvEnd = 5; //кол-во звездочек в ряду
+        colRow = 8; //кол-во рядов
+        for (byte i = 0; i < colRow; i++) {
+            for (byte j = 0; j < zvEnd; j++) {
+                if(j > 0) System.out.print(" "); //ставим пробел перед любой звездочкой, кроме первой
+                System.out.print("*");
+            }
+            System.out.println();
+        }
     }
 }
