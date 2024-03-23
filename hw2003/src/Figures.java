@@ -26,40 +26,39 @@ public class Figures {
             else if(height%2 == 0)
                 System.out.println("ОШИБКА! Введено четное число строк.");
             else{
-                byte end = (byte)(height - 1); //предпоследняя позиция (для расчета ширины)
                 byte kolFig = typeFigure == 0 ? max : 1;
                 byte k = 0;
                 while(++k <= kolFig){
                     if(kolFig > 1) typeFigure = k;
-                    byte i = -1;
-                    while(++i < height){
-                        byte width = 0; //ширина фигуры
-                        byte start = 0; //начальная позиция, с которой начинается левый край фигуры
+                    byte i = 0;
+                    while(++i <= height){
+                        byte width = 1; //ширина фигуры
+                        byte start = 1; //начальная позиция, с которой начинается левый край фигуры
                         switch (typeFigure) {
                             //прямоугольный треугольник вершиной вверх
-                            case 1: width = i;
-                                break;
+                            case 1: width = i;//(byte)(i-1);
+                                    break;
                             //прямоугольный треугольник вершиной вниз
-                            case 2: width = (byte)(end - i);
-                                break;
+                            case 2: width = (byte)(height + 1 - i);
+                                    break;
                             //равнобедренный треугольник вершиной вверх
-                            case 3: width = (byte)(end + i);
-                                start = (byte)(end - i);
-                                break;
+                            case 3: width = (byte)(height + i - 1);
+                                    start = (byte)(height + 1 - i);
+                                    break;
                             //равнобедренный треугольник вершиной вниз
-                            case 4: width = (byte)(2*end - i);
-                                start = i;
-                                break;
+                            case 4: width = (byte)(2*height - i);
+                                    start = i;
+                                    break;
                             //ромб
-                            case 5: byte delta = i <= end/2 ? i : (byte)(end - i);
-                                width = (byte)(end/2 + delta);
-                                start = (byte)(end/2 - delta);
-                                break;
+                            case 5: byte delta = i <= (height/2 + 1) ? (byte)(i - 1) : (byte)(height - i);
+                                    width = (byte)(height/2 + 1 + delta);
+                                    start = (byte)(height/2 + 1 - delta);
+                                    break;
                         }
                         //рисуем одну строку
-                        byte j = -1;
+                        byte j = 0;
                         while(++j < width){
-                            if (j < start || (!filled && j > start) && ( i > 0 && i < height - 1))
+                            if (j < start || (!filled && j > start) && ( i > 1 && i < height))
                                 System.out.print(spacer);
                             else
                                 System.out.print(filler);
