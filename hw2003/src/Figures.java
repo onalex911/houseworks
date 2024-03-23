@@ -4,34 +4,34 @@ public class Figures {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Выберите номер фигуры, которую требуется нарисовать:");
-        System.out.println(" 1 - прямоугольный треугольник вершиной вверх");
-        System.out.println(" 2 - прямоугольный треугольник вершиной вниз");
-        System.out.println(" 3 - равнобедренный треугольник вершиной вверх");
-        System.out.println(" 4 - равнобедренный треугольник вершиной вниз");
-        System.out.println(" 5 - ромб");
+        System.out.println(" 1 - прямоугольный треугольник вершиной вверх;");
+        System.out.println(" 2 - прямоугольный треугольник вершиной вниз;");
+        System.out.println(" 3 - равнобедренный треугольник вершиной вверх;");
+        System.out.println(" 4 - равнобедренный треугольник вершиной вниз;");
+        System.out.println(" 5 - ромб.");
         byte typeFigure = sc.nextByte();
         boolean filled;
         char filler = '*';//символ "заполнитель" фигуры
         char spacer = ' ';//символ "пустоты"
 
         if(typeFigure > 0 && typeFigure <=5){
-            System.out.println("Фигура должна быть закрашена?\n 0 (и меньше) - нет\n 1 (и больше) - да");
+            System.out.println("Фигура должна быть закрашена?\n 0 (и меньше) - нет\n 1 (и больше) - да:");
             filled = sc.nextByte() > 0;
             String nech = typeFigure >= 3 ? "нечетное " : "";
             System.out.print("Введите кол-во строк для высоты фигуры ("+nech+"число от 3 до 99):");
             byte height = sc.nextByte();
             if(height < 3 || height > 99){
-                System.out.println("ОШИБКА! Введено неверное число строк");
+                System.out.println("ОШИБКА! Введено неверное число строк.");
             }else{
                 if(typeFigure >=3 && height%2 == 0){
-                    System.out.println("ВНИМАНИЕ! Вы ввели четное число ("+typeFigure+"). Оно будет уменьшено на 1-цу");
+                    System.out.println("ВНИМАНИЕ! Вы ввели четное число ("+height+"). Оно будет уменьшено на 1-цу.");
                     height--; //уменьшаем значение на 1, если введено четное число
                 }
                 int i = -1;
+                int end = height - 1; //предпоследняя позиция (для расчета ширины)
                 while(++i < height){
-                    int width = 0;
-                    int start = 0;
-                    int end = height - 1;
+                    int width = 0; //ширина фигуры
+                    int start = 0; //начальная позиция, с которой начинается левый край фигуры
                     switch (typeFigure) {
                         //прямоугольный треугольник вершиной вверх
                         case 1: width = i;
@@ -65,6 +65,6 @@ public class Figures {
                 }
             }
         }else
-            System.out.println("ОШИБКА! Введен неверный номер фигуры");
+            System.out.println("ОШИБКА! Введен неверный номер фигуры.");
     }
 }
