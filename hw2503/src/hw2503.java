@@ -27,7 +27,8 @@ public class hw2503 {
             byte height = sc.nextByte();
             if(height < 3 || height > 99)
                 System.out.println("ОШИБКА! Введено неверное число строк.");
-            else if(height%2 == 0)
+//            else if(height%2 == 0)
+            else if(typeFigure > 4 && height%2 == 0)
                 System.out.println("ОШИБКА! Введено четное число строк.");
             else{
                 byte end = (byte)(height - 1); //предпоследняя позиция (для расчета ширины)
@@ -48,11 +49,12 @@ public class hw2503 {
                             case 2: width = (byte)(end - i);
                                 break;
                             //прямоугольный треугольник вершиной вверх, верт. справа
-                            case 3: width = i;
-                                    start = i;
+                            case 3: width = end;
+                                    start = (byte)(end - i);
                                 break;
                             //прямоугольный треугольник вершиной вниз, верт. справа
-                            case 4: width = (byte)(end - i);
+                            case 4: width = end;
+                                    start = i;
                                 break;
                             //равнобедренный треугольник вершиной вверх
                             case 5: width = (byte)(end + i);
@@ -64,12 +66,11 @@ public class hw2503 {
                                 break;
                             //равнобедренный треугольник вершиной вправо
                             case 7: delta = i <= end/2 ? i : (byte)(end - i);
-                                width = (byte)(end/2 + delta);
-                                start = (byte)(end/2 - delta);
+                                width = delta;
                                 break;
                             //равнобедренный треугольник вершиной влево
                             case 8: delta = i <= end/2 ? i : (byte)(end - i);
-                                width = (byte)(end/2 + delta);
+                                width = (byte)(end/2);
                                 start = (byte)(end/2 - delta);
                                 break;
                             //ромб
@@ -77,8 +78,6 @@ public class hw2503 {
                                 width = (byte)(end/2 + delta);
                                 start = (byte)(end/2 - delta);
                                 break;
-                            default:
-                                System.out.printf("Нет фигуры с номером %d!",typeFigure);
                         }
                         //рисуем одну строку
                         byte j = 0;
