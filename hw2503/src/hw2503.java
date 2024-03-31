@@ -28,11 +28,11 @@ public class hw2503 {
             else{
                 byte end = (byte)(height - 1); //предпоследняя позиция (для расчета ширины)
                 byte kolFig = typeFigure == 0 ? max : 1;
-                byte k = 0;
-                while(++k <= kolFig){
+                byte k = 1;
+                do{
                     if(kolFig > 1) typeFigure = k;
-                    byte i = -1;
-                    while(++i < height){
+                    byte i = 0;
+                    do{
                         byte width = 0; //ширина фигуры
                         byte start = 0; //начальная позиция, с которой начинается левый край фигуры
                         switch (typeFigure) {
@@ -55,19 +55,22 @@ public class hw2503 {
                                 width = (byte)(end/2 + delta);
                                 start = (byte)(end/2 - delta);
                                 break;
+                            default:
+                                System.out.printf("Нет фигуры с номером %d!",typeFigure);
                         }
                         //рисуем одну строку
-                        byte j = -1;
-                        while(++j < width){
+                        byte j = 0;
+                        do{
+                            if(width == 0) break; //пропускаем шаг с "нулевой" шириной, т.к. у нас в любом случае рисуется один заполнитель (стр. 70)
                             if (j < start || (!filled && j > start) && ( i > 0 && i < height - 1))
                                 System.out.print(spacer);
                             else
                                 System.out.print(filler);
-                        }
+                        }while(++j < width);
                         System.out.println(filler); //любая строка любой фигуры заканчивается "заполнителем"
-                    }
+                    }while(++i < height);
                     System.out.println();
-                }
+                }while(++k <= kolFig);
             }
         }else
             System.out.println("ОШИБКА! Введен неверный номер фигуры.");
