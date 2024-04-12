@@ -1,69 +1,74 @@
 package hw0304;
 
+import java.util.Random;
+
 public class MySort2 {
-    public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        System.out.print("Enter array length: ");
-//        int len = sc.nextInt();
-        int len = 5;
-        int[] arr = {15,9,-8,10,9};
-        int[] ind = new int[len];
-        int[] out = new int[len];
+    static final int[] inArr = new int[10];// = {400,-1,56,-20,-1};
+    static int[] ind = new int[inArr.length];
+    static final int incredible = -1;
 
-//        Random rnd = new Random();
-//        for (int i = 0; i < len; i++) {
-//            arr[i] = rnd.nextInt(5) + rnd.nextInt(5) - rnd.nextInt(10);
-//            System.out.printf("%d ",arr[i]);
-//        }
-        //инициализация массива индексов
-        for (int i = 0; i < len; i++) {
-            ind[i] = -1;
-        }
-        int min, max;
-        if(arr[0] < arr[arr.length-1]){
-            min = arr[arr.length-1];
-            max = arr[0];
-        }else{
-            min = arr[0];
-            max = arr[arr.length-1];
-        }
-        int x = 0; int y = len-1;
-        boolean exists = false;
-        boolean even = len%2 == 0;
-        for (int i = 0; i < len; i++) { //обход всего массива поэлементно
-            if(i<len-1) {
-                for (int j = 0; j < len; j++) {
-                    //if(i==j) continue;
-                    for (int k = 0; k < len; k++) {
-                        if (ind[k] == i) {
-                            exists = true;
-                            break;
-                        }
-                    }
-                    if (exists) continue;
-                    if (arr[j] < min) {
-                        min = arr[j];
-                        ind[x] = j;
-                    } else if (arr[j] > max) {
-                        max = arr[j];
-                        ind[y] = j;
-                    }
-                }
-                out[x++] = min;
-                out[y--] = max;
-                max = (min + max) - (min = max);
-            }else{
-                out[x]=arr[i];
-                break;
+    //абсолютно максимальное значение
+    static final int absMax = 50; // Integer.MAX_VALUE;
+    static int count = 0;
+
+    //возвращает индекс минимального значения массива за вычетом уже найденных минимальных значений
+    static int getIndMin(){
+        int min = absMax;
+        int indMin = 0;
+        for (int i = 0; i < inArr.length; i++) {
+            if(isInInd(i)) continue;
+            if(inArr[i]<=min) {
+                min = inArr[i];
+                indMin = i;
             }
+            count++;
         }
-        //System.out.printf("\nmin = %d, max = %d\n",min,max);
-        for (int i = 0; i < len; i++)
-            System.out.printf("%d ",ind[i]);
-        System.out.println();
-        for (int i = 0; i < len; i++)
-            System.out.printf("%d ",out[i]);
+        return indMin;
+    }
 
+    //проверяет, имеется ли указанный индекс в массиве индексов
+    static boolean isInInd(int index){
+        for (int i = 0; i < ind.length; i++) {
+            if(ind[i] == incredible)
+                return false;
+            if (ind[i] == index)
+                return true;
+            count++;
+        }
+        return false;
+    }
 
+    public static void main(String[] args) {
+
+        int[] outArr = new int[inArr.length]; //выходной массив
+
+        //инициализируем массив индексов "невозможными" значениями
+        for (int i = 0; i < ind.length; i++) {
+            ind[i] = incredible;
+            count++;
+        }
+
+        //заполняем исходный массив случайными значениями
+        int maxVal = absMax;
+        Random rnd = new Random();
+        System.out.println("исходный массив: ");
+        for (int i = 0; i < inArr.length; i++) {
+            inArr[i] = rnd.nextInt(maxVal) - rnd.nextInt(maxVal);
+            System.out.printf("%d ",inArr[i]);
+        }
+
+        //заполняем массив индексов значениями позиций минимальных членов
+        for (int i = 0; i < inArr.length; i++) {
+            ind[i] = getIndMin();
+            count++;
+        }
+
+        System.out.println("\nрезультат сортировки: ");
+        for (int i = 0; i < ind.length; i++) {
+            outArr[i] = inArr[ind[i]];
+            System.out.printf("%d ",outArr[i]);
+        }
+
+        System.out.println("\n\ncount = "+count);
     }
 }
