@@ -12,6 +12,7 @@ public class MySort1 {
         int incredible = -1;
         for (int i = 0; i < ind.length; i++) {
             ind[i]= incredible;
+            count++;
         }
 
         //заполняем исходный массив случайными значениями
@@ -20,7 +21,7 @@ public class MySort1 {
         System.out.println("исходный массив: ");
         for (int i = 0; i < inArr.length; i++) {
             inArr[i] = rnd.nextInt(maxVal) - rnd.nextInt(maxVal);
-            System.out.printf("%d, ",inArr[i]);
+            System.out.printf("%d ",inArr[i]);
         }
         //находим максимальное значение массива и записываем его индекс...
         int arrMax = inArr[0];
