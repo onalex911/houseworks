@@ -1,19 +1,19 @@
-import java.util.Random;
-
 public class Cell {
     int x;
     int y;
     private Coord coord;
     private char state;
     private boolean complete;
-    private char[] hip;
+    //private char[] hip;
+    private Hypothesis hyps;
 
     private static int countReduce = 0;
     public static int countReducedHips = 0;
 
     {
-        hip = new char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9'};// Field.digits;
+        //hip = new char[]{'1', '2', '3', '4', '5', '6', '7', '8', '9'};// Field.digits;
         complete = false;
+        hyps = new Hypothesis();
         state = '.';
         //countReduce = 0;
     }
@@ -45,7 +45,7 @@ public class Cell {
         return complete;
     }
 
-    public char[] getHip() {
+    /*public char[] getHip() {
         return hip;
     }
 
@@ -90,9 +90,9 @@ public class Cell {
                 return true;
         }
         return false;
-    }
+    }*/
 
-    private boolean isNeighborsHip(char val, Field field) {
+    /*private boolean isNeighborsHip(char val, Field field) {
         int k = 0;
         Cell nc;
         for (int i = 0; i < 3; i++) {
@@ -114,31 +114,61 @@ public class Cell {
             if (hip[i] != '.' && !isNeighborsHip(hip[i], field))
                 return hip[i];
         return '.';
-    }
+    }*/
 
-    public boolean reduceHip(boolean notFirst, Field field) {
+    public boolean reduceHyps(boolean notFirst, Field field) {
         if (++Cell.countReduce >= 10) return false; //заготовка для рекурсии
 
         if (!complete) {
-            for (int i = 0; i < hip.length; i++) {
-                char curVal = hip[i];
+            for (int i = 0; i < hyps.getSize(); ) {
+                char curVal = hyps.getHyps()[i];
                 int a = x / 3;
                 int b = y / 3;
+                int remaindHyps = Field.sizeX;
                 if (Coord.isStatused(Line.checkNumber(y, false, curVal, field))) {
-                    delHip(curVal);
+                    remaindHyps = hyps.delHyp(curVal);
                 } else if (Coord.isStatused(Line.checkNumber(x, true, curVal, field))) {
-                    delHip(curVal);
+                    remaindHyps = hyps.delHyp(curVal);
                 } else if (Coord.isStatused(Square.checkNumber(a, b, curVal, field))) {
-                    delHip(curVal);
+                    remaindHyps = hyps.delHyp(curVal);
+                } else if (notFirst) {
+//                    CoordArray coordsHor = Line.checkHyps(y, false, getHypStr(), field);
+//                    int removedInHor = 0;
+//                    if (coordsHor.getSize() >1 && coordsHor.getSize() == hyps.getSize()) {
+//                        removedInHor = Line.removeDoubleHyps(y, false, coordsHor, field);
+//                    }
+//                    int removedInVert = 0;
+//                    CoordArray coordsVert = Line.checkHyps(x, true, getHypStr(), field);
+//                    if (coordsVert.getSize() >1 && coordsVert.getSize() == hyps.getSize()) {
+//                        removedInVert = Line.removeDoubleHyps(x, true, coordsVert, field);
+//                    }
+                    int removedInSquare = 0;
+                    String curHypStr =  getHypStr();
+                    CoordArray coords = Square.checkHyps(a, b,curHypStr, field);
+                    if (coords.getSize() >1 && coords.getSize() == hyps.getSize()) {
+                        removedInSquare = Square.removeDoubleHyps(a, b, coords, field);
+                    }
+//                    if (removedInHor > 0)
+//                        System.out.printf("удалено неочевидных гипотез в горизонтали %d - %d",y,removedInHor);
+//                    if (removedInVert > 0)
+//                        System.out.printf("удалено неочевидных гипотез в вертикали %d - %d",x,removedInVert);
+                    if (removedInSquare > 0) {
+                        System.out.printf("удалено неочевидных гипотез в квадрате (%d,%d) - %d", a, b, removedInSquare);
+                        return true;
+                    }
                 }
-                Square curSquare = new Square(a, b, field);
-                //Cell[] freeCells = curSquare.getFreeCells().getArr();
-                if (curSquare.getFreeCells().getSize() == 1) {
-                    curSquare.getArrayCell(0).checkLastHip();
-                    if (complete)
-                        countReducedHips++;
-                    System.out.println("Уст: " + state + "!!!");
-                } else {
+                if (remaindHyps == 1) {
+                    complete = true;
+
+//                Square curSquare = new Square(a, b, field);
+//                //Cell[] freeCells = curSquare.getFreeCells().getArr();
+//                if (curSquare.getFreeCells().getSize() == 1) {
+//                    curSquare.getArrayCell(0).hyps.checkLastHip();
+//                    if (complete)
+                    countReducedHips++;
+//                    System.out.println("Уст: " + state + "!!!");
+                } else if (remaindHyps == Field.sizeX) {
+                    i++;
 //                    if (notFirst && curVal != '.') {
 //                        System.out.println("проверка соседей x="+x+", y="+y+" на "+curVal);
 //                        char uniq = getUniqHip(field);
@@ -154,14 +184,20 @@ public class Cell {
         return complete;
     }
 
-    public static int countIncompleteLines(Cell[][] field) {
-        int count = 0;
-        for (int i = 0; i < Field.sizeY; i++) {
-            if (Line.getFreeCells(i, false, field).getSize() > 0)
-                count++;
-        }
-        return count;
+//    public static int countIncompleteLines(Cell[][] field) {
+//        int count = 0;
+//        for (int i = 0; i < Field.sizeY; i++) {
+//            if (Line.getFreeCells(i, false, field).getSize() > 0)
+//                count++;
+//        }
+//        return count;
+//    }
+
+    public String getHypStr() {
+        return hyps.getHypStr();
     }
 
-
+    public Hypothesis getHyps() {
+        return hyps;
+    }
 }

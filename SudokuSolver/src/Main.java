@@ -1,5 +1,3 @@
-import java.util.Random;
-
 class Field {
     public static final int sizeX = 9;
     public static final int sizeY = 9;
@@ -147,14 +145,17 @@ public class Main {
 //            }
             for (int i = startY; i < endY; i++) {
                 for (int j = startX; j < endX; j++) {
-                    Cell curCell = cells.getCell(i,j);
+                    Cell curCell = cells.getCell(j,i);
                     if (!curCell.isComplete()) {
-                        if (curCell.reduceHip(notFirst,cells)) {
+                        System.out.printf("x = %d, y = %d before: ", curCell.getCoord().getX(), curCell.getCoord().getY());
+                        System.out.println(curCell.getHypStr());
+                        if (curCell.reduceHyps(notFirst,cells) || curCell.getHyps().getLastHyp() != '.'){
+                                curCell.setState(curCell.getHyps().getLastHyp());
                             System.out.println("Уст: " + curCell.getState() + "! reduced: " + ++Cell.countReducedHips);
                             toReduce--;
                         }
-                        System.out.printf("x = %d, y = %d: ", curCell.getCoord().getX(), curCell.getCoord().getY());
-                        System.out.println(curCell.getHip());
+                        System.out.printf("x = %d, y = %d after: ", curCell.getCoord().getX(), curCell.getCoord().getY());
+                        System.out.println(curCell.getHypStr());
                     }
                 }
             }
