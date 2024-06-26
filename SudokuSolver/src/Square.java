@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Square {
     private Coord sqCoord;
     private boolean complete;
@@ -44,15 +47,36 @@ public class Square {
         this.complete = complete;
     }
 
-//    private Cell[] add(Cell[] array,Cell cell){
-//        int newLength = array.length+1;
-//        Cell[] out = new Cell[newLength];
-//        for (int i = 0; i < array.length; i++) {
-//            out[i] = array[i];
-//        }
-//        out[array.length] = cell;
-//        return out;
-//    }
+    public static boolean isComplete(int a, int b, Field field) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int posX = j + a * 3;
+                int posY = i + b * 3;
+                if (!field.getCells()[posY][posX].isComplete()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean isCorrect(int a, int b, Field field) {
+        if (isComplete(a, b, field)) {
+            List<Integer> values = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    int posX = j + a * 3;
+                    int posY = i + b * 3;
+                    Cell curCell = field.getCells()[posY][posX];
+                    if (values.contains((int) curCell.getState()))
+                        return false;
+                    values.add((int) curCell.getState());
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
     public static Coord checkNumber(int a, int b, char val, Field field) {
         int x = -1;

@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Line {
     private int num; //позиция линии по горизонтали или по вертикалих [0-8]
     private boolean complete;
@@ -24,6 +27,35 @@ public class Line {
             }
         }
         return new Coord(x, y);
+    }
+
+
+    public static boolean isComplete(int pos, boolean isVert, Field field) {
+
+        for (int i = 0; i < Field.sizeX; i++) {
+            int x = isVert ? pos : i;
+            int y = isVert ? i : pos;
+            Cell curCell = field.getCell(x, y);
+            if (!curCell.isComplete())
+                return false;
+        }
+        return true;
+    }
+
+    public static boolean isCorrect(int pos, boolean isVert, Field field) {
+        if (isComplete(pos,isVert,field)) {
+            List<Integer> values = new ArrayList<>();
+            for (int i = 0; i < Field.sizeX; i++) {
+                int x = isVert ? pos : i;
+                int y = isVert ? i : pos;
+                Cell curCell = field.getCell(x, y);
+                if (values.contains((int) curCell.getState()))
+                    return false;
+                values.add((int)curCell.getState());
+            }
+            return true;
+        }
+        return false;
     }
 
     public static CoordArray checkHyps(int pos, boolean isVert, String hypStr, Field field) {
@@ -53,18 +85,18 @@ public class Line {
         for (int i = 0; i < limit; i++) {
             int posX = isVert ? pos : i;
             int posY = isVert ? i : pos;
-            if(field.getCells()[posY][posX].isComplete()) continue;
+            if (field.getCells()[posY][posX].isComplete()) continue;
             Coord curCoord = new Coord(posX, posY);
             for (int j = 0; j < coords.getSize(); j++) {
                 if (Coord.compareCoords(curCoord, coords.getArr()[j])) continue;
                 //if (!Coord.compareCoords(coords.getArr()[j], curCoord)) {
-                    Hypothesis curCellHyps = field.getCells()[posY][posX].getHyps();
-                    for (int k = 0; k < fixHips.getSize(); k++) {
-                        if (curCellHyps.isValInHyps(fixHips.getHyps()[k])) {
-                            curCellHyps.delHyp(fixHips.getHyps()[k]);
-                            removes++;
-                        }
+                Hypothesis curCellHyps = field.getCells()[posY][posX].getHyps();
+                for (int k = 0; k < fixHips.getSize(); k++) {
+                    if (curCellHyps.isValInHyps(fixHips.getHyps()[k])) {
+                        curCellHyps.delHyp(fixHips.getHyps()[k]);
+                        removes++;
                     }
+                }
                 //}
             }
         }

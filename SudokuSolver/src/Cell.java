@@ -115,7 +115,7 @@ public class Cell {
     }
 
     public boolean reduceHyps(boolean notFirst, Field field) {
-        if (++Cell.countReduce >= 10) return false; //заготовка для рекурсии
+       // if (++Cell.countReduce >= 10) return false; //заготовка для рекурсии
 
         if (!complete) {
             for (int i = 0; i < hyps.getSize(); ) {
@@ -131,15 +131,15 @@ public class Cell {
                     remaindHyps = hyps.delHyp(curVal);
                 }
 
-                char uniq = getUniqHyp(field);
-                if (uniq != '.') {// && curSquare.isContains(uniq)){
-                    state = uniq;
-                    complete = true;
-                    System.out.println("Уст. " + uniq + " на основании анализа соседей x=" + x + ", y=" + y);
-                    countReducedHips++;
-                    return true;
-                }
                 if (notFirst) {
+                    char uniq = getUniqHyp(field);
+                    if (uniq != '.') {// && curSquare.isContains(uniq)){
+                        state = uniq;
+                        complete = true;
+                        System.out.println("Уст. " + uniq + " на основании анализа соседей x=" + x + ", y=" + y);
+                        countReducedHips++;
+                        return true;
+                    }
 //                    CoordArray coordsHor = Line.checkHyps(y, false, getHypStr(), field);
 //                    int removedInHor = 0;
 //                    if (coordsHor.getSize() > 1 && coordsHor.getSize() == hyps.getSize()) {
