@@ -82,39 +82,37 @@ public class Cell {
             }
         }
         checkLastHip();
-    }
+    }*/
 
-    private boolean isValInHip(char val) {
-        for (int i = 0; i < hip.length; i++) {
-            if (hip[i] == val)
+    private boolean isValInHyps(char val) {
+        for (int i = 0; i < hyps.getSize(); i++) {
+            if (hyps.getHyps()[i] == val)
                 return true;
         }
         return false;
-    }*/
+    }
 
-    /*private boolean isNeighborsHip(char val, Field field) {
-        int k = 0;
+    private boolean isNeighborsHyps(char val, Field field) {
         Cell nc;
         for (int i = 0; i < 3; i++) {
             if (i != x % 3) {
                 nc = field.getCell(x - x % 3 + i, y);
-                if(!nc.isComplete() && nc.isValInHip(val)) k++;
+                if (!nc.isComplete() && nc.isValInHyps(val)) return true;
             }
             if (i != y % 3) {
                 nc = field.getCell(x, y - y % 3 + i);
-                if(!nc.isComplete() && nc.isValInHip(val)) k++;
+                if (!nc.isComplete() && nc.isValInHyps(val)) return true;
             }
         }
-        if (k > 0) return true;
         return false;
     }
 
-    private char getUniqHip(Field field) {
-        for (int i = 0; i < hip.length; i++)
-            if (hip[i] != '.' && !isNeighborsHip(hip[i], field))
-                return hip[i];
+    private char getUniqHyp(Field field) {
+        for (int i = 0; i < hyps.getSize(); i++)
+            if (!isNeighborsHyps(hyps.getHyps()[i], field))
+                return hyps.getHyps()[i];
         return '.';
-    }*/
+    }
 
     public boolean reduceHyps(boolean notFirst, Field field) {
         if (++Cell.countReduce >= 10) return false; //заготовка для рекурсии
@@ -131,52 +129,51 @@ public class Cell {
                     remaindHyps = hyps.delHyp(curVal);
                 } else if (Coord.isStatused(Square.checkNumber(a, b, curVal, field))) {
                     remaindHyps = hyps.delHyp(curVal);
-                } else if (notFirst) {
+                }
+
+                char uniq = getUniqHyp(field);
+                if (uniq != '.') {// && curSquare.isContains(uniq)){
+                    state = uniq;
+                    complete = true;
+                    System.out.println("Уст. " + uniq + " на основании анализа соседей x=" + x + ", y=" + y);
+                    countReducedHips++;
+                    return true;
+                }
+                if (notFirst) {
 //                    CoordArray coordsHor = Line.checkHyps(y, false, getHypStr(), field);
 //                    int removedInHor = 0;
-//                    if (coordsHor.getSize() >1 && coordsHor.getSize() == hyps.getSize()) {
+//                    if (coordsHor.getSize() > 1 && coordsHor.getSize() == hyps.getSize()) {
 //                        removedInHor = Line.removeDoubleHyps(y, false, coordsHor, field);
 //                    }
 //                    int removedInVert = 0;
 //                    CoordArray coordsVert = Line.checkHyps(x, true, getHypStr(), field);
-//                    if (coordsVert.getSize() >1 && coordsVert.getSize() == hyps.getSize()) {
+//                    if (coordsVert.getSize() > 1 && coordsVert.getSize() == hyps.getSize()) {
 //                        removedInVert = Line.removeDoubleHyps(x, true, coordsVert, field);
 //                    }
                     int removedInSquare = 0;
-                    String curHypStr =  getHypStr();
-                    CoordArray coords = Square.checkHyps(a, b,curHypStr, field);
-                    if (coords.getSize() >1 && coords.getSize() == hyps.getSize()) {
+                    String curHypStr = getHypStr();
+                    CoordArray coords = Square.checkHyps(a, b, curHypStr, field);
+                    if (coords.getSize() > 1 && coords.getSize() == hyps.getSize()) {
                         removedInSquare = Square.removeDoubleHyps(a, b, coords, field);
                     }
 //                    if (removedInHor > 0)
-//                        System.out.printf("удалено неочевидных гипотез в горизонтали %d - %d",y,removedInHor);
+//                        System.out.printf("удалено неочевидных гипотез в горизонтали %d - %d", y, removedInHor);
 //                    if (removedInVert > 0)
-//                        System.out.printf("удалено неочевидных гипотез в вертикали %d - %d",x,removedInVert);
+//                        System.out.printf("удалено неочевидных гипотез в вертикали %d - %d", x, removedInVert);
                     if (removedInSquare > 0) {
                         System.out.printf("удалено неочевидных гипотез в квадрате (%d,%d) - %d", a, b, removedInSquare);
                         return true;
                     }
+
                 }
                 if (remaindHyps == 1) {
+                    state = hyps.getLastHyp();
                     complete = true;
+                    return true;
+                }
 
-//                Square curSquare = new Square(a, b, field);
-//                //Cell[] freeCells = curSquare.getFreeCells().getArr();
-//                if (curSquare.getFreeCells().getSize() == 1) {
-//                    curSquare.getArrayCell(0).hyps.checkLastHip();
-//                    if (complete)
-                    countReducedHips++;
-//                    System.out.println("Уст: " + state + "!!!");
-                } else if (remaindHyps == Field.sizeX) {
+                if (remaindHyps == Field.sizeX) {
                     i++;
-//                    if (notFirst && curVal != '.') {
-//                        System.out.println("проверка соседей x="+x+", y="+y+" на "+curVal);
-//                        char uniq = getUniqHip(field);
-//                        if (uniq != '.' && curSquare.isContains(uniq)){
-//                            state = uniq;
-//                            complete = true;
-//                        }
-//                    }
                 }
             }
         }

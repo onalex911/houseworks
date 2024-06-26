@@ -56,7 +56,8 @@ public class Line {
             if(field.getCells()[posY][posX].isComplete()) continue;
             Coord curCoord = new Coord(posX, posY);
             for (int j = 0; j < coords.getSize(); j++) {
-                if (!Coord.compareCoords(coords.getArr()[j], curCoord)) {
+                if (Coord.compareCoords(curCoord, coords.getArr()[j])) continue;
+                //if (!Coord.compareCoords(coords.getArr()[j], curCoord)) {
                     Hypothesis curCellHyps = field.getCells()[posY][posX].getHyps();
                     for (int k = 0; k < fixHips.getSize(); k++) {
                         if (curCellHyps.isValInHyps(fixHips.getHyps()[k])) {
@@ -64,7 +65,7 @@ public class Line {
                             removes++;
                         }
                     }
-                }
+                //}
             }
         }
         return removes;
