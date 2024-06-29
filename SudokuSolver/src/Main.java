@@ -33,6 +33,70 @@ class Field {
         return cells[y][x];
     }
 
+    public static void checkLines(Field field) {
+        for (int i = 0; i < 9; i++) {
+            System.out.print("Проверка строки " + (i + 1) + ": ");
+            switch (Line.isCorrect(i, false, field)) {
+                case -1:
+                    System.out.println("не заполнена");
+                    //System.out.println(Line.print(i, field));
+                    break;
+                case 0:
+                    System.out.println("ОШИБКА!");
+                    //System.out.println(Line.print(i, field));
+                    break;
+                case 1:
+                    System.out.println("Ok!");
+            }
+            System.out.println(Line.print(i, field));
+        }
+    }
+
+    public static CoordArray checkSquares(Field field) {
+        CoordArray out = new CoordArray();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                //System.out.print("Проверка квадрата " + j + ", " + i + ": ");
+//                switch (Square.isCorrect(j, i,field)) {
+//                    case -1:
+//                        System.out.println("не заполнен");
+                        //System.out.println(Line.print(i, field));
+                        if(Square.isCorrect(j, i,field) <0)
+                            out.add(new Coord(j,i));
+//                        break;
+//                    case 0:
+//                        System.out.println("ОШИБКА!");
+//
+//                        break;
+//                    case 1:
+//                        System.out.println("Ok!");
+//                }
+//                System.out.println(Square.print(j,i, field));
+            }
+        }
+        return out;
+    }
+
+    static void deleteHypsLnSq(Cell cell,Field field,boolean sqToo){
+        int x = cell.getCoord().getX();
+        int y = cell.getCoord().getY();
+        char state = cell.getState();
+        for (int i = 0; i < 9; i++) {
+            int posXHor = i; int posYHor = y;
+            int posXVert = x; int posYVert = i;
+            int posA = x-x%3+i%3; int posB=y-y%3+i/3;
+
+            Cell curCell1 = field.getCell(posXHor,posYHor);
+            if(!curCell1.isComplete() && posXHor != x) curCell1.getHyps().delHyp(state);
+            Cell curCell2 = field.getCell(posXVert,posYVert);
+            if(!curCell2.isComplete() && posYVert != y) curCell2.getHyps().delHyp(state);
+            if(sqToo) {
+                Cell curCell3 = field.getCell(posA, posB);
+                if (!curCell3.isComplete() && posA != x && posB != y) curCell3.getHyps().delHyp(state);
+            }
+        }
+    }
+
 //    public static CellArray findVal(char val){
 //        CellArray out = new CellArray();
 //        for (int i = 0; i < sizeY; i++) {
@@ -92,6 +156,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
+   //     System.out.println((char)48);
 /* EXPERT
         char[][] field = new char[][]{
                 {'5', '6', '2', '7', '.', '.', '.', '8', '.'},
@@ -184,6 +249,7 @@ public class Main {
         int count = 0;
         int startX, startY, endX, endY, inc;
         do {
+            System.out.println("Итерация :" + (count) + " ... ");
             int oldCount = toReduce;
             //if(count%2 == 0){
             startX = startY = 0;
@@ -202,7 +268,15 @@ public class Main {
 //                        System.out.println(curCell.getHypStr());
                         if (curCell.reduceHyps(notFirst, cells) && curCell.getHyps().getLastHyp() != '.') {
                             curCell.setState(curCell.getHyps().getLastHyp());
+                            Field.deleteHypsLnSq(curCell,cells,true);
                             System.out.println("Уст: " + curCell.getState() + "! reduced: " + ++Cell.countReducedHips);
+                            Field.checkLines(cells);
+                            CoordArray squaresCoords = Field.checkSquares(cells);
+                            if(squaresCoords.getSize() > 0) {
+                                for (int k = 0; k < squaresCoords.getSize(); k++) {
+                                    Square.forceFill(squaresCoords.getArr()[k].getX(),squaresCoords.getArr()[k].getY(), cells);
+                                }
+                            }
                             toReduce--;
                         }
                         System.out.printf("x = %d, y = %d after: ", curCell.getCoord().getX(), curCell.getCoord().getY());
@@ -210,14 +284,14 @@ public class Main {
                     }
                 }
             }
-            if (count >0 && oldCount == toReduce) {
-                System.out.println("НЕ произошло уменьшение вариантов после " + (count+1) + "-го цикла!");
+            if (count > 0 && oldCount == toReduce) {
+                System.out.println("НЕ произошло уменьшение вариантов после " + (count + 1) + "-го цикла!");
                 break; //какой-то затык...
             }
             notFirst = true;
             count++;
         } while (toReduce > 0);
-        System.out.println("toReduce: " + toReduce+"/"+Cell.countReducedHips);
+        System.out.println("toReduce: " + toReduce + "/" + Cell.countReducedHips);
         /*for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 System.out.println("x="+j+", y="+i+": "+cells.getCells()[i][j].printHip());

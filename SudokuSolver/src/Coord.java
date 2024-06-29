@@ -15,11 +15,23 @@ public class Coord {
         return x;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public int getY() {
         return y;
     }
 
-    public static boolean isStatused(Coord cell) {
+    public boolean isSet() {
+        if (x != -1 || y != -1)
+            return true;
+        return false;
+    }public static boolean isStatused(Coord cell) {
         if (cell.getX() != -1 || cell.getY() != -1)
             return true;
         return false;

@@ -42,20 +42,22 @@ public class Line {
         return true;
     }
 
-    public static boolean isCorrect(int pos, boolean isVert, Field field) {
-        if (isComplete(pos,isVert,field)) {
-            List<Integer> values = new ArrayList<>();
-            for (int i = 0; i < Field.sizeX; i++) {
-                int x = isVert ? pos : i;
-                int y = isVert ? i : pos;
-                Cell curCell = field.getCell(x, y);
+    public static int isCorrect(int pos, boolean isVert, Field field) {
+        //if (isComplete(pos,isVert,field)) {
+        List<Integer> values = new ArrayList<>();
+        for (int i = 0; i < Field.sizeX; i++) {
+            int x = isVert ? pos : i;
+            int y = isVert ? i : pos;
+            Cell curCell = field.getCell(x, y);
+            if (curCell.isComplete()) {
                 if (values.contains((int) curCell.getState()))
-                    return false;
-                values.add((int)curCell.getState());
+                    return 0;
+                values.add((int) curCell.getState());
             }
-            return true;
         }
-        return false;
+        return values.size() == 9 ? 1 : -1;
+        //}
+        //return false;
     }
 
     public static CoordArray checkHyps(int pos, boolean isVert, String hypStr, Field field) {
@@ -113,6 +115,14 @@ public class Line {
             if (!field[posY][posX].isComplete()) {
                 out.add(field[posY][posX]);
             }
+        }
+        return out;
+    }
+
+    public static String print(int pos,Field field){
+        String out = "";
+        for (int i = 0; i < 9; i++) {
+            out += field.getCell(i,pos).getState()+"|";
         }
         return out;
     }

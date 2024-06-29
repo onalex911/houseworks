@@ -60,22 +60,69 @@ public class Square {
         return true;
     }
 
-    public static boolean isCorrect(int a, int b, Field field) {
-        if (isComplete(a, b, field)) {
-            List<Integer> values = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    int posX = j + a * 3;
-                    int posY = i + b * 3;
-                    Cell curCell = field.getCells()[posY][posX];
+    public static int isCorrect(int a, int b, Field field) {
+        //if (isComplete(a, b, field)) {
+        List<Integer> values = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int posX = j + a * 3;
+                int posY = i + b * 3;
+                Cell curCell = field.getCells()[posY][posX];
+                if (curCell.isComplete()) {
                     if (values.contains((int) curCell.getState()))
-                        return false;
+                        return 0;
                     values.add((int) curCell.getState());
                 }
             }
-            return true;
         }
-        return false;
+        return values.size() == 9 ? 1 : -1;
+        // }
+        // return false;
+    }
+
+    public static void forceFill(int a, int b, Field field) {
+        int count = 0;
+        Coord tmp = new Coord(-1, -1);
+        List<Character> statuses = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int posX = j + a * 3;
+                int posY = i + b * 3;
+                Cell curCell = field.getCells()[posY][posX];
+                if (!curCell.isComplete()) {
+                    tmp.setX(posX);
+                    tmp.setY(posY);
+                    count++;
+                } else {
+                    statuses.add(curCell.getState());
+                }
+            }
+        }
+        if (count == 1) {
+            for (int i = 0; i < 9; i++) {
+                if (!statuses.contains((char) (48 + i))) {
+                    if (tmp.isSet()) {
+                        Cell curCell = field.getCells()[tmp.getY()][tmp.getX()];
+                        curCell.setState((char) (48 + i));
+                        curCell.setComplete(true);
+                        Field.deleteHypsLnSq(curCell, field, false);
+                    }
+                }
+            }
+        }
+    }
+
+    public static String print(int a, int b, Field field) {
+        int x = a * 3;
+        int y = b * 3;
+        String out = "";
+        for (int i = y; i < y + 3; i++) {
+            char s1 = field.getCell(x, i).getState();
+            char s2 = field.getCell(x + 1, i).getState();
+            char s3 = field.getCell(x + 2, i).getState();
+            out += " " + s1 + " | " + s2 + " | " + s3 + "\n-----------\n";
+        }
+        return out;
     }
 
     public static Coord checkNumber(int a, int b, char val, Field field) {
