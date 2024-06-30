@@ -59,6 +59,12 @@ public class Main2606 {
         }catch (IndexOutOfBoundsException e){
             System.out.println(e.getMessage());
         }
+        singlLinkedList.RemoveLast();
+        singlLinkedList.RemoveLast();
+//        singlLinkedList.RemoveLast();
+        singlLinkedList.print();
+        singlLinkedList.reverse();
+        singlLinkedList.print();
     }
 }
 
@@ -203,7 +209,27 @@ class SinglLinkedList {
     }
 //        11)void reverse()  reverse data
     public void reverse(){
-        
+        if(head.next != null) { //если список из одного эл-та
+            Node tail = head; //A
+            Node start = head.next; //B
+
+            if (start.next == null) { //если список из 2-х эл-тов
+                head = start;
+                tail.next = null;
+                head.next = tail;
+            }else {
+               Node next = start.next; //C
+
+//                    start.next = tmpHd;
+//                    next.next = start;
+//                    count++;
+//                }
+                head = next;
+                head.next = start;
+                tail.next = null;
+                start.next = tail;
+            }
+        }
     }
 
     public void print() {
