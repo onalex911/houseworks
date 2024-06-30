@@ -59,11 +59,15 @@ public class Main2606 {
         }catch (IndexOutOfBoundsException e){
             System.out.println(e.getMessage());
         }
-        singlLinkedList.RemoveLast();
-        singlLinkedList.RemoveLast();
-//        singlLinkedList.RemoveLast();
+        singlLinkedList.add(70);
+        singlLinkedList.add(80);
+        singlLinkedList.add(90);
+        singlLinkedList.add(100);
+        singlLinkedList.AddByIndex(1,20);
+        System.out.println("Список до реверса:");
         singlLinkedList.print();
         singlLinkedList.reverse();
+        System.out.println("Список после реверса:");
         singlLinkedList.print();
     }
 }
@@ -219,16 +223,19 @@ class SinglLinkedList {
                 tail.next = null;
                 head.next = tail;
             }else {
-               Node next = start.next; //C
+                Node past = head;
+                Node cur = head;
+                boolean isFirst = true;
+                while (cur.next != null) {
+                    Node next = cur.next; //C
+                    cur.next = isFirst ? null : past;
+                    past = cur;
+                    cur = next;
+                    isFirst = false;
 
-//                    start.next = tmpHd;
-//                    next.next = start;
-//                    count++;
-//                }
-                head = next;
-                head.next = start;
-                tail.next = null;
-                start.next = tail;
+                }
+                head = cur;
+                head.next = past;
             }
         }
     }
