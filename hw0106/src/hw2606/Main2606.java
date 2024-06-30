@@ -209,6 +209,7 @@ class SinglLinkedList {
     }
 //        11)void reverse()  reverse data
     public void reverse(){
+
         if(head.next != null) { //если список из одного эл-та
             Node tail = head; //A
             Node start = head.next; //B
