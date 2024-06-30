@@ -59,6 +59,11 @@ public class Main2606 {
         }catch (IndexOutOfBoundsException e){
             System.out.println(e.getMessage());
         }
+        singlLinkedList.RemoveLast();
+        singlLinkedList.RemoveLast();
+        singlLinkedList.RemoveLast();
+        singlLinkedList.reverse();
+        singlLinkedList.print();
     }
 }
 
@@ -203,7 +208,32 @@ class SinglLinkedList {
     }
 //        11)void reverse()  reverse data
     public void reverse(){
-        
+        if(head.next != null) {
+            Node tmpHd = head;
+            Node start = head;
+            Node tail = start.next;
+            while (true) {
+                if (start.next == null) {
+                    head = start;
+                    start = tmpHd;
+                    //head.next = tail;
+                    break;
+                }
+                if (start.next.next == null) {
+                    //tail.next = start;
+                    head = tail;
+                    //head.next=start;
+                    start.next=tmpHd;
+                    break;
+                }
+                Node next = start.next.next;
+                start.next = start;
+                //System.out.print(start.value + " ");
+                start = tail;
+                tail=next;
+            }
+            //start =
+        }
     }
 
     public void print() {
