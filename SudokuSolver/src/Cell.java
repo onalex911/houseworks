@@ -94,13 +94,23 @@ public class Cell {
 
     private boolean isNeighborsHyps(char val, Field field) {
         Cell nc;
-        for (int i = 0; i < 3; i++) {
+        /*for (int i = 0; i < 3; i++) {
             if (i != x % 3) {
                 nc = field.getCell(x - x % 3 + i, y);
                 if (!nc.isComplete() && nc.isValInHyps(val)) return true;
             }
             if (i != y % 3) {
                 nc = field.getCell(x, y - y % 3 + i);
+                if (!nc.isComplete() && nc.isValInHyps(val)) return true;
+            }
+        }*/
+        //проверяем соседей по квадрату на наличие текущего значения в их hyps. Если его там нет, то текущее значение является уникальным для данного квадрата
+        int startX = x - x % 3;
+        int startY = y - y % 3;
+        for (int i = startY; i < startY + 3; i++) {
+            for (int j = startX; j < startX + 3; j++) {
+                if (j == x && i == y) continue;
+                nc = field.getCell(j, i);
                 if (!nc.isComplete() && nc.isValInHyps(val)) return true;
             }
         }
@@ -115,7 +125,7 @@ public class Cell {
     }
 
     public boolean reduceHyps(boolean notFirst, Field field) {
-       // if (++Cell.countReduce >= 10) return false; //заготовка для рекурсии
+        // if (++Cell.countReduce >= 10) return false; //заготовка для рекурсии
 
         if (!complete) {
             for (int i = 0; i < hyps.getSize(); ) {
@@ -136,30 +146,33 @@ public class Cell {
                     if (uniq != '.') {// && curSquare.isContains(uniq)){
                         state = uniq;
                         complete = true;
+                        delInNeighborHypsInSquare(state, field);
+                        delInNeighborHypsInLine(false, state, field);
+                        delInNeighborHypsInLine(true, state, field);
                         System.out.println("Уст. " + uniq + " на основании анализа соседей x=" + x + ", y=" + y);
                         countReducedHips++;
                         return true;
                     }
-//                    CoordArray coordsHor = Line.checkHyps(y, false, getHypStr(), field);
-//                    int removedInHor = 0;
-//                    if (coordsHor.getSize() > 1 && coordsHor.getSize() == hyps.getSize()) {
-//                        removedInHor = Line.removeDoubleHyps(y, false, coordsHor, field);
-//                    }
-//                    int removedInVert = 0;
-//                    CoordArray coordsVert = Line.checkHyps(x, true, getHypStr(), field);
-//                    if (coordsVert.getSize() > 1 && coordsVert.getSize() == hyps.getSize()) {
-//                        removedInVert = Line.removeDoubleHyps(x, true, coordsVert, field);
-//                    }
+                    CoordArray coordsHor = Line.checkHyps(y, false, getHypStr(), field);
+                    int removedInHor = 0;
+                    if (coordsHor.getSize() > 1 && coordsHor.getSize() == hyps.getSize()) {
+                        removedInHor = Line.removeDoubleHyps(y, false, coordsHor, field);
+                    }
+                    int removedInVert = 0;
+                    CoordArray coordsVert = Line.checkHyps(x, true, getHypStr(), field);
+                    if (coordsVert.getSize() > 1 && coordsVert.getSize() == hyps.getSize()) {
+                        removedInVert = Line.removeDoubleHyps(x, true, coordsVert, field);
+                    }
                     int removedInSquare = 0;
                     String curHypStr = getHypStr();
                     CoordArray coords = Square.checkHyps(a, b, curHypStr, field);
                     if (coords.getSize() > 1 && coords.getSize() == hyps.getSize()) {
                         removedInSquare = Square.removeDoubleHyps(a, b, coords, field);
                     }
-//                    if (removedInHor > 0)
-//                        System.out.printf("удалено неочевидных гипотез в горизонтали %d - %d", y, removedInHor);
-//                    if (removedInVert > 0)
-//                        System.out.printf("удалено неочевидных гипотез в вертикали %d - %d", x, removedInVert);
+                    if (removedInHor > 0)
+                        System.out.printf("удалено неочевидных гипотез в горизонтали %d - %d", y, removedInHor);
+                    if (removedInVert > 0)
+                        System.out.printf("удалено неочевидных гипотез в вертикали %d - %d", x, removedInVert);
                     if (removedInSquare > 0) {
                         System.out.printf("удалено неочевидных гипотез в квадрате (%d,%d) - %d", a, b, removedInSquare);
                         return true;
@@ -196,5 +209,33 @@ public class Cell {
 
     public Hypothesis getHyps() {
         return hyps;
+    }
+
+    public void delInNeighborHypsInLine(boolean isVert, char val, Field field) {
+        for (int i = 0; i < 9; i++) {
+            int posX = isVert ? x : i;
+            int posY = isVert ? i : y;
+            if (posX == x && posY == y) continue;
+            Cell curCell = field.getCell(posX, posY);
+            if (!curCell.isComplete()) {
+                curCell.hyps.delHyp(val);
+            }
+
+        }
+    }
+
+    public void delInNeighborHypsInSquare(char val, Field field) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int posX = x - x % 3 + j;
+                int posY = y - y % 3 + i;
+                if (posX == x && posY == y) continue;
+
+                Cell curCell = field.getCell(posX, posY);
+                if (!curCell.isComplete()) {
+                    curCell.hyps.delHyp(val);
+                }
+            }
+        }
     }
 }

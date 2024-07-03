@@ -127,19 +127,7 @@ public class Line {
         return out;
     }
 
-//    public static boolean checkNeighborLines(int pos, boolean isVert, char val) {
-//        int posInSquare = pos % 3;
-//        int match = 0;
-//        for (int i = 0; i < 3; i++) {
-//            int curPos = i + pos - posInSquare;
-//            if (curPos != pos) {
-//                if (Coord.isStatused(Line.checkNumber(curPos, isVert, val)))
-//                    match++;
-//            }
-//        }
-//        if (match == 2) return true;
-//        return false;
-//    }
+
 
 
 }

@@ -216,4 +216,9 @@ public class Square {
 //                System.out.println("------------");
 //        }
 //    }
+    public static Coord getSquareCoords(Cell cell){
+        int a = cell.getCoord().getX()/3;
+        int b = cell.getCoord().getY()/3;
+        return new Coord(a,b);
+    }
 }

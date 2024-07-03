@@ -10,6 +10,15 @@ public class Hypothesis {
         size = hyps.length;
     }
 
+    public Hypothesis() {
+    }
+
+//    public Hypothesis(char[] hyps, int size) {
+//        this.hyps = hyps;
+//        this.size = size;
+//        makeHypStr();
+//    }
+
     public char[] getHyps() {
         return hyps;
     }

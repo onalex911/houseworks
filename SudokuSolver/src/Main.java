@@ -33,23 +33,29 @@ class Field {
         return cells[y][x];
     }
 
-    public static void checkLines(Field field) {
+    public static int checkLines(Field field) {
+        int out = 0;
         for (int i = 0; i < 9; i++) {
             System.out.print("Проверка строки " + (i + 1) + ": ");
             switch (Line.isCorrect(i, false, field)) {
                 case -1:
                     System.out.println("не заполнена");
                     //System.out.println(Line.print(i, field));
+                    //out = false;
                     break;
                 case 0:
                     System.out.println("ОШИБКА!");
                     //System.out.println(Line.print(i, field));
+                    out = -1;
                     break;
                 case 1:
                     System.out.println("Ok!");
+                    out = 1;
             }
             System.out.println(Line.print(i, field));
+            if(out < 0) return out;
         }
+        return out;
     }
 
     public static CoordArray checkSquares(Field field) {
@@ -171,7 +177,7 @@ public class Main {
         };
 */
 //Hevy
-        /*char[][] field = new char[][]{
+       /* char[][] field = new char[][]{
                 {'8', '1', '.', '.', '.', '.', '.', '.', '9'},
                 {'.', '7', '.', '.', '.', '.', '1', '.', '.'},
                 {'5', '.', '.', '9', '.', '1', '.', '.', '2'},
@@ -196,7 +202,7 @@ public class Main {
         };*/
         //Middle
         char[][] field = new char[][]{
-//                0    1    2  | 3    4    5  | 6    7    8
+////                0    1    2  | 3    4    5  | 6    7    8
                 {'4', '8', '3', '.', '6', '9', '.', '.', '1'},//0
                 {'.', '6', '9', '.', '.', '7', '.', '2', '4'},//1
                 {'.', '.', '2', '4', '.', '.', '.', '.', '8'},//2_
@@ -207,7 +213,7 @@ public class Main {
                 {'8', '.', '.', '1', '.', '.', '2', '9', '.'},//7
                 {'6', '.', '.', '8', '.', '.', '4', '7', '3'},//8
         };
-        /*char[][] field = new char[][]{
+        /* OK! char[][] field = new char[][]{
                 {'1', '8', '2', '.', '.', '6', '.', '.', '.'},
                 {'9', '7', '4', '1', '.', '.', '.', '5', '.'},
                 {'.', '3', '.', '.', '7', '.', '1', '9', '.'},
@@ -218,7 +224,7 @@ public class Main {
                 {'.', '4', '.', '.', '.', '9', '3', '6', '1'},
                 {'.', '.', '.', '5', '.', '.', '9', '8', '7'},
         };*/
-        /*char[][] field = new char[][]
+        /* OK! char[][] field = new char[][]
                 {
                     {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
                     {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
@@ -254,6 +260,7 @@ public class Main {
             //if(count%2 == 0){
             startX = startY = 0;
             endX = endY = 9;
+            int checkLineState = 0;
             inc = 1;
 //            }else{
 //                startX = startY = 9;
@@ -270,7 +277,14 @@ public class Main {
                             curCell.setState(curCell.getHyps().getLastHyp());
                             Field.deleteHypsLnSq(curCell,cells,true);
                             System.out.println("Уст: " + curCell.getState() + "! reduced: " + ++Cell.countReducedHips);
-                            Field.checkLines(cells);
+                            checkLineState = Field.checkLines(cells);
+                            if(checkLineState < 0)
+                                break;
+                            /*else if(checkLineState > 0){ //если установили статус, удаляем его из ячеек текущего квадрата, текущей горизонмали, вертикали, где они есть
+                                curCell.delInNeighborHypsInSquare(curCell.getState(),cells);
+                                curCell.delInNeighborHypsInLine(false,curCell.getState(),cells);
+                                curCell.delInNeighborHypsInLine(true,curCell.getState(),cells);
+                            }*/
                             CoordArray squaresCoords = Field.checkSquares(cells);
                             if(squaresCoords.getSize() > 0) {
                                 for (int k = 0; k < squaresCoords.getSize(); k++) {
@@ -283,11 +297,13 @@ public class Main {
                         System.out.println(curCell.getHypStr());
                     }
                 }
+                if(checkLineState < 0) break;
             }
-            if (count > 0 && oldCount == toReduce) {
+            if (count > 0 && oldCount == toReduce && checkLineState>=0) {
                 System.out.println("НЕ произошло уменьшение вариантов после " + (count + 1) + "-го цикла!");
                 break; //какой-то затык...
-            }
+            }else if(checkLineState < 0)
+                break;
             notFirst = true;
             count++;
         } while (toReduce > 0);

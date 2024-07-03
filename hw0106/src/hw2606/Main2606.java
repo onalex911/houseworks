@@ -218,6 +218,10 @@ class SinglLinkedList {
             Node tail = head; //A
             Node start = head.next; //B
 
+            String aaa = "asdf";
+            char[] ccc = aaa.toCharArray();
+            int a = ccc.length
+
             if (start.next == null) { //если список из 2-х эл-тов
                 head = start;
                 tail.next = null;
