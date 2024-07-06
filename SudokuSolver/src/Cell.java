@@ -45,44 +45,6 @@ public class Cell {
         return complete;
     }
 
-    /*public char[] getHip() {
-        return hip;
-    }
-
-    public String printHip() {
-        String out = "";
-        for (int i = 0; i < 9; i++) {
-            out += hip[i] + " ";
-        }
-        return out;
-    }
-
-    private void checkLastHip() {
-        if (!complete) {
-            int hips = 0;
-            char out = ' ';
-            for (int i = 0; i < hip.length; i++) {
-                if (hip[i] != '.') {
-                    hips++;
-                    out = hip[i];
-                }
-            }
-            if (hips == 1) {
-                state = out;
-                complete = true;
-            }
-        }
-    }
-
-    private void delHip(char val) {
-        for (int i = 0; i < hip.length; i++) {
-            if (hip[i] == val) {
-                hip[i] = '.';
-                break;
-            }
-        }
-        checkLastHip();
-    }*/
 
     private boolean isValInHyps(char val) {
         for (int i = 0; i < hyps.getSize(); i++) {
@@ -92,18 +54,8 @@ public class Cell {
         return false;
     }
 
-    private boolean isNeighborsHyps(char val, Field field) {
+    private boolean isNeighborsHypsSq(char val, Field field) {
         Cell nc;
-        /*for (int i = 0; i < 3; i++) {
-            if (i != x % 3) {
-                nc = field.getCell(x - x % 3 + i, y);
-                if (!nc.isComplete() && nc.isValInHyps(val)) return true;
-            }
-            if (i != y % 3) {
-                nc = field.getCell(x, y - y % 3 + i);
-                if (!nc.isComplete() && nc.isValInHyps(val)) return true;
-            }
-        }*/
         //проверяем соседей по квадрату на наличие текущего значения в их hyps. Если его там нет, то текущее значение является уникальным для данного квадрата
         int startX = x - x % 3;
         int startY = y - y % 3;
@@ -117,14 +69,38 @@ public class Cell {
         return false;
     }
 
+    private boolean isNeighborsHypsLn(char val, boolean isVert, Field field) {
+        Cell nc;
+        //проверяем соседей по линии на наличие текущего значения в их hyps.
+        // Если его там нет, то текущее значение является уникальным для данного квадрата
+        for (int i = 0; i < 9; i++) {
+            int posX = isVert ? x : i;
+            int posY = isVert ? i : y;
+            if (posX == x && posY == y) continue;
+            nc = field.getCell(posX, posY);
+            if (!nc.isComplete() && nc.isValInHyps(val)) return true;
+
+        }
+        return false;
+    }
+
+    // проверка каждого гипотетического числа текущей ячейки на предмет,
+    // присутствует ли оно в гипотетических числах ячеек текущего квадрата
+    // если такого числа там нет, значит оно уникально для текущего квадрата0
+    // и его нужно установить как основное для текущей ячейки
     private char getUniqHyp(Field field) {
-        for (int i = 0; i < hyps.getSize(); i++)
-            if (!isNeighborsHyps(hyps.getHyps()[i], field))
+        for (int i = 0; i < hyps.getSize(); i++) {
+            if (!isNeighborsHypsSq(hyps.getHyps()[i], field))
                 return hyps.getHyps()[i];
+            if (!isNeighborsHypsLn(hyps.getHyps()[i], false, field))
+                return hyps.getHyps()[i];
+            if (!isNeighborsHypsLn(hyps.getHyps()[i], true, field))
+                return hyps.getHyps()[i];
+        }
         return '.';
     }
 
-    public boolean reduceHyps(boolean notFirst, Field field) {
+    public boolean reduceHyps(boolean notFirst, boolean enforce, Field field) {
         // if (++Cell.countReduce >= 10) return false; //заготовка для рекурсии
 
         if (!complete) {
@@ -146,38 +122,44 @@ public class Cell {
                     if (uniq != '.') {// && curSquare.isContains(uniq)){
                         state = uniq;
                         complete = true;
+
                         delInNeighborHypsInSquare(state, field);
                         delInNeighborHypsInLine(false, state, field);
                         delInNeighborHypsInLine(true, state, field);
+
                         System.out.println("Уст. " + uniq + " на основании анализа соседей x=" + x + ", y=" + y);
                         countReducedHips++;
                         return true;
                     }
-                    CoordArray coordsHor = Line.checkHyps(y, false, getHypStr(), field);
-                    int removedInHor = 0;
-                    if (coordsHor.getSize() > 1 && coordsHor.getSize() == hyps.getSize()) {
-                        removedInHor = Line.removeDoubleHyps(y, false, coordsHor, field);
+                    if (enforce) {
+                        // ищем одинаковые последовательности гипотез в линииях
+                        // если находим 2 уникальные последовательности из 2-ух одних и тех же цифр, значит,
+                        // в других ячейках этих цифр быть не должно, поэтому мы их удалем их гипотез других ячеек
+                        CoordArray coordsHor = Line.checkHyps(y, false, getHypStr(), field);
+                        int removedInHor = 0;
+                        if (coordsHor.getSize() > 1 && coordsHor.getSize() == hyps.getSize()) {
+                            removedInHor = Line.removeDoubleHyps(y, false, coordsHor, field);
+                        }
+                        int removedInVert = 0;
+                        CoordArray coordsVert = Line.checkHyps(x, true, getHypStr(), field);
+                        if (coordsVert.getSize() > 1 && coordsVert.getSize() == hyps.getSize()) {
+                            removedInVert = Line.removeDoubleHyps(x, true, coordsVert, field);
+                        }
+                        int removedInSquare = 0;
+                        String curHypStr = getHypStr();
+                        CoordArray coords = Square.checkHyps(a, b, curHypStr, field);
+                        if (coords.getSize() > 1 && coords.getSize() == hyps.getSize()) {
+                            removedInSquare = Square.removeDoubleHyps(a, b, coords, field);
+                        }
+                        if (removedInHor > 0)
+                            System.out.printf("удалено неочевидных гипотез в горизонтали %d - %d", y, removedInHor);
+                        if (removedInVert > 0)
+                            System.out.printf("удалено неочевидных гипотез в вертикали %d - %d", x, removedInVert);
+                        if (removedInSquare > 0) {
+                            System.out.printf("удалено неочевидных гипотез в квадрате (%d,%d) - %d", a, b, removedInSquare);
+                            return true;
+                        }
                     }
-                    int removedInVert = 0;
-                    CoordArray coordsVert = Line.checkHyps(x, true, getHypStr(), field);
-                    if (coordsVert.getSize() > 1 && coordsVert.getSize() == hyps.getSize()) {
-                        removedInVert = Line.removeDoubleHyps(x, true, coordsVert, field);
-                    }
-                    int removedInSquare = 0;
-                    String curHypStr = getHypStr();
-                    CoordArray coords = Square.checkHyps(a, b, curHypStr, field);
-                    if (coords.getSize() > 1 && coords.getSize() == hyps.getSize()) {
-                        removedInSquare = Square.removeDoubleHyps(a, b, coords, field);
-                    }
-                    if (removedInHor > 0)
-                        System.out.printf("удалено неочевидных гипотез в горизонтали %d - %d", y, removedInHor);
-                    if (removedInVert > 0)
-                        System.out.printf("удалено неочевидных гипотез в вертикали %d - %d", x, removedInVert);
-                    if (removedInSquare > 0) {
-                        System.out.printf("удалено неочевидных гипотез в квадрате (%d,%d) - %d", a, b, removedInSquare);
-                        return true;
-                    }
-
                 }
                 if (remaindHyps == 1) {
                     state = hyps.getLastHyp();

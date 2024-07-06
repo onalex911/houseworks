@@ -254,37 +254,27 @@ public class Main {
         boolean notFirst = false;
         int count = 0;
         int startX, startY, endX, endY, inc;
+        boolean enforce = false;
         do {
             System.out.println("Итерация :" + (count) + " ... ");
             int oldCount = toReduce;
-            //if(count%2 == 0){
             startX = startY = 0;
             endX = endY = 9;
             int checkLineState = 0;
             inc = 1;
-//            }else{
-//                startX = startY = 9;
-//                endX = endY = 0;
-//                inc = -1;
-//            }
             for (int i = startY; i < endY; i++) {
                 for (int j = startX; j < endX; j++) {
                     Cell curCell = cells.getCell(j, i);
                     if (!curCell.isComplete()) {
 //                        System.out.printf("x = %d, y = %d before: ", curCell.getCoord().getX(), curCell.getCoord().getY());
 //                        System.out.println(curCell.getHypStr());
-                        if (curCell.reduceHyps(notFirst, cells) && curCell.getHyps().getLastHyp() != '.') {
+                        if (curCell.reduceHyps(notFirst,enforce, cells) && curCell.getHyps().getLastHyp() != '.') {
                             curCell.setState(curCell.getHyps().getLastHyp());
                             Field.deleteHypsLnSq(curCell,cells,true);
                             System.out.println("Уст: " + curCell.getState() + "! reduced: " + ++Cell.countReducedHips);
                             checkLineState = Field.checkLines(cells);
                             if(checkLineState < 0)
                                 break;
-                            /*else if(checkLineState > 0){ //если установили статус, удаляем его из ячеек текущего квадрата, текущей горизонмали, вертикали, где они есть
-                                curCell.delInNeighborHypsInSquare(curCell.getState(),cells);
-                                curCell.delInNeighborHypsInLine(false,curCell.getState(),cells);
-                                curCell.delInNeighborHypsInLine(true,curCell.getState(),cells);
-                            }*/
                             CoordArray squaresCoords = Field.checkSquares(cells);
                             if(squaresCoords.getSize() > 0) {
                                 for (int k = 0; k < squaresCoords.getSize(); k++) {
@@ -300,8 +290,12 @@ public class Main {
                 if(checkLineState < 0) break;
             }
             if (count > 0 && oldCount == toReduce && checkLineState>=0) {
-                System.out.println("НЕ произошло уменьшение вариантов после " + (count + 1) + "-го цикла!");
-                break; //какой-то затык...
+                if(!enforce){
+                    enforce = true;
+                }else {
+                    System.out.println("НЕ произошло уменьшение вариантов после " + (count + 1) + "-го цикла!");
+                    break; //какой-то затык...
+                }
             }else if(checkLineState < 0)
                 break;
             notFirst = true;
