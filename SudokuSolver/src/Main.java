@@ -51,6 +51,11 @@ class Field {
                 case 1:
                     System.out.println("Ok!");
                     out = 1;
+                    break;
+                case 2:
+                    System.out.println("не заполнено одно поле в строке");
+                    Line.forceFill(i,false,field);
+                    out=1;
             }
             System.out.println(Line.print(i, field));
             if(out < 0) return out;
@@ -103,32 +108,6 @@ class Field {
         }
     }
 
-//    public static CellArray findVal(char val){
-//        CellArray out = new CellArray();
-//        for (int i = 0; i < sizeY; i++) {
-//            for (int j = 0; j < sizeX; j++) {
-//                if(cells[j][i].getState() == val)
-//                    out.add(cells[j][i]);
-//            }
-//        }
-//        return out;
-//    }
-
-//    public static CoordArray findSquaresWithVal(char val){
-//        CellArray arr = findVal(val);
-//        CoordArray out = new CoordArray();
-//        if(arr.getSize() > 0) {
-//            int a = -1;
-//            int b = -1;
-//            for (int i = 0; i < arr.getSize(); i++) {
-//                Cell cell = arr.getCellByIndex(i);
-//                a = cell.getCoord().getX()/3;
-//                b = cell.getCoord().getY()/3;
-//                out.add(new Coord(a,b));
-//            }
-//        }
-//        return out;
-//    }
 }
 
 public class Main {
@@ -213,7 +192,7 @@ public class Main {
                 {'8', '.', '.', '1', '.', '.', '2', '9', '.'},//7
                 {'6', '.', '.', '8', '.', '.', '4', '7', '3'},//8
         };*/
-        /* OK! char[][] field = new char[][]{
+        char[][] field = new char[][]{
                 {'1', '8', '2', '.', '.', '6', '.', '.', '.'},
                 {'9', '7', '4', '1', '.', '.', '.', '5', '.'},
                 {'.', '3', '.', '.', '7', '.', '1', '9', '.'},
@@ -223,8 +202,8 @@ public class Main {
                 {'.', '1', '9', '.', '6', '.', '.', '4', '.'},
                 {'.', '4', '.', '.', '.', '9', '3', '6', '1'},
                 {'.', '.', '.', '5', '.', '.', '9', '8', '7'},
-        };*/
-          char[][] field = new char[][]
+        };
+          /*char[][] field = new char[][]
                 {
                     {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
                     {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
@@ -235,7 +214,7 @@ public class Main {
                     {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
                     {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
                     {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
-                };
+                };*/
 //        System.out.println(field.length);
         int toReduce = 0;
         Field cells = new Field();
@@ -275,6 +254,12 @@ public class Main {
                             checkLineState = Field.checkLines(cells);
                             if(checkLineState < 0)
                                 break;
+//                            else if(checkLineState == 0){
+//                                int correctLine = Line.isCorrect(curCell.getCoord().getY(),false,cells);
+//                                if(correctLine == 0){
+//                                    Line.forceFill(curCell.getCoord().getY(),false,cells);
+//                                }
+//                            }
                             CoordArray squaresCoords = Field.checkSquares(cells);
                             if(squaresCoords.getSize() > 0) {
                                 for (int k = 0; k < squaresCoords.getSize(); k++) {
@@ -290,7 +275,7 @@ public class Main {
                 if(checkLineState < 0) break;
             }
             if (count > 0 && oldCount == toReduce && checkLineState>=0) {
-                if(!enforce){
+                if(!enforce && checkLineState == 0){
                     enforce = true;
                 }else {
                     System.out.println("НЕ произошло уменьшение вариантов после " + (count + 1) + "-го цикла!");

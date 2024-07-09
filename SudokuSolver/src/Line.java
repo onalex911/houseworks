@@ -55,9 +55,42 @@ public class Line {
                 values.add((int) curCell.getState());
             }
         }
+        if(values.size() == 8) return 2;
         return values.size() == 9 ? 1 : -1;
         //}
         //return false;
+    }
+
+    public static void forceFill(int pos, boolean isVert, Field field){
+        int count = 0;
+        Coord tmp = new Coord(-1, -1);
+        List<Character> statuses = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            int posX = isVert ? pos : i;
+            int posY = isVert ? i : pos;
+            Cell curCell = field.getCell(posX,posY);
+            if (!curCell.isComplete()) {
+                tmp.setX(posX);
+                tmp.setY(posY);
+                count++;
+            } else {
+                statuses.add(curCell.getState());
+            }
+
+        }
+
+        if (count == 1) {
+            for (int i = 0; i < 9; i++) {
+                if (!statuses.contains((char) (48 + i))) {
+                    if (tmp.isSet()) {
+                        Cell curCell = field.getCells()[tmp.getY()][tmp.getX()];
+                        curCell.setState((char) (48 + i));
+                        curCell.setComplete(true);
+                        Field.deleteHypsLnSq(curCell, field, false);
+                    }
+                }
+            }
+        }
     }
 
     public static CoordArray checkHyps(int pos, boolean isVert, String hypStr, Field field) {
