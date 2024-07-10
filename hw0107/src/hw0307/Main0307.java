@@ -2,6 +2,7 @@ package hw0307;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main0307 {
@@ -14,27 +15,28 @@ public class Main0307 {
         HashMap<String, HashMap<String, ArrayList<String>>> transTo = new HashMap<>();
         HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> transFrom = new HashMap<>();
 
-        /*ArrayList<String> ruMean1 = new ArrayList<>();
-        ruMean1.add("идти");
-        ruMean1.add("ехать");
-        ruMean1.add("двигаться");
-        wordsFrom.put("go", ruMean1);
+        ArrayList<String> ruMean1 = new ArrayList<>();
+//        ruMean1.add("идти");
+//        ruMean1.add("ехать");
+//        ruMean1.add("двигаться");
+//        wordsFrom.put("go", ruMean1);
+//
+//        ArrayList<String> ruMean2 = new ArrayList<>();
+//        ruMean2.add("мочь");
+//        ruMean2.add("уметь");
+//        ruMean2.add("банка");
+//        wordsFrom.put("can", ruMean2);
+//
+//        ArrayList<String> ruMean3 = new ArrayList<>();
+//        ruMean3.add("ехать");
+//        ruMean3.add("везти");
+//        ruMean3.add("вести");
+//        wordsFrom.put("drive", ruMean3);
 
-        ArrayList<String> ruMean2 = new ArrayList<>();
-        ruMean2.add("мочь");
-        ruMean2.add("уметь");
-        ruMean2.add("банка");
-        wordsFrom.put("can", ruMean2);
-
-        ArrayList<String> ruMean3 = new ArrayList<>();
-        ruMean3.add("ехать");
-        ruMean3.add("везти");
-        ruMean3.add("вести");
-        wordsFrom.put("drive", ruMean3);
-*/
         // создаем "пустое" слово для обеспечения целостности структуры
         // после добавления первого слова его нужно удалить
-        wordsFrom.put("0",meanTo);
+        if (ruMean1.isEmpty()) wordsFrom.put("0", meanTo);
+
         transTo.put("ru", wordsFrom);
         transFrom.put("en", transTo);
         Dictionary dictionary = new Dictionary(transFrom);
@@ -49,8 +51,8 @@ public class Main0307 {
             numWords = dictionary.getNumWords();
 //            if (numWords > 0)
 //                numMeanings = getNumMeanings(dictionary);
-//            System.out.printf("\nВсего в словаре слов: %d, значений: %d\n\n", numWords, dictInfo.getNumMeanigs());
-            System.out.println();
+            System.out.printf("\nВсего в словаре слов: %d, значений: %d\n", numWords, dictionary.getNumMeanigs());
+            System.out.println("Основное меню");
             if (numWords > 0)
                 System.out.println("1 - перевод слов");
             System.out.println("2 - добавить слово в словарь");
@@ -60,16 +62,21 @@ public class Main0307 {
             System.out.println("0 - выход");
             System.out.print("Выберите действие: ");
             scn = new Scanner(System.in);
-            int resp = scn.nextInt();
+            int resp = 0;
+            try {
+                resp = scn.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Введено неверное значение!");
+                continue;
+            }
             if (resp == 0) break;
             switch (resp) {
                 case 1: //перевести слово
-                case 2: //добавить новое слово в словарь
                     if (numWords == 0) {
                         System.out.println("Пока в словаре нет введенных слов");
                         continue;
                     }
-
+                case 2: //добавить новое слово в словарь
                     Scanner sc1 = new Scanner(System.in);
                     System.out.print("С какого языка переводим (язык A)? Введите обозначение: ");
                     String fromLang = sc1.next();
@@ -99,13 +106,46 @@ public class Main0307 {
                         }
                         continue;
                     }
-                    int resultOfAdd = dictionary.add(fromLang, toLang, wordFrom);
-                    if (resultOfAdd < 0) {
-                        System.out.println("Слово " + wordFrom + " уже есть в словаре. Введите другое.");
-                    } else if (resultOfAdd == 0) {
+
+                    /*------------------------- добавление ------------------------------------*/
+                    var words = dictionary.getWordsOf(fromLang);
+                    boolean newWord = true;
+                    for (String word : words) {
+                        if (word.equals(wordFrom)) {
+                            System.out.println("Слово " + wordFrom + " уже есть в словаре. Введите другое.");
+                            newWord = false;
+                            break;
+                        }
+                    }
+                    if (!newWord) break;
+                    Scanner scn5;
+                    String newMeaning = "";
+                    int count = 0;
+                    ArrayList<String> meanings = new ArrayList<>();
+                    while (true) {
+                        System.out.print("Введите значение для слова " + wordFrom + " (0 - выход): ");
+                        scn5 = new Scanner(System.in);
+                        newMeaning = scn5.next();
+                        if (newMeaning.equals("0")) {
+                            if (count > 0) {
+                                dictionary.add(fromLang, toLang, wordFrom, meanings);
+                            }
+                            break;
+                        }
+                        if (newMeaning.trim().isEmpty()) continue;
+                        if (meanings.contains(newMeaning)) {
+                            System.out.println("ВНИМАНИЕ! Значение " + newMeaning + " уже имеется для слова " + wordFrom + "! Введите новое значение.");
+                            continue;
+                        }
+                        meanings.add(newMeaning);
+                        count++;
+                    }
+                    /*------------------------- конец добавления ------------------------------*/
+                    
+                    if (count == 0) {
                         System.out.println("ВНИМАНИЕ! Ничего не добавлено.");
                     } else {
-                        System.out.println("Слово " + wordFrom + " добавлено с количеством значений: " + resultOfAdd);
+                        System.out.println("Слово " + wordFrom + " добавлено с количеством значений: " + count);
                     }
                     break;
                 case 3: //показать все языки словаря

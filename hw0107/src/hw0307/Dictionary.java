@@ -18,23 +18,23 @@ public class Dictionary {
 
     public Dictionary(HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> langsFrom) {
         this.langsFrom = langsFrom;
-        this.getInfo();
+        this.refreshInfo();
     }
 
-    public void getInfo() {
+    public void refreshInfo() {
         if (!langsFrom.keySet().isEmpty()) {
             for (String langFrom : langsFrom.keySet()) { //перебираем языки исходные
                 var langsTo = langsFrom.get(langFrom);
                 //if(!langsTo.keySet().isEmpty()) {
                 for (String langTo : langsTo.keySet()) { //перебираем языки целевые
                     var words = langsTo.get(langTo);
-                    //if(!words.keySet().isEmpty()){
-                    for (String word : words.keySet()) { //перебираем исходные слова в целевом языке
-                        ArrayList<String> meanings = words.get(word);
-                        numMeanigs += meanings.size();
-                        numWords++;
+                    if (!words.containsKey("0")) {
+                        for (String word : words.keySet()) { //перебираем исходные слова в целевом языке
+                            ArrayList<String> meanings = words.get(word);
+                            numMeanigs += meanings.size();
+                            numWords++;
+                        }
                     }
-                    //}
                     numLangsTo++;
                 }
                 //}
@@ -59,11 +59,11 @@ public class Dictionary {
         return numMeanigs;
     }
 
-    public boolean isFrom(String lang) {
+    private boolean isFrom(String lang) {
         return langsFrom.containsKey(lang);
     }
 
-    public boolean isTo(String lang) {
+    private boolean isTo(String lang) {
         for (String lf : langsFrom.keySet()) {
             if (langsFrom.get(lf).containsKey(lang))
                 return true;
@@ -144,43 +144,19 @@ public class Dictionary {
         return out.substring(0, out.length() - 2) + "\n----------------------------------------------";
     }
 
-    public int add(String from, String to, String wordFrom) {
+    public void add(String from, String to, String wordFrom, ArrayList<String> meanings) {
         boolean ext2inner = isFrom(from) && isTo(to);
-
-        var words = getWordsOf(from);
-        for (String word : words) {
-            if (word.equals(wordFrom)) return -1;
-        }
-        Scanner scn;
-        String newMeaning = "";
-        int count = 0;
-        ArrayList<String> meanings = new ArrayList<>();
-        while (true) {
-            System.out.print("Введите значение для слова " + wordFrom + " (0 - выход): ");
-            scn = new Scanner(System.in);
-            newMeaning = scn.next();
-            if (newMeaning.equals("0")) {
-                if (count > 0) {
-                    if (ext2inner)
-                        langsFrom.get(from).get(to).put(wordFrom, meanings);
-                    else {
-                        for (String meaning : meanings) {
-                            ArrayList<String> newWord = new ArrayList<>();
-                            newWord.add(wordFrom);
-                            langsFrom.get(to).get(from).put(meaning, newWord);
-                        }
-                    }
-                    langsFrom.get ("en").get("ru").remove("0"); //удаляем "нулевое" слово (если оно есть)
-                }
-                return count;
+        if (ext2inner)
+            langsFrom.get(from).get(to).put(wordFrom, meanings);
+        else {
+            for (String meaning : meanings) {
+                ArrayList<String> newWord = new ArrayList<>();
+                newWord.add(wordFrom);
+                langsFrom.get(to).get(from).put(meaning, newWord);
             }
-            if (newMeaning.trim().isEmpty()) continue;
-            if (meanings.contains(newMeaning)) {
-                System.out.println("ВНИМАНИЕ! Значение " + newMeaning + " уже имеется для слова " + wordFrom + "! Введите новое значение.");
-                continue;
-            }
-            meanings.add(newMeaning);
-            count++;
         }
+        langsFrom.get("en").get("ru").remove("0"); //удаляем "нулевое" слово (если оно есть)
+        //langsFrom.get(from).get(to).put(wordFrom, meanings);
+        refreshInfo();
     }
 }
