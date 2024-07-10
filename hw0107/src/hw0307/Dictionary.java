@@ -59,11 +59,11 @@ public class Dictionary {
         return numMeanigs;
     }
 
-    private boolean isFrom(String lang) {
+    public boolean isFrom(String lang) {
         return langsFrom.containsKey(lang);
     }
 
-    private boolean isTo(String lang) {
+    public boolean isTo(String lang) {
         for (String lf : langsFrom.keySet()) {
             if (langsFrom.get(lf).containsKey(lang))
                 return true;
@@ -146,6 +146,7 @@ public class Dictionary {
 
     public int add(String from, String to, String wordFrom) {
         boolean ext2inner = isFrom(from) && isTo(to);
+
         var words = getWordsOf(from);
         for (String word : words) {
             if (word.equals(wordFrom)) return -1;
@@ -169,6 +170,7 @@ public class Dictionary {
                             langsFrom.get(to).get(from).put(meaning, newWord);
                         }
                     }
+                    langsFrom.get ("en").get("ru").remove("0"); //удаляем "нулевое" слово (если оно есть)
                 }
                 return count;
             }

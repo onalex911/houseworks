@@ -9,29 +9,33 @@ public class Main0307 {
     public static void main(String[] args) {
         String warnNoLang = "ВНИМАНИЕ! Нет такого языка в словаре!";
         String warnNoWord = "ВНИМАНИЕ! Нет такого слова в словаре!";
-        HashMap<String, ArrayList<String>> ruWords = new HashMap<>();
+        ArrayList<String> meanTo = new ArrayList<>();
+        HashMap<String, ArrayList<String>> wordsFrom = new HashMap<>();
         HashMap<String, HashMap<String, ArrayList<String>>> transTo = new HashMap<>();
         HashMap<String, HashMap<String, HashMap<String, ArrayList<String>>>> transFrom = new HashMap<>();
 
-        ArrayList<String> ruMean1 = new ArrayList<>();
+        /*ArrayList<String> ruMean1 = new ArrayList<>();
         ruMean1.add("идти");
         ruMean1.add("ехать");
         ruMean1.add("двигаться");
-        ruWords.put("go", ruMean1);
+        wordsFrom.put("go", ruMean1);
 
         ArrayList<String> ruMean2 = new ArrayList<>();
         ruMean2.add("мочь");
         ruMean2.add("уметь");
         ruMean2.add("банка");
-        ruWords.put("can", ruMean2);
+        wordsFrom.put("can", ruMean2);
 
         ArrayList<String> ruMean3 = new ArrayList<>();
         ruMean3.add("ехать");
         ruMean3.add("везти");
         ruMean3.add("вести");
-        ruWords.put("drive", ruMean3);
-
-        transTo.put("ru", ruWords);
+        wordsFrom.put("drive", ruMean3);
+*/
+        // создаем "пустое" слово для обеспечения целостности структуры
+        // после добавления первого слова его нужно удалить
+        wordsFrom.put("0",meanTo);
+        transTo.put("ru", wordsFrom);
         transFrom.put("en", transTo);
         Dictionary dictionary = new Dictionary(transFrom);
 //        var words = dictInfo.getMeanings("ru","en","ехать");
@@ -51,7 +55,8 @@ public class Main0307 {
                 System.out.println("1 - перевод слов");
             System.out.println("2 - добавить слово в словарь");
             System.out.println("3 - показать все языки словаря");
-            System.out.println("4 - показать все слова в словаре одного языка");
+            if (numWords > 0)
+                System.out.println("4 - показать все слова в словаре одного языка");
             System.out.println("0 - выход");
             System.out.print("Выберите действие: ");
             scn = new Scanner(System.in);
