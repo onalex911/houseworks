@@ -1,7 +1,8 @@
 package FileTest;
 
 import java.io.File;
-import java.util.HashMap;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainFileTest {
@@ -28,18 +29,18 @@ public class MainFileTest {
         }
         return false;
     }*/
-    static ArrayList<Integer, String> getMaskHash(String mask) {
+    static ArrayList<MaskParts> getMaskHash(String mask) {
         // ключ = 1, если после части маски любой единичный символ ('_')
         // 2 - если после данной части маски идет серия любых символов ('*')
         // 0 - если часть последняя в маске
-        ArrayList<Integer, String> out = new HashMap<>();
+        ArrayList<MaskParts> out = new ArrayList<>();
         String part = "";
         char[] maskChars = mask.toCharArray();
         int type = 0;
         for (int i = 0; i < maskChars.length; ) {
             if (maskChars[i] == '_' || maskChars[i] == '*') {
                 type = maskChars[i] == '_' ? 1 : 2;
-                out.put(type, part);
+                out.add(new MaskParts(type,part));
                 part = "";
                 type = 0;
                 i += 2;
@@ -47,7 +48,7 @@ public class MainFileTest {
                 part += maskChars[i++];
             }
             if (i >= maskChars.length) {
-                out.put(type, part);
+                out.add(new MaskParts(type,part));
                 break;
             }
         }
@@ -55,16 +56,29 @@ public class MainFileTest {
     }
 
     static boolean isMatchesMask(String src, String mask) {
+        if(mask.equals("*")) return true;
+        if(mask.equals("_") && src.length() == 1) return true;
         boolean flag = false;
-        HashMap<Integer, String> maskParts = getMaskHash(mask);
+        int good = 0;
+        ArrayList<MaskParts> maskParts = getMaskHash(mask);
         int start = 0;
-        for(Integer key:maskParts.keySet()){
-            String partText = maskParts.get(key);
-            if(!partText.isEmpty() && src.contains(partText)) {
-                if (key == 1) {
 
+        for(MaskParts part:maskParts){
+            System.out.println(part.getPart());
+        /*    String partText = part.getPart();
+            if(!partText.isEmpty() && src.contains(partText)) {
+                if (part.getType() == 1) {
+                    if(src.substring(start,partText.length()-1).equals(partText)) {
+                        good++;
+                        start = partText.length() + 1;
+                    }
+                }else if(part.getType() == 2){
+                    if()
+                }else{
+                    if(src.endsWith(partText))
+                        good++;
                 }
-            }
+            }*/
         }
         return flag;
 
@@ -96,12 +110,12 @@ public class MainFileTest {
             Scanner scn1 = new Scanner(System.in);
             Scanner scn2 = new Scanner(System.in);
             System.out.print("Введите маску: ");
-            String src = scn1.next();
-            if (src.equals("0")) break;
-            System.out.print("Введите строку: ");
-            String mask = scn2.next();
+            String mask = scn1.next();
             if (mask.equals("0")) break;
-            boolean res1 = isMatchesAnyOne(src, mask);
+            System.out.print("Введите строку: ");
+            String src = scn2.next();
+            if (src.equals("0")) break;
+            boolean res1 = isMatchesMask(src, mask);
             System.out.println(res1);
 //            boolean res2 = isMatchesAnyMany(src,mask);
         }
