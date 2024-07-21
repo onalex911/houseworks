@@ -52,23 +52,23 @@ public class Main1507 {
         ArrayList<File> files = new ArrayList<>();
         int countDir = 0;
         int countFile = 0;
-        if (innerFiles != null && maxLevel>0) {
+        if (innerFiles != null && maxLevel > 0) {
             for (File innerFile : innerFiles) {
-                if(innerFile.isDirectory()){
+                if (innerFile.isDirectory()) {
                     dirs.add(innerFile);
                     countDir++;
-                }else{
+                } else {
                     files.add(innerFile);
                     countFile++;
                 }
                 //printFileInfo(innerFile, 0);
             }
-            System.out.println("Папка содержит: вложенных папок – "+countDir+", файлов – "+countFile);
-            for(File curDir:dirs) {
+            System.out.println("Папка содержит: вложенных папок – " + countDir + ", файлов – " + countFile);
+            for (File curDir : dirs) {
                 //printFileInfo(curDir, 0);
                 listDir(curDir, maxLevel - 1);
             }
-            for(File curFile:files)
+            for (File curFile : files)
                 //printFileInfo(curFile,0);
                 listDir(curFile, maxLevel - 1);
         }
@@ -89,8 +89,16 @@ public class Main1507 {
         for (int i = 0; i < level; i++) {
             System.out.print(" ");
         }
-        System.out.printf("%s\t%s\t%.3fKb, %s\n", file.getAbsolutePath(), typeTxt, (float) file.length() / 1000, date);
-
+        float sizeToShow = file.length();
+        String dim = "";
+        if (file.length() > 1000000) {
+            sizeToShow = (float) file.length() / 1000000;
+            dim = "Mb";
+        } else if (file.length() > 1000) {
+            sizeToShow = (float) file.length() / 1000;
+            dim = "Kb";
+        }
+        System.out.printf("%s\t%s\t%.1f %s, %s\n", file.getAbsolutePath(), typeTxt, sizeToShow, dim, date);
     }
 
     public static void main(String[] args) {
@@ -101,7 +109,7 @@ public class Main1507 {
         String fileName;
         String workDir = "Main1507";
         File workDirFile = new File(workDir);
-        if(!workDirFile.exists())
+        if (!workDirFile.exists())
             workDirFile.mkdir();
         while (true) {
             System.out.println("\n-----------------------------------------");
@@ -130,7 +138,7 @@ public class Main1507 {
                         scn1 = new Scanner(System.in);
                         folderName = scn1.next();
                         if (isCorrectName(folderName)) {
-                            File folder = new File(workDir+"/"+folderName);
+                            File folder = new File(workDir + "/" + folderName);
                             try {
                                 if (containsSlash(folderName))
                                     flag = folder.mkdirs();
@@ -150,7 +158,7 @@ public class Main1507 {
                         fileName = scn1.next();
 //                        if (isCorrectName(fileName) && !containsSlash(fileName)) {
                         if (isCorrectName(fileName)) {
-                            File file = new File(workDir+"/"+fileName);
+                            File file = new File(workDir + "/" + fileName);
                             try {
                                 flag = file.createNewFile();
                             } catch (Exception p) {
@@ -167,7 +175,7 @@ public class Main1507 {
                         Scanner scn4;
                         String response = scn3.next();
                         if (!response.trim().isEmpty()) {
-                            File fileToDel = new File(workDir+"/"+response);
+                            File fileToDel = new File(workDir + "/" + response);
                             if (fileToDel.exists()) {
                                 if (fileToDel.isFile()) {
                                     System.out.print("Вы действительно хотите удалить файл: " + fileToDel.getName() + "? (y/n): ");
@@ -215,13 +223,13 @@ public class Main1507 {
                         System.out.print("Введите имя файла/паки, котороую вы хотите переименовать: ");
                         String fileToRename = scn5.next();
                         if (!fileToRename.trim().isEmpty()) {
-                            File obj = new File(workDir+"/"+fileToRename);
+                            File obj = new File(workDir + "/" + fileToRename);
                             if (obj.exists()) {
                                 String objType = obj.isDirectory() ? "папки" : "файла";
                                 Scanner scn6 = new Scanner(System.in);
                                 System.out.print("Введите новое имя " + objType + ": ");
                                 String newName = scn6.next();
-                                if (!newName.trim().isEmpty() && obj.renameTo(new File(workDir+"/"+newName))) {
+                                if (!newName.trim().isEmpty() && obj.renameTo(new File(workDir + "/" + newName))) {
                                     System.out.printf("Переименование %s %s в %s произошло успешно!\n", objType, fileToRename, newName);
                                 } else {
                                     System.out.printf("ВНИМАНИЕ! Переименование %s %s НЕ ПРОИЗОШЛО!\n", objType, fileToRename);
@@ -234,18 +242,21 @@ public class Main1507 {
                         }
                         break;
                     case 5: // Просмотр
-//                        File file = new File(workDir);
-                        File file = new File("G:\\");
+                        File file = new File(workDir);
+//                        File file = new File("G:\\");
                         Scanner scn6 = new Scanner(System.in);
                         System.out.print("Вывести информацию о вложнных папках и файлах? (y/n): ");
                         String respFull = scn6.next();
-                        if(respFull.equals("y")){
-                            listDir(file, 3);
-                        }else {
+                        Scanner scn7 = new Scanner(System.in);
+                        System.out.print("Введите кол-во вложенных уровней поддиректорий (относительно " + file.getPath() + "): ");
+                        int respDepth = scn7.nextInt();
+                        if (respFull.equals("y")) {
+                            listDir(file, respDepth);
+                        } else {
 //                            File[] innerFiles = file.listFiles();
 //                            int countDir = 0;
 //                            int countFile = 0;
-                            listDir(file,1);
+                            listDir(file, 1);
                         }
                         break;
                     default:
