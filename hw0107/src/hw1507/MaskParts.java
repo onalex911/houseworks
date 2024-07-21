@@ -1,4 +1,4 @@
-package FileTest;
+package hw1507;
 
 public class MaskParts {
     private int type;

@@ -72,14 +72,6 @@ public class Main1507 {
                 //printFileInfo(curFile,0);
                 listDir(curFile, maxLevel - 1);
         }
-        /*if (directory.isDirectory() && maxLevel > 0) {
-            File[] innerFiles = directory.listFiles();
-            if (innerFiles != null) {
-                for (File obj : innerFiles) {
-                    listDir(obj, maxLevel - 1);
-                }
-            }
-        }*/
         Main1507.count--;
     }
 
@@ -101,8 +93,106 @@ public class Main1507 {
         System.out.printf("%s\t%s\t%.1f %s, %s\n", file.getAbsolutePath(), typeTxt, sizeToShow, dim, date);
     }
 
-    public static void main(String[] args) {
+    static ArrayList<MaskParts> getMaskArray(String mask) {
+        // ключ = 1, если после части маски любой единичный символ ('_')
+        // 2 - если после данной части маски идет серия любых символов ('*')
+        // 0 - если часть последняя в маске
+        ArrayList<MaskParts> out = new ArrayList<>();
+        String part = "";
+        char[] maskChars = mask.toCharArray();
+        int type = 0;
+        for (int i = 0; i < maskChars.length; i++) {
+            if (maskChars[i] == '_' || maskChars[i] == '*') {
+                type = maskChars[i] == '_' ? 1 : 2;
+                out.add(new MaskParts(type, part));
+                part = "";
+                type = 0;
+                //i += 2;
+            } else {
+                part += maskChars[i];
+            }
+        }
+        if (!part.isEmpty())
+            out.add(new MaskParts(type, part));
+        return out;
+    }
 
+    static boolean isMatchesMask(String src, ArrayList<MaskParts> maskParts) {
+        int good = 0;
+        int start = 0;
+        boolean isExit = false;
+
+        for (int i = 0; i < maskParts.size(); i++) {
+            int curType = maskParts.get(i).getType();
+            int nextType = i < maskParts.size() - 1 ? maskParts.get(i + 1).getType() : -1;
+            String curPart = maskParts.get(i).getPart();
+            String nextPart = i < maskParts.size() - 1 ? maskParts.get(i + 1).getPart() : "";
+            switch (curType) {
+                case 0:
+                    if (src.substring(start).equals(curPart))
+                        good++;
+                    isExit = true;
+                    break;
+                case 1:
+                    String substr = "";
+                    if (!curPart.isEmpty()) {
+                        if (src.substring(start, start + curPart.length()).equals(curPart)) {
+                            int beg = start + curPart.length() + 1;
+                            substr = src.substring(beg, beg + nextPart.length());
+                            if (substr.equals(nextPart)) {
+                                good++;
+                                start = beg;
+                            }
+                        }
+                    } else {
+                        substr = src.substring(start + 1, start + 1 + nextPart.length());
+                        if (substr.equals(nextPart)) {
+                            good++;
+                            start++;
+                        }
+                    }
+                    break;
+                case 2:
+                    if (!curPart.isEmpty()) {
+                        if (src.substring(start, start + curPart.length()).equals(curPart)) {
+                            if (nextType >= 0 && src.indexOf(nextPart) > curPart.length()) {
+                                good++;
+                                start = src.indexOf(nextPart);
+                            } else {
+//                                if(!src.substring(start,src.length()).isEmpty()){
+                                good++;
+                                isExit = true;
+//                                }
+                            }
+                        }
+                    } else {
+                        if (src.indexOf(nextPart) > i + 1) {
+                            good++;
+                            start = src.indexOf(nextPart);
+                        }
+                    }
+                    break;
+            }
+            if (isExit) break;
+        }
+        return maskParts.size() == good;
+    }
+
+    static void findFilesByMask(File fileForSearch, String mask) {
+        ArrayList<MaskParts> maskParts = getMaskArray(mask);
+        File[] innerFiles = fileForSearch.listFiles();
+        if (innerFiles != null) {
+            for (File file : innerFiles) {
+                if (mask.equals("*") || (mask.equals("_") && file.getName().length() == 1) || isMatchesMask(file.getName(), maskParts)) {
+                    printFileInfo(file, Main1507.count++);
+                }
+                findFilesByMask(file, mask);
+            }
+        }
+        Main1507.count--;
+    }
+
+    public static void main(String[] args) {
         Scanner scn0;
         Scanner scn1;
         String folderName;
@@ -121,6 +211,7 @@ public class Main1507 {
             System.out.println("3 - Удалить");
             System.out.println("4 - Переименовать");
             System.out.println("5 - Просмотр");
+            System.out.println("6 - Поиск файлов по маске");
             System.out.println("0 - Выход");
             System.out.print("Выберите действие: ");
 
@@ -257,6 +348,21 @@ public class Main1507 {
 //                            int countDir = 0;
 //                            int countFile = 0;
                             listDir(file, 1);
+                        }
+                        break;
+                    case 6:
+                        System.out.print("Введите директорию, в которой нужно найти файлы и папки: ");
+                        Scanner scn8 = new Scanner(System.in);
+                        String curDir = scn8.next();
+                        File fileForSearch = new File(curDir);
+                        if (fileForSearch.exists()) {
+                            System.out.print("Введите маску для поиска: ");
+                            Scanner scn9 = new Scanner(System.in);
+                            String mask = scn9.next();
+                            Main1507.count = 0;
+                            findFilesByMask(fileForSearch, mask);
+                        } else {
+                            System.out.println("Директория " + curDir + " не существует.");
                         }
                         break;
                     default:
