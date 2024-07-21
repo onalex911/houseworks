@@ -22,14 +22,40 @@ public class Person {
         this.age = age;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
-        return id + ": " + name + " " + surname + " " + age;
+        return id + ") " + name + " " + surname + " " + age;
     }
 
     public String toFileString() {
-        return id + fieldDelim + name + fieldDelim + surname + fieldDelim + age + recordDelim;
+        return "" + id + fieldDelim + name + fieldDelim + surname + fieldDelim + age + recordDelim;
     }
-
-
 }
