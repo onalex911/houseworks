@@ -5,6 +5,7 @@ import hw0307.Main0307;
 import java.io.File;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -216,10 +217,26 @@ public class Main1507 {
                             listDir(file, 5);
                         }else {
                             File[] innerFiles = file.listFiles();
+                            int countDir = 0;
+                            int countFile = 0;
+                            ArrayList<File> dirs = new ArrayList<>();
+                            ArrayList<File> files = new ArrayList<>();
                             if (innerFiles != null) {
                                 for (File innerFile : innerFiles) {
-                                    printFileInfo(innerFile, 0);
+                                    if(innerFile.isDirectory()){
+                                        dirs.add(innerFile);
+                                        countDir++;
+                                    }else{
+                                        files.add(innerFile);
+                                        countFile++;
+                                    }
+                                    //printFileInfo(innerFile, 0);
                                 }
+                                System.out.println("Текущая папка содержит: \nвложенных папок: "+countDir+"\nфайлов: "+countFile);
+                                for(File curDir:dirs)
+                                    printFileInfo(curDir,0);
+                                for(File curFile:files)
+                                    printFileInfo(curFile,0);
                             }
                         }
                         break;
