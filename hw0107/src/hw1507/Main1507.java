@@ -47,14 +47,39 @@ public class Main1507 {
 
     static void listDir(File directory, int maxLevel) {
         printFileInfo(directory, Main1507.count++);
-        if (directory.isDirectory() && maxLevel > 0) {
+        File[] innerFiles = directory.listFiles();
+        ArrayList<File> dirs = new ArrayList<>();
+        ArrayList<File> files = new ArrayList<>();
+        int countDir = 0;
+        int countFile = 0;
+        if (innerFiles != null && maxLevel>0) {
+            for (File innerFile : innerFiles) {
+                if(innerFile.isDirectory()){
+                    dirs.add(innerFile);
+                    countDir++;
+                }else{
+                    files.add(innerFile);
+                    countFile++;
+                }
+                //printFileInfo(innerFile, 0);
+            }
+            System.out.println("Папка содержит: вложенных папок – "+countDir+", файлов – "+countFile);
+            for(File curDir:dirs) {
+                //printFileInfo(curDir, 0);
+                listDir(curDir, maxLevel - 1);
+            }
+            for(File curFile:files)
+                //printFileInfo(curFile,0);
+                listDir(curFile, maxLevel - 1);
+        }
+        /*if (directory.isDirectory() && maxLevel > 0) {
             File[] innerFiles = directory.listFiles();
             if (innerFiles != null) {
                 for (File obj : innerFiles) {
                     listDir(obj, maxLevel - 1);
                 }
             }
-        }
+        }*/
         Main1507.count--;
     }
 
@@ -209,35 +234,18 @@ public class Main1507 {
                         }
                         break;
                     case 5: // Просмотр
-                        File file = new File(workDir);
+//                        File file = new File(workDir);
+                        File file = new File("G:\\");
                         Scanner scn6 = new Scanner(System.in);
                         System.out.print("Вывести информацию о вложнных папках и файлах? (y/n): ");
                         String respFull = scn6.next();
                         if(respFull.equals("y")){
-                            listDir(file, 5);
+                            listDir(file, 3);
                         }else {
-                            File[] innerFiles = file.listFiles();
-                            int countDir = 0;
-                            int countFile = 0;
-                            ArrayList<File> dirs = new ArrayList<>();
-                            ArrayList<File> files = new ArrayList<>();
-                            if (innerFiles != null) {
-                                for (File innerFile : innerFiles) {
-                                    if(innerFile.isDirectory()){
-                                        dirs.add(innerFile);
-                                        countDir++;
-                                    }else{
-                                        files.add(innerFile);
-                                        countFile++;
-                                    }
-                                    //printFileInfo(innerFile, 0);
-                                }
-                                System.out.println("Текущая папка содержит: \nвложенных папок: "+countDir+"\nфайлов: "+countFile);
-                                for(File curDir:dirs)
-                                    printFileInfo(curDir,0);
-                                for(File curFile:files)
-                                    printFileInfo(curFile,0);
-                            }
+//                            File[] innerFiles = file.listFiles();
+//                            int countDir = 0;
+//                            int countFile = 0;
+                            listDir(file,1);
                         }
                         break;
                     default:
