@@ -1,10 +1,9 @@
 package hw1507;
 
-import hw0307.Main0307;
-
 import java.io.File;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -12,6 +11,7 @@ import java.util.Scanner;
 public class Main1507 {
 
     static int count = 0;
+    static int level = 0;
     static int maxLevel = 10;
 
     static boolean isCorrectName(String name) {
@@ -192,6 +192,43 @@ public class Main1507 {
         Main1507.count--;
     }
 
+    static void checkFiles(File fileForSearch) {
+
+        Main1507.level++;
+        try {
+            if (fileForSearch.isFile()) {
+                Main1507.count++;
+                FileReader fr = new FileReader(fileForSearch);
+                String status = fr.read(new char[1]) > 0 ? "" : fileForSearch.getAbsolutePath() + " - NOT OK!!!";
+                fr.close();
+                if (!status.isEmpty()) {
+                    System.out.println();
+                    for (int i = 0; i < Main1507.level; i++) {
+                        System.out.print(" ");
+                    }
+                    System.out.println(status);
+                } else {
+                    System.out.print(".");
+                    if (Main1507.count % 100 == 0) System.out.println();
+                }
+            } else {
+                File[] innerFiles = fileForSearch.listFiles();
+                if (innerFiles != null) {
+                    for (File file : innerFiles) {
+                        checkFiles(file);
+                    }
+                }
+            }
+        } catch (FileNotFoundException fnfex) {
+            System.out.println(fileForSearch.getAbsolutePath() + " не найден! " + fnfex.getMessage());
+        } catch (IOException ioex) {
+            System.out.println(fileForSearch.getAbsolutePath() + " - ошибка ввода/вывода! " + ioex.getMessage());
+
+        }
+
+        Main1507.level--;
+    }
+
     public static void main(String[] args) {
         Scanner scn0;
         Scanner scn1;
@@ -212,6 +249,7 @@ public class Main1507 {
             System.out.println("4 - Переименовать");
             System.out.println("5 - Просмотр");
             System.out.println("6 - Поиск файлов по маске");
+            System.out.println("7 - Проверка чтения всех файлов на диске");
             System.out.println("0 - Выход");
             System.out.print("Выберите действие: ");
 
@@ -365,9 +403,23 @@ public class Main1507 {
                             System.out.println("Директория " + curDir + " не существует.");
                         }
                         break;
+                    case 7:
+                        String curDisk = "G:\\";
+//                        String curDisk = "G:\\Home\\всякое с Я.Диска\\Документы\\бэкап с HTC OneS";
+                        File fileForCheck = new File(curDisk);
+                        if (fileForCheck.exists()) {
+                            Main1507.count = 0;
+                            checkFiles(fileForCheck);
+                        } else {
+                            System.out.println("Директория " + curDisk + " не существует.");
+                        }
+                        System.out.println("\nВсего обработано файлов: "+Main1507.count);
+                        break;
                     default:
                         System.out.println("ВНИМАНИЕ! Введено неверное значение.");
                 }
+
+
             } catch (Exception e) {
                 System.out.println("ОШИБКА! " + e.getMessage());
             }
