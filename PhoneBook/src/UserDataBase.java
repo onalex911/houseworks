@@ -105,6 +105,17 @@ public class UserDataBase {
         return false;
     }
 
+    public User getUserByLogin(String login){
+        if (existData) {
+            for (Integer id : userDB.keySet()) {
+                User curUser = userDB.get(id);
+                if (curUser.getLogin().equals(login))
+                    return curUser;
+            }
+        }
+        return null;
+    }
+
     public void addUser(User user) throws IOException, DataNotFoundException, SecurityException {
         FileWriter fw = new FileWriter(file, true);
         fw.write(lastId + "\t" + user.getLogin() + "\t" + user.getName() + "\t" + user.getPasswordHash() + "\n");

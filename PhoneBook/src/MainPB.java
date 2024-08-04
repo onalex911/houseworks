@@ -6,14 +6,11 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class MainPB {
-    public static String inputPhrase = "Введите значение: ";
     public static String errMsg = "ОШИБКА! ";
     public static String warnMsg = "ВНИМАНИЕ! ";
-    public static String wrongValue = "Введено неверное значение.";
-    public static String inputIsEmpty = "Введено пустое значение.";
-    public static String tryAgain = "\nПопробуйте еще раз.";
 
     public static String workDirName = "DB";
+    public static final int MaxAttempts = 5;
 
     static void checkWorkDir() throws NullPointerException, SecurityException {
         File dir = new File(workDirName);
@@ -23,10 +20,13 @@ public class MainPB {
     }
 
     public static void main(String[] args) {
-
-        Scanner scn1, scn2, scn3, scn4, scn5, scn6, scn7, scn8, scn9;
+        MenuHandler mh = new MenuHandler("LoginMenu");
+        mh.execute("LoginMenu");
+        //Scanner scn1, scn2, scn3, scn4, scn5, scn6, scn7, scn8, scn9;
+        /*
         while (true) { //login menu
             MenuHandler mh = new MenuHandler("LoginMenu");
+
             System.out.println(mh.getMenuString());
             System.out.print(inputPhrase);
             scn1 = new Scanner(System.in);
@@ -40,8 +40,45 @@ public class MainPB {
                     String login, name, email, password;
                     switch (response) {
                         case 1: //Sign In
+                            userDB = new UserDataBase();
+                            User currentUser;
+                            int attempt = 0;
                             //запрашиваем имя/пароль пользователя
-                            //выводим меню контактов для авторизовавшегося пользователя
+                            while (true) {
+                                System.out.print("Введите логин: ");
+                                scn2 = new Scanner(System.in);
+                                login = scn2.next();
+                                if (login.isEmpty()) {
+                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                } else {
+                                    if (!userDB.isLoginExists(login)) {
+                                        System.out.println(warnMsg + "Введенный логин не существует." + tryAgain);
+                                    } else {
+                                        currentUser = userDB.getUserByLogin(login);
+                                        System.out.print("Введите пароль: ");
+                                        scn3 = new Scanner(System.in);
+                                        password = scn3.next();
+                                        if (password.isEmpty()) {
+                                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                        } else {
+                                            if (!password.equals(currentUser.getPasswordHash())) {
+                                                System.out.println(warnMsg + "Введен неверный пароль." + tryAgain);
+                                            } else {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                if(++attempt >= MaxAttempts){
+                                    System.out.println(errMsg+"Вы исчерпали количество попыток для авторизации. Программа будет закрыта!");
+                                    needBreak = true;
+                                    break;
+                                }
+                            }
+                            if(!needBreak){
+                                //выводим меню контактов для авторизовавшегося пользователя
+
+                            }
                             break;
                         case 2: //Sign Up
                             userDB = new UserDataBase();
@@ -67,19 +104,19 @@ public class MainPB {
                                 } else
                                     break;
                             }
-                            /*while (true) {
-                                System.out.println("Введите ваш email: ");
-                                scn4 = new Scanner(System.in);
-                                email = scn4.next();
-                                if (email.isEmpty()) {
-                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
-                                } else {
-                                    if (!email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$")) {
-                                        System.out.println(warnMsg + "Введенное значение не соответствует формату адреса электронной почты." + tryAgain);
-                                    } else
-                                        break;
-                                }
-                            }*/
+//                            while (true) {
+//                                System.out.println("Введите ваш email: ");
+//                                scn4 = new Scanner(System.in);
+//                                email = scn4.next();
+//                                if (email.isEmpty()) {
+//                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
+//                                } else {
+//                                    if (!email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$")) {
+//                                        System.out.println(warnMsg + "Введенное значение не соответствует формату адреса электронной почты." + tryAgain);
+//                                    } else
+//                                        break;
+//                                }
+//                            }
                             while (true) {
                                 System.out.print("Придумайте и введите пароль: ");
                                 scn5 = new Scanner(System.in);
@@ -119,7 +156,7 @@ public class MainPB {
                 continue;
             }
             if (needBreak) break;
-        }
+        }*/
         System.out.println("\n\nДо новых встреч!");
     }
 }

@@ -31,7 +31,7 @@ public class Main2406 {
         }*/
         String num = "+7 (912) 123-58-57 ";
         long startTime = System.nanoTime();
-        System.out.println(String.format("%010d", strToLong(num)));
+        System.out.println(String.format("%015d", strToLong(num)));
         //strToLong(num);
         long interTime = System.nanoTime();
         strToLongOld(num);
