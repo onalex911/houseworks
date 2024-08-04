@@ -31,8 +31,8 @@ public class Main2406 {
         }*/
         String num = "+7 (912) 123-58-57 ";
         long startTime = System.nanoTime();
-//        System.out.println(strToLong(num));
-        strToLong(num);
+        System.out.println(String.format("%010d", strToLong(num)));
+        //strToLong(num);
         long interTime = System.nanoTime();
         strToLongOld(num);
         long endTime = System.nanoTime();
@@ -40,15 +40,16 @@ public class Main2406 {
         System.out.println("2: "+(endTime-interTime));
     }
 
-    static void strToLong(String str){
+    static long strToLong(String str){
         IntStream streamFromString = str.chars();
         String txtResult = streamFromString
                 .filter(Character::isDigit)
 //                .filter(s -> s >= 48 && s <= 57)
                 .mapToObj(c -> String.valueOf((char) c))
                 .reduce("",String::concat);//forEach(x-> (char)x);
-        System.out.println(txtResult);
-        //return Long.parseLong(txtResult);
+        //System.out.println(txtResult);
+        return Long.parseLong(txtResult);
+
     }
     static long strToLongOld(String str){
         char[] chars = str.toCharArray();

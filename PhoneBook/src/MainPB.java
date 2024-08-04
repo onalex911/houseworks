@@ -40,6 +40,8 @@ public class MainPB {
                     String login, name, email, password;
                     switch (response) {
                         case 1: //Sign In
+                            //запрашиваем имя/пароль пользователя
+                            //выводим меню контактов для авторизовавшегося пользователя
                             break;
                         case 2: //Sign Up
                             userDB = new UserDataBase();

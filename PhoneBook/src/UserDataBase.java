@@ -11,9 +11,10 @@ public class UserDataBase {
     private long lastId;
     private HashMap<Integer, User> userDB;
     private boolean existData;
-    private String fileName = "UsersDB.txt";
-    private String serviceFileName = "service.txt";
+    private final String fileName = "UsersDB.txt";
+    private final String serviceFileName = "service.txt";
     private final long initId = 1L;
+
     {
         userDB = new HashMap<>();
         lastId = initId;
@@ -25,7 +26,7 @@ public class UserDataBase {
             MainPB.checkWorkDir();
             file = new File(MainPB.workDirName + "/" + fileName);
             if (file.exists() && file.length() > 0) {
-                System.out.println("DEBUG! UsersDB length = "+file.length());
+                System.out.println("DEBUG! UsersDB length = " + file.length());
                 FileReader fr = new FileReader(file);
                 char[] buffer = new char[(int) file.length()];
                 int countRead = fr.read(buffer);
@@ -69,10 +70,10 @@ public class UserDataBase {
                     existData = true;
                 }
             } else {
-                if(file.createNewFile()) {
+                if (file.createNewFile()) {
                     writeLastId(lastId);
                     existData = false;
-                }else {
+                } else {
                     throw new IOException("Невозможно создать файл пользователей.");
                 }
             }
@@ -87,7 +88,7 @@ public class UserDataBase {
         if (existData) {
             for (Integer id : userDB.keySet()) {
                 User curUser = userDB.get(id);
-                out += ++count +". " + curUser.getName() + "\n";
+                out += ++count + ". " + curUser.getName() + "\n";
             }
         }
         return out;
@@ -104,51 +105,61 @@ public class UserDataBase {
         return false;
     }
 
-    public void addUser(User user) throws IOException,DataNotFoundException {
+    public void addUser(User user) throws IOException, DataNotFoundException, SecurityException {
         FileWriter fw = new FileWriter(file, true);
-        fw.write("" + lastId + "\t" + user.getLogin() + "\t" + user.getName() + "\t" + user.getPasswordHash()+"\n");
+        fw.write(lastId + "\t" + user.getLogin() + "\t" + user.getName() + "\t" + user.getPasswordHash() + "\n");
         fw.close();
+        File userDir = new File(String.valueOf(lastId));
+        if (!userDir.exists()) {
+            if (!userDir.mkdir())
+                throw new SecurityException("Невозможно создать директорию для файлов пользователя.");
+        }
         writeLastId(++lastId);
+
     }
 
-    public long getLastId() throws NullPointerException, IOException, NumberFormatException{
-        try{
+    public long getLastId() throws NullPointerException, IOException, NumberFormatException {
+        try {
             MainPB.checkWorkDir();
-            File idFile = new File(MainPB.workDirName+"/"+serviceFileName);
-            if(idFile.exists()){
-                char[] buffer = new char[(int)idFile.length()];
+            File idFile = new File(MainPB.workDirName + "/" + serviceFileName);
+            if (idFile.exists()) {
+                char[] buffer = new char[(int) idFile.length()];
                 FileReader fr = new FileReader(idFile);
                 int countData = fr.read(buffer);
                 String tmp = "";
                 for (int i = 0; i < countData; i++) {
-                    if(buffer[i] == '\n')
+                    if (buffer[i] == '\n')
                         break;
-                    else if(buffer[i] >= 48 && buffer[i] <= 57)
+//                    else if (buffer[i] >= 48 && buffer[i] <= 57)
+                    else if(Character.isDigit(buffer[i]))
                         tmp += buffer[i];
                 }
                 return Long.parseLong(tmp);
-            }else{
+            } else {
                 writeLastId(initId);
                 return initId;
             }
-        }catch(NullPointerException | IOException | NumberFormatException ex){
+        } catch (NullPointerException | IOException | NumberFormatException ex) {
             throw ex;
         } catch (DataNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void writeLastId(long id) throws IOException, DataNotFoundException{
-        File idFile = new File(MainPB.workDirName+"/"+serviceFileName);
-        if(idFile.exists()){
-            FileWriter fw = new FileWriter(idFile,false);
-            fw.write(""+id+"\n");
+    public void writeLastId(long id) throws IOException, DataNotFoundException {
+        File idFile = new File(MainPB.workDirName + "/" + serviceFileName);
+        if (idFile.exists()) {
+            FileWriter fw = new FileWriter(idFile, false);
+            fw.write(id + "\n");
             fw.close();
-        }else{
-            idFile.createNewFile();
-            FileWriter fw = new FileWriter(idFile);
-            fw.write(""+id+"\n");
-            fw.close();
+        } else {
+            if (idFile.createNewFile()) {
+                FileWriter fw = new FileWriter(idFile);
+                fw.write(id + "\n");
+                fw.close();
+            } else {
+                throw new IOException("Невозможно создать служебный файл для пользователя.");
+            }
             //throw new DataNotFoundException("Отсутствует служебный файл");
         }
     }
