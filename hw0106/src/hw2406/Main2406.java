@@ -10,12 +10,12 @@ public class Main2406 {
 
         Scanner scn = new Scanner(System.in);
         try {
-            DataProcessor dp = new DataProcessor(emails, users);
+            DataProcessor dp = new DataProcessor(emails, users); //инициализируем "базу данных"
             System.out.print("Введите ваш логин (в формате ящика электронной почты): ");
             String login = scn.nextLine();
             UserInputHandler check = new UserInputHandler();
-            check.validateInput(login);
-            System.out.println("Ваше имя: " + dp.findData(login));
+            check.validateInput(login); //проверка на соответствие введенного имени формату эл.почты
+            System.out.println("Ваше имя: " + dp.findData(login)); //ищем введенный логин в "базе данных"
 
         }catch (RuntimeException r){
             System.out.println(r.getMessage());

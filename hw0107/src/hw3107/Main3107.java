@@ -1,15 +1,12 @@
 package hw3107;
 
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
-
 
 //Создать программу которая будет считать из файла который содержит N-количество слов ( сказку)
 //1) Количество глассных символов
@@ -36,7 +33,7 @@ public class Main3107 {
         String wordForSearch = scn2.next();
 
         long startTime = System.nanoTime();
-        File file = new File("Main3107/lorem1.txt");
+        File file = new File("src/files/lorem.txt");
         if (file.exists()) {
             try {
 
