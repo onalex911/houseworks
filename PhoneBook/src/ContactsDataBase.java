@@ -26,10 +26,14 @@ public class ContactsDataBase {
         this.userId = userId;
         this.userIdText = String.format("%010d", userId);
         //MainPB.checkWorkDir();
+        File dir = new File(MainPB.workDirName + "/" + this.userIdText);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
         file = new File(MainPB.workDirName + "/" + this.userIdText + "/" + fileName);
         if (file.exists() && file.length() > 0) {
             System.out.println("DEBUG! ContactDB for userId:" + userId + " length = " + file.length());
-            FileReader fr = new FileReader(file);
+            /*FileReader fr = new FileReader(file);
             char[] buffer = new char[(int) file.length()];
             int countRead = fr.read(buffer);
             if (countRead > 0) {
@@ -40,14 +44,24 @@ public class ContactsDataBase {
                 List<String> line = new ArrayList<>();
                 for (int i = 0; i < buffer.length; i++) {
                     if (buffer[i] == '\t') {
-                        line.add(tmp);
-                        tmp = "";
-                        countField++;
+                        if(countField == 0 && Long.parseLong(tmp) == userId) {
+                            line.add(tmp);
+                            tmp = "";
+                            countField++;
+                        }else{
+                            //если не тот userId - пропускаем строку до конца
+                            for (int j = ++i; j < buffer.length ; j++) {
+                                if(buffer[j] == '\n'){
+                                    i = j;
+                                    continue;
+                                }
+                            }
+                        }
                     } else if (buffer[i] == '\n') {
                         if (countField == 3) {
                             line.add(tmp);
                             tmp = "";
-                            contDB.put(Integer.parseInt(line.get(0)), new Contact(userId, Long.parseLong(line.get(0)), line.get(1), line.get(2), line.get(3)));
+                            contDB.put(Integer.parseInt(line.get(0)), new Contact(Long.parseLong(line.get(0)),Long.parseLong(line.get(1)), line.get(2), line.get(3), line.get(4)));
                             line.clear();
                             countField = 0;
                         } else {
@@ -58,24 +72,26 @@ public class ContactsDataBase {
                     }
                 }
                 existData = true;
-            }
+            }*/
         } else {
             if (file.createNewFile()) {
                 writeLastId(lastId);
                 existData = false;
             } else {
-                throw new IOException("Невозможно создать файл пользователей.");
+                throw new IOException("Невозможно создать файл контактов.");
             }
         }
     }
 
     public void addContact(Contact contact) throws IOException, DataNotFoundException, SecurityException {
         FileWriter fw = new FileWriter(file, true);
-        fw.write(lastId + "\t" + contact.getContactName() + "\t" + contact.getContactSurname()  + "\t" + contact.getContactNumberText()  + "\n");
+        lastId = getLastId();
+        fw.write(lastId + "\t" + contact.getUserId() + "\t" + contact.getContactName() + "\t" + contact.getContactSurname() + "\t" + contact.getContactNumberText() + "\n");
         fw.close();
         writeLastId(++lastId);
 
     }
+
     public void writeLastId(long id) throws IOException, DataNotFoundException {
         File idFile = new File(MainPB.workDirName + "/" + userIdText + "/" + serviceFileName);
         if (idFile.exists()) {
@@ -105,7 +121,6 @@ public class ContactsDataBase {
                 for (int i = 0; i < countData; i++) {
                     if (buffer[i] == '\n')
                         break;
-//                    else if (buffer[i] >= 48 && buffer[i] <= 57)
                     else if (Character.isDigit(buffer[i]))
                         tmp += buffer[i];
                 }

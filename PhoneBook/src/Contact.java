@@ -8,13 +8,16 @@ public class Contact {
     private String contactNumberText;
     private long contactNumber;
 
-    public Contact(long userId, long contactId, String contactName, String contactSurname, String contactNumberText) {
+    public Contact(long userId,String contactName, String contactSurname, String contactNumberText) {
         this.userId = userId;
-        this.contactId = contactId;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactNumberText = contactNumberText;
         this.contactNumber = strToLong(contactNumberText);
+    }
+    public Contact(long userId, long contactId, String contactName, String contactSurname, String contactNumberText) {
+        this(userId, contactName, contactSurname, contactNumberText);
+        this.contactId = contactId;
     }
 
     public long getUserId() {
@@ -56,11 +59,15 @@ public class Contact {
 
     static long strToLong(String str){
         IntStream streamFromString = str.chars();
-        String txtResult = streamFromString
-                .filter(Character::isDigit)
-                .mapToObj(c -> String.valueOf((char) c))
-                .reduce("",String::concat);
+        try {
+            String txtResult = streamFromString
+                    .filter(Character::isDigit)
+                    .mapToObj(c -> String.valueOf((char) c))
+                    .reduce("", String::concat);
 
-        return Long.parseLong(txtResult);
+            return Long.parseLong(txtResult);
+        }catch (Exception ex){
+            return 0;
+        }
     }
 }

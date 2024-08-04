@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.InputMismatchException;
@@ -84,11 +85,11 @@ public class MenuHandler {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
-        String mainMenu = "  _________________________________________________\n" +
+        String mainMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
-                " |            << Телефонная книга >>               |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
-                " |                Основное меню                    |\n" +
+                " |              << Телефонная книга >>             |\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
+                " |" + insertName("Основное меню") + "|\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
                 " | 0 - Save and Exit ( Save and Exit the program)  |\n" +
@@ -104,11 +105,11 @@ public class MenuHandler {
                 " | 5 - Come Back     ( Save and Exit phonebook )   |\n" +
                 " |_________________________________________________|";
         MenuMap.put("MainMenu", new MenuSettings(mainMenu, 5, 0));
-        String contactMenu = "  _________________________________________________\n" +
+        String contactMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |             << Телефонная книга >>              |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
-                " |           Основное меню -> Контакты             |\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
+                " |" + insertName("Основное меню -> Контакты") + "|\n" +
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
@@ -121,11 +122,11 @@ public class MenuHandler {
                 " |  2 - Delete       ( Delete contact )            |\n" +
                 " |_________________________________________________|";
         MenuMap.put("ContactMenu", new MenuSettings(contactMenu, 2, -1));
-        String contactEditMenu = "  _________________________________________________\n" +
+        String contactEditMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |             << Телефонная книга >>              |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
-                " |    Основное меню -> Контакты -> Редактировать   |\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
+                " |" + insertName("Основное меню -> Контакты -> Редактировать") + "|\n" +
                 " |         Что требуется отредактировать ?         |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
@@ -140,11 +141,11 @@ public class MenuHandler {
                 " |  3 - All          ( Edit name/surname/number )  |\n" +
                 " |_________________________________________________|";
         MenuMap.put("ContactEditMenu", new MenuSettings(contactEditMenu, 3, -1));
-        String printMenu = "  _________________________________________________\n" +
+        String printMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |             << Телефонная книга >>              |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
-                " |            Основное меню -> Печать              |\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
+                " |" + insertName("Основное меню -> Печать") + "|\n" +
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
@@ -155,10 +156,10 @@ public class MenuHandler {
                 " |  1 - Print        ( Specific )                  |\n" +
                 " |_________________________________________________|";
         MenuMap.put("PrintMenu", new MenuSettings(printMenu, 1, -1));
-        String sortingMenu = "  _________________________________________________\n" +
+        String sortingMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |            << Телефонная книга >>               |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
                 " |         Основное меню -> Сортировка             |\n" +
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
@@ -172,10 +173,10 @@ public class MenuHandler {
                 " |  2 - Number       ( Sort  1-9 / 9-1 )           |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingMenu", new MenuSettings(sortingMenu, 2, -1));
-        String sortingNameMenu = "  _________________________________________________\n" +
+        String sortingNameMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |             << Телефонная книга >>              |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
                 " |     Основное меню -> Сортировка -> по Имени     |\n" +
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
@@ -187,10 +188,10 @@ public class MenuHandler {
                 " |  1 - Name         ( Sort  Z - A )               |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingNameMenu", new MenuSettings(sortingNameMenu, 1, -1));
-        String sortingSurnameMenu = "  _________________________________________________\n" +
+        String sortingSurnameMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |             << Телефонная книга >>              |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
                 " |    Основное меню -> Сортировка -> по Фамилии    |\n" +
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
@@ -202,10 +203,10 @@ public class MenuHandler {
                 " |  1 - Surname         ( Sort  Z - A )            |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingSurnameMenu", new MenuSettings(sortingSurnameMenu, 1, -1));
-        String sortingNumberMenu = "  _________________________________________________\n" +
+        String sortingNumberMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |             << Телефонная книга >>              |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
                 " |    Основное меню -> Сортировка -> по Номеру     |\n" +
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
@@ -217,10 +218,10 @@ public class MenuHandler {
                 " |  1 - Number       ( Sort  9 - 1 )               |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingNumberMenu", new MenuSettings(sortingNumberMenu, 1, -1));
-        String searchMenu = "  _________________________________________________\n" +
+        String searchMenu = " ___________________________________________________\n" +
                 " |                                                 |\n" +
                 " |            << Телефонная книга >>               |\n" +
-                " |" + insertName("Владелец: "+this.currentUser.getName()) + "|\n" +
+                " |" + insertName("Владелец: " + currentUser.getName()) + "|\n" +
                 " |            Основное меню -> Поиск               |\n" +
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
@@ -248,7 +249,7 @@ public class MenuHandler {
         return menuExitValue;
     }
 
-    public boolean execute(String menuId) {
+    public boolean execute(String menuId) throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
         this.currentMenuId = menuId;
         switch (currentMenuId) {
             case "LoginMenu":
@@ -256,7 +257,7 @@ public class MenuHandler {
                 break;
             case "MainMenu":
                 return doMainMenu();
-                //break;
+            //break;
             case "ContactMenu":
                 doContactMenu();
                 break;
@@ -282,7 +283,7 @@ public class MenuHandler {
                 doSearchMenu();
                 break;
             default:
-                System.out.println(errMsg+"Неверный ключ меню.");
+                System.out.println(errMsg + "Неверный ключ меню.");
         }
         return true; //выход в предыдущее меню
     }
@@ -343,7 +344,7 @@ public class MenuHandler {
                             if (!needBreak) {
                                 //выводим меню контактов для авторизовавшегося пользователя
                                 mh.setCurrentUser(currentUser);
-                                needBreak =!mh.execute("MainMenu");
+                                needBreak = !mh.execute("MainMenu");
                                 //needBreak=true;
                             }
                             break;
@@ -371,19 +372,6 @@ public class MenuHandler {
                                 } else
                                     break;
                             }
-//                            while (true) {
-//                                System.out.println("Введите ваш email: ");
-//                                scn4 = new Scanner(System.in);
-//                                email = scn4.next();
-//                                if (email.isEmpty()) {
-//                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
-//                                } else {
-//                                    if (!email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$")) {
-//                                        System.out.println(warnMsg + "Введенное значение не соответствует формату адреса электронной почты." + tryAgain);
-//                                    } else
-//                                        break;
-//                                }
-//                            }
                             while (true) {
                                 System.out.print("Придумайте и введите пароль: ");
                                 scn5 = new Scanner(System.in);
@@ -426,7 +414,9 @@ public class MenuHandler {
         }
     }
 
-    private boolean doMainMenu() throws InputMismatchException {
+    private boolean doMainMenu() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
+        MenuHandler mh = new MenuHandler("MainMenu");
+        mh.setCurrentUser(currentUser);
         while (true) {
             System.out.println(MenuMap.get(currentMenuId).getMenuText());
             System.out.print(inputPhrase);
@@ -434,21 +424,30 @@ public class MenuHandler {
             int resp = scn.nextInt();
             if (resp == MenuMap.get(currentMenuId).getExitValue())
                 return false;
-            switch (resp){
-                case 1: doContactMenu();
-                break;
-                case 2: doPrintMenu();
-                break;
-                case 3: doSortingMenu();
+            switch (resp) {
+                case 1:
+                    mh.execute("ContactMenu");
                     break;
-                case 4: doSearchMenu();
+                case 2:
+                    mh.execute("PrintMenu");
                     break;
-                case 5: return true;
+                case 3:
+                    mh.execute("SortingMenu");
+                    break;
+                case 4:
+                    mh.execute("SearchMenu");
+                    break;
+                case 5:
+                    return true;
+                default:
+                    System.out.println(warnMsg + wrongValue + tryAgain);
             }
         }
     }
 
-    private void doContactMenu() throws InputMismatchException {
+    private void doContactMenu() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
+        MenuHandler mh = new MenuHandler("ContactMenu");
+        mh.setCurrentUser(currentUser);
         while (true) {
             System.out.println(MenuMap.get(currentMenuId).getMenuText());
             System.out.print(inputPhrase);
@@ -456,11 +455,47 @@ public class MenuHandler {
             int resp = scn.nextInt();
             if (resp == MenuMap.get(currentMenuId).getExitValue())
                 return;
-            if (resp == 1) {
-                execute("ContactEditMenu");
+            Scanner scn1, scn2, scn3;
+            switch (resp) {
+                case 0: //Add
+                    String name, surname, number;
+                    while (true) {
+                        System.out.print("Введите имя: ");
+                        scn1 = new Scanner(System.in);
+                        name = scn1.next();
+                        if (name.isEmpty()) {
+                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                            continue;
+                        }
+                        System.out.print("Введите фамилию: ");
+                        scn2 = new Scanner(System.in);
+                        surname = scn2.next();
+                        if (surname.isEmpty()) {
+                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                            continue;
+                        }
+                        System.out.print("Введите номер телефона: ");
+                        scn3 = new Scanner(System.in);
+                        number = scn3.next();
+                        if (number.isEmpty()) {
+                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                            continue;
+                        } else if (!checkPhoneNumber(number)) {
+                            System.out.println(warnMsg + "Введено значение не соответствующее формату телефонного номера" + tryAgain);
+                            continue;
+                        } else break;
+                    }
+                    Contact contact = new Contact(currentUser.getId(), name, surname, number);
+                    ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                    contDB.addContact(contact);
+                    break;
+                case 1: //Edit
+                    break;
+                case 2: //Delete
+                    break;
+                default:
+                    System.out.println(warnMsg + wrongValue + tryAgain);
             }
-
-            System.out.println("Contact Edit Menu working...");
         }
     }
 
@@ -565,5 +600,13 @@ public class MenuHandler {
         } else {
             return name;
         }
+    }
+
+    public static boolean checkPhoneNumber(String number) {
+        return number.matches("[0-9+\\s\\-()]{3,18}") && Contact.strToLong(number) > 0;
+    }
+
+    public static boolean checkEmail(String email) {
+        return email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$");
     }
 }

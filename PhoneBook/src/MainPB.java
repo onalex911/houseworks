@@ -19,8 +19,14 @@ public class MainPB {
     }
 
     public static void main(String[] args) {
-        MenuHandler mh = new MenuHandler("LoginMenu");
-        mh.execute("LoginMenu");
+        try {
+            MenuHandler mh = new MenuHandler("LoginMenu");
+            mh.execute("LoginMenu");
+        }catch(Exception ex){
+            System.out.println(MenuHandler.errMsg+ex.getMessage()+"Программа будет прервана!");
+        }
+        //System.out.println(Contact.strToLong("-------"));
+        //System.out.println(MenuHandler.checkPhoneNumber("31"));
         //System.out.println("|"+MenuHandler.insertName("Alibaba")+"|");
         System.out.println("\n\nДо новых встреч!");
     }

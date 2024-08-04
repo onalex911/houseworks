@@ -9,7 +9,7 @@ import java.util.List;
 public class UserDataBase {
     private File file;
     private long lastId;
-    private HashMap<Integer, User> userDB;
+    private HashMap<Long, User> userDB;
     private boolean existData;
     private final String fileName = "UsersDB.txt";
     private final String serviceFileName = "service.txt";
@@ -57,7 +57,8 @@ public class UserDataBase {
                             if (countField == 3) {
                                 line.add(tmp);
                                 tmp = "";
-                                userDB.put(Integer.parseInt(line.get(0)), new User(line.get(1), line.get(2), line.get(3)));
+                                long id = Long.parseLong(line.get(0));
+                                userDB.put(id, new User(id,line.get(1), line.get(2), line.get(3)));
                                 line.clear();
                                 countField = 0;
                             } else {
@@ -86,7 +87,7 @@ public class UserDataBase {
         String out = "";
         long count = 0;
         if (existData) {
-            for (Integer id : userDB.keySet()) {
+            for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
                 out += ++count + ". " + curUser.getName() + "\n";
             }
@@ -96,7 +97,7 @@ public class UserDataBase {
 
     public boolean isLoginExists(String login) {
         if (existData) {
-            for (Integer id : userDB.keySet()) {
+            for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
                 if (curUser.getLogin().equals(login))
                     return true;
@@ -107,7 +108,7 @@ public class UserDataBase {
 
     public User getUserByLogin(String login){
         if (existData) {
-            for (Integer id : userDB.keySet()) {
+            for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
                 if (curUser.getLogin().equals(login))
                     return curUser;
