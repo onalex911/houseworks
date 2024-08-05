@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -85,7 +84,7 @@ public class MenuHandler {
         }
     }
 
-    public MenuHandler(String menuName,User currentUser) {
+    public MenuHandler(String menuName, User currentUser) {
         this(menuName);
         //this.currentUser = currentUser;
         setCurrentUser(currentUser);
@@ -351,7 +350,7 @@ public class MenuHandler {
                         }
                         if (!needBreak) {
                             //выводим меню контактов для авторизовавшегося пользователя
-                            MenuHandler mainMenu = new MenuHandler("MainMenu",currentUser);
+                            MenuHandler mainMenu = new MenuHandler("MainMenu", currentUser);
 
                             needBreak = !mainMenu.execute();
                             //needBreak=true;
@@ -423,91 +422,99 @@ public class MenuHandler {
         }
     }
 
-    private boolean doMainMenu() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
+    private boolean doMainMenu() throws IOException, NullPointerException, DataNotFoundException {
 //        MenuHandler mh = new MenuHandler("MainMenu");
 //        mh.setCurrentUser(currentUser);
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return false;
-            switch (resp) {
-                case 1:
-                    MenuHandler contMenu = new MenuHandler("ContactMenu",currentUser);
-                    contMenu.execute();
-                    break;
-                case 2:
-                    MenuHandler prnMenu = new MenuHandler("PrintMenu",currentUser);
-                    prnMenu.execute();
-                    break;
-                case 3:
-                    MenuHandler sortMenu = new MenuHandler("SortingMenu",currentUser);
-                    sortMenu.execute();
-                    break;
-                case 4:
-                    MenuHandler searchMenu = new MenuHandler("SearchMenu",currentUser);
-                    searchMenu.execute();
-                    break;
-                case 5:
-                    return true;
-                default:
-                    System.out.println(warnMsg + wrongValue + tryAgain);
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return false;
+                switch (resp) {
+                    case 1:
+                        MenuHandler contMenu = new MenuHandler("ContactMenu", currentUser);
+                        contMenu.execute();
+                        break;
+                    case 2:
+                        MenuHandler prnMenu = new MenuHandler("PrintMenu", currentUser);
+                        prnMenu.execute();
+                        break;
+                    case 3:
+                        MenuHandler sortMenu = new MenuHandler("SortingMenu", currentUser);
+                        sortMenu.execute();
+                        break;
+                    case 4:
+                        MenuHandler searchMenu = new MenuHandler("SearchMenu", currentUser);
+                        searchMenu.execute();
+                        break;
+                    case 5:
+                        return true;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                }
+            } catch (InputMismatchException ime) {
+                System.out.println(warnMsg + wrongValue + tryAgain);
             }
         }
     }
 
-    private void doContactMenu() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
+    private void doContactMenu() throws IOException, NullPointerException, DataNotFoundException {
 //        MenuHandler mh = new MenuHandler("ContactMenu");
 //        mh.setCurrentUser(currentUser);
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
-            Scanner scn1, scn2, scn3;
-            switch (resp) {
-                case 0: //Add
-                    String name, surname, number;
-                    while (true) {
-                        System.out.print("Введите имя: ");
-                        scn1 = new Scanner(System.in);
-                        name = scn1.next();
-                        if (name.isEmpty()) {
-                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
-                            continue;
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
+                Scanner scn1, scn2, scn3;
+                switch (resp) {
+                    case 0: //Add
+                        String name, surname, number;
+                        while (true) {
+                            System.out.print("Введите имя: ");
+                            scn1 = new Scanner(System.in);
+                            name = scn1.next();
+                            if (name.isEmpty()) {
+                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                continue;
+                            }
+                            System.out.print("Введите фамилию: ");
+                            scn2 = new Scanner(System.in);
+                            surname = scn2.next();
+                            if (surname.isEmpty()) {
+                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                continue;
+                            }
+                            System.out.print("Введите номер телефона: ");
+                            scn3 = new Scanner(System.in);
+                            number = scn3.next();
+                            if (number.isEmpty()) {
+                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                continue;
+                            } else if (!checkPhoneNumber(number)) {
+                                System.out.println(warnMsg + "Введено значение не соответствующее формату телефонного номера" + tryAgain);
+                                continue;
+                            } else break;
                         }
-                        System.out.print("Введите фамилию: ");
-                        scn2 = new Scanner(System.in);
-                        surname = scn2.next();
-                        if (surname.isEmpty()) {
-                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
-                            continue;
-                        }
-                        System.out.print("Введите номер телефона: ");
-                        scn3 = new Scanner(System.in);
-                        number = scn3.next();
-                        if (number.isEmpty()) {
-                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
-                            continue;
-                        } else if (!checkPhoneNumber(number)) {
-                            System.out.println(warnMsg + "Введено значение не соответствующее формату телефонного номера" + tryAgain);
-                            continue;
-                        } else break;
-                    }
-                    Contact contact = new Contact(currentUser.getId(), name, surname, number);
-                    ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
-                    contDB.addContact(contact);
-                    break;
-                case 1: //Edit
-                    break;
-                case 2: //Delete
-                    break;
-                default:
-                    System.out.println(warnMsg + wrongValue + tryAgain);
+                        Contact contact = new Contact(currentUser.getId(), name, surname, number);
+                        ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                        contDB.addContact(contact);
+                        break;
+                    case 1: //Edit
+                        break;
+                    case 2: //Delete
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                }
+            } catch (InputMismatchException ime) {
+                System.out.println(errMsg + wrongValue + tryAgain);
             }
         }
     }
@@ -525,17 +532,42 @@ public class MenuHandler {
         }
     }
 
-    private void doPrintMenu() throws InputMismatchException {
+    private void doPrintMenu() throws RuntimeException, IOException {
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
+            Scanner scn1;
 
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
 
-            System.out.println("Menu working ...");
+                ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                switch (resp) {
+                    case 0:
+                        System.out.println(contDB.getContactsForPrint(""));
+                        System.out.println("-------------------------------------------------------------");
+                        break;
+                    case 1:
+                        scn1 = new Scanner(System.in);
+                        System.out.print("Введите поисковую строку для номера: ");
+                        String mask = scn1.nextLine();
+                        System.out.println(contDB.getContactsForPrint(mask));
+                        System.out.println("-------------------------------------------------------------");
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                }
+
+            } catch (InputMismatchException ime) {
+                System.out.println(errMsg + wrongValue + tryAgain);
+            } catch (DataNotFoundException e) {
+                throw new RuntimeException(errMsg + "Данные не найдены!");
+            } catch (IOException e) {
+                throw new IOException(e);
+            }
         }
     }
 

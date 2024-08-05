@@ -25,6 +25,21 @@ public class MainPB {
         }catch(Exception ex){
             System.out.println(MenuHandler.errMsg+ex.getMessage()+"Программа будет прервана!");
         }
+//        String str = "+(55) 66 77";
+//        Scanner scn = new Scanner(System.in);
+//        System.out.print("Enter mask: ");
+//        String mask = scn.nextLine();
+//
+//        String template = mask; //"^"+mask.trim()+"$";
+//        template = template.replace(".","\\".concat("."));
+//        template = template.replace("+","\\".concat("+"));
+//        template = template.replace("(","\\".concat("("));
+//        template = template.replace(")","\\".concat(")"));
+//        template = template.replace("_",".");
+//        template = template.replace("*",".*");
+//        template = template.replace(" ","\\".concat("s"));
+//
+//        System.out.println(template+": "+ str.matches(template));
         //System.out.println(Contact.strToLong("-------"));
         //System.out.println(MenuHandler.checkPhoneNumber("31"));
         //System.out.println("|"+MenuHandler.insertName("Alibaba")+"|");
