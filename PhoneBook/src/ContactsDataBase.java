@@ -75,13 +75,15 @@ public class ContactsDataBase {
 static int Num = 1;
     public String getContactsForPrint(String mask) throws DataNotFoundException, IOException {
         String out = "";
-//        int num = 1;
-        if(contactDB.isEmpty())
+        Num = 1;
+        if(contactDB.isEmpty()) {
             getContactDB();
+        }
         if(mask.isEmpty()){
-            for(Contact contact:contactDB){
-                out += (Num++)+". "+contact.getContactName()+" "+contact.getContactSurname()+" тел.: "+ contact.getContactNumberText()+"\n";
-            }
+            contactDB.stream()
+                    .forEach(c->{
+                        System.out.println((Num++)+". "+c.getContactNumberText()+" "+c.getContactName()+" "+c.getContactSurname());
+                    } );
         }else{
             contactDB.stream()
                     .filter(s ->{
