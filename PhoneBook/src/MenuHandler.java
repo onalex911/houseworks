@@ -5,12 +5,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MenuHandler {
+    private String menuName;
     private String menuString;
     private int menuMaxValue;
     private int menuExitValue;
     private final HashMap<String, MenuSettings> MenuMap = new HashMap<>();
     private User currentUser;
-    private String currentMenuId;
+    //private String currentMenuId;
     public static String errMsg = "ОШИБКА! ";
     public static String warnMsg = "ВНИМАНИЕ! ";
     public static String inputPhrase = "Введите значение: ";
@@ -72,15 +73,22 @@ public class MenuHandler {
 
     }
 
-    MenuHandler(String nameMenu) {
+    public MenuHandler(String menuName) {
+        this.menuName = menuName;
         for (String name : MenuMap.keySet()) {
-            if (name.equals(nameMenu)) {
+            if (name.equals(menuName)) {
                 menuString = MenuMap.get(name).getMenuText();
                 menuMaxValue = MenuMap.get(name).getMaxValue();
                 menuExitValue = MenuMap.get(name).getExitValue();
                 break;
             }
         }
+    }
+
+    public MenuHandler(String menuName,User currentUser) {
+        this(menuName);
+        //this.currentUser = currentUser;
+        setCurrentUser(currentUser);
     }
 
     public void setCurrentUser(User currentUser) {
@@ -249,9 +257,9 @@ public class MenuHandler {
         return menuExitValue;
     }
 
-    public boolean execute(String menuId) throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
-        this.currentMenuId = menuId;
-        switch (currentMenuId) {
+    public boolean execute() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
+        //this.currentMenuId = menuId;
+        switch (menuName) {
             case "LoginMenu":
                 doLoginMenu();
                 break;
@@ -288,154 +296,159 @@ public class MenuHandler {
         return true; //выход в предыдущее меню
     }
 
-    private void doLoginMenu() throws InputMismatchException {
+    private void doLoginMenu() {
         Scanner scn1, scn2, scn3, scn4, scn5, scn6, scn7, scn8, scn9;
         while (true) { //login menu
-            MenuHandler mh = new MenuHandler("LoginMenu");
+            //MenuHandler mh = new MenuHandler("LoginMenu");
 
-            System.out.println(mh.getMenuString());
+            System.out.println(menuString);
             System.out.print(inputPhrase);
             scn1 = new Scanner(System.in);
             boolean needBreak = false;
             try {
                 int response = scn1.nextInt();
-                if (response == mh.getMenuExitValue())
+                if (response == menuExitValue)
                     break;
-                try {
-                    UserDataBase userDB;// = new UserDataBase();
-                    String login, name, email, password;
-                    switch (response) {
-                        case 1: //Sign In
-                            userDB = new UserDataBase();
-                            User currentUser = null;
-                            int attempt = 0;
-                            //запрашиваем имя/пароль пользователя
-                            while (true) {
-                                System.out.print("Введите логин: ");
-                                scn2 = new Scanner(System.in);
-                                login = scn2.next();
-                                if (login.isEmpty()) {
-                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
+
+                UserDataBase userDB;// = new UserDataBase();
+                String login, name, email, password;
+                switch (response) {
+                    case 1: //Sign In
+                        userDB = new UserDataBase();
+                        User currentUser = null;
+                        int attempt = 0;
+                        //запрашиваем имя/пароль пользователя
+                        while (true) {
+                            System.out.print("Введите логин: ");
+                            scn2 = new Scanner(System.in);
+                            login = scn2.next();
+                            if (login.isEmpty()) {
+                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                            } else {
+                                if (!userDB.isLoginExists(login)) {
+                                    System.out.println(warnMsg + "Введенный логин не существует." + tryAgain);
                                 } else {
-                                    if (!userDB.isLoginExists(login)) {
-                                        System.out.println(warnMsg + "Введенный логин не существует." + tryAgain);
+                                    currentUser = userDB.getUserByLogin(login);
+                                    System.out.print("Введите пароль: ");
+                                    scn3 = new Scanner(System.in);
+                                    password = scn3.next();
+                                    if (password.isEmpty()) {
+                                        System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                     } else {
-                                        currentUser = userDB.getUserByLogin(login);
-                                        System.out.print("Введите пароль: ");
-                                        scn3 = new Scanner(System.in);
-                                        password = scn3.next();
-                                        if (password.isEmpty()) {
-                                            System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                        if (!password.equals(currentUser.getPasswordHash())) {
+                                            System.out.println(warnMsg + "Введен неверный пароль." + tryAgain);
                                         } else {
-                                            if (!password.equals(currentUser.getPasswordHash())) {
-                                                System.out.println(warnMsg + "Введен неверный пароль." + tryAgain);
-                                            } else {
-                                                break;
-                                            }
+                                            break;
                                         }
                                     }
                                 }
-                                if (++attempt >= MaxAttempts) {
-                                    System.out.println(errMsg + "Вы исчерпали количество попыток для авторизации. Программа будет закрыта!");
-                                    needBreak = true;
-                                    break;
-                                }
                             }
-                            if (!needBreak) {
-                                //выводим меню контактов для авторизовавшегося пользователя
-                                mh.setCurrentUser(currentUser);
-                                needBreak = !mh.execute("MainMenu");
-                                //needBreak=true;
+                            if (++attempt >= MaxAttempts) {
+                                System.out.println(errMsg + "Вы исчерпали количество попыток для авторизации. Программа будет закрыта!");
+                                needBreak = true;
+                                break;
                             }
-                            break;
-                        case 2: //Sign Up
-                            userDB = new UserDataBase();
-                            while (true) {
-                                System.out.print("Придумайте и введите логин: ");
-                                scn2 = new Scanner(System.in);
-                                login = scn2.next();
-                                if (login.isEmpty()) {
-                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
-                                } else {
-                                    if (userDB.isLoginExists(login)) {
-                                        System.out.println(warnMsg + "Введенный логин уже существует." + tryAgain);
-                                    } else
-                                        break;
-                                }
-                            }
-                            while (true) {
-                                System.out.print("Введите ваше имя: ");
-                                scn3 = new Scanner(System.in);
-                                name = scn3.nextLine();
-                                if (name.isEmpty()) {
-                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                        }
+                        if (!needBreak) {
+                            //выводим меню контактов для авторизовавшегося пользователя
+                            MenuHandler mainMenu = new MenuHandler("MainMenu",currentUser);
+
+                            needBreak = !mainMenu.execute();
+                            //needBreak=true;
+                        }
+                        break;
+                    case 2: //Sign Up
+                        userDB = new UserDataBase();
+                        while (true) {
+                            System.out.print("Придумайте и введите логин: ");
+                            scn2 = new Scanner(System.in);
+                            login = scn2.next();
+                            if (login.isEmpty()) {
+                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                            } else {
+                                if (userDB.isLoginExists(login)) {
+                                    System.out.println(warnMsg + "Введенный логин уже существует." + tryAgain);
                                 } else
                                     break;
                             }
-                            while (true) {
-                                System.out.print("Придумайте и введите пароль: ");
-                                scn5 = new Scanner(System.in);
-                                password = scn5.next();
-                                if (password.isEmpty()) {
-                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
-                                } else {
-                                    scn6 = new Scanner(System.in);
-                                    System.out.print("Введите пароль еще раз: ");
-                                    String password2 = scn6.next();
-                                    if (password2.equals(password))
-                                        break;
-                                    else
-                                        System.out.println(warnMsg + "Пароли не совпадают." + tryAgain);
-                                }
-                            }
-                            userDB.addUser(new User(login, name, password));
-                            break;
-                        case 3: //Print Users
-                            userDB = new UserDataBase();
-                            String usersNames = userDB.getUsersNames();
-                            if (usersNames.isEmpty()) {
-                                System.out.println(warnMsg + "Нет зарегистрированных пользователей.");
+                        }
+                        while (true) {
+                            System.out.print("Введите ваше имя: ");
+                            scn3 = new Scanner(System.in);
+                            name = scn3.nextLine();
+                            if (name.isEmpty()) {
+                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                            } else
+                                break;
+                        }
+                        while (true) {
+                            System.out.print("Придумайте и введите пароль: ");
+                            scn5 = new Scanner(System.in);
+                            password = scn5.next();
+                            if (password.isEmpty()) {
+                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
                             } else {
-                                System.out.println("Список зарегистрированных пользователей:\n" + usersNames);
+                                scn6 = new Scanner(System.in);
+                                System.out.print("Введите пароль еще раз: ");
+                                String password2 = scn6.next();
+                                if (password2.equals(password))
+                                    break;
+                                else
+                                    System.out.println(warnMsg + "Пароли не совпадают." + tryAgain);
                             }
-                            break;
-                        default:
-                            System.out.println(warnMsg + wrongValue + tryAgain);
-                    }
-                } catch (Exception ex) {
-                    System.out.println(errMsg + "Не удалось прочитать файл пользователей\n" + ex.getMessage());
-                    break;
+                        }
+                        userDB.addUser(new User(login, name, password));
+                        break;
+                    case 3: //Print Users
+                        userDB = new UserDataBase();
+                        String usersNames = userDB.getUsersNames();
+                        if (usersNames.isEmpty()) {
+                            System.out.println(warnMsg + "Нет зарегистрированных пользователей.");
+                        } else {
+                            System.out.println("Список зарегистрированных пользователей:\n" + usersNames);
+                        }
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
                 }
-            } catch (Exception ime) {
-                System.out.println(errMsg + ime.getMessage() + tryAgain);
+
+            } catch (InputMismatchException ime) {
+                System.out.println(warnMsg + wrongValue + tryAgain);
                 continue;
+            } catch (IOException | NullPointerException | DataNotFoundException ex) {
+                System.out.println(errMsg + "Не удалось прочитать файл пользователей\n" + ex.getMessage());
+                break;
             }
             if (needBreak) break;
         }
     }
 
     private boolean doMainMenu() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
-        MenuHandler mh = new MenuHandler("MainMenu");
-        mh.setCurrentUser(currentUser);
+//        MenuHandler mh = new MenuHandler("MainMenu");
+//        mh.setCurrentUser(currentUser);
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return false;
             switch (resp) {
                 case 1:
-                    mh.execute("ContactMenu");
+                    MenuHandler contMenu = new MenuHandler("ContactMenu",currentUser);
+                    contMenu.execute();
                     break;
                 case 2:
-                    mh.execute("PrintMenu");
+                    MenuHandler prnMenu = new MenuHandler("PrintMenu",currentUser);
+                    prnMenu.execute();
                     break;
                 case 3:
-                    mh.execute("SortingMenu");
+                    MenuHandler sortMenu = new MenuHandler("SortingMenu",currentUser);
+                    sortMenu.execute();
                     break;
                 case 4:
-                    mh.execute("SearchMenu");
+                    MenuHandler searchMenu = new MenuHandler("SearchMenu",currentUser);
+                    searchMenu.execute();
                     break;
                 case 5:
                     return true;
@@ -446,14 +459,14 @@ public class MenuHandler {
     }
 
     private void doContactMenu() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
-        MenuHandler mh = new MenuHandler("ContactMenu");
-        mh.setCurrentUser(currentUser);
+//        MenuHandler mh = new MenuHandler("ContactMenu");
+//        mh.setCurrentUser(currentUser);
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
             Scanner scn1, scn2, scn3;
             switch (resp) {
@@ -501,11 +514,11 @@ public class MenuHandler {
 
     private void doContactEditMenu() throws InputMismatchException {
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
             System.out.println("Menu working ...");
@@ -514,11 +527,11 @@ public class MenuHandler {
 
     private void doPrintMenu() throws InputMismatchException {
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
 
@@ -528,11 +541,11 @@ public class MenuHandler {
 
     private void doSortingMenu() throws InputMismatchException {
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
             System.out.println("Menu working ...");
@@ -541,11 +554,11 @@ public class MenuHandler {
 
     private void doSortingNameMenu() throws InputMismatchException {
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
             System.out.println("Contact Edit Menu working ...");
@@ -554,11 +567,11 @@ public class MenuHandler {
 
     private void doSortingSurnameMenu() throws InputMismatchException {
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
             System.out.println("Menu working ...");
@@ -567,11 +580,11 @@ public class MenuHandler {
 
     private void doSortingNumberMenu() throws InputMismatchException {
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
             System.out.println("Menu working ...");
@@ -580,11 +593,11 @@ public class MenuHandler {
 
     private void doSearchMenu() throws InputMismatchException {
         while (true) {
-            System.out.println(MenuMap.get(currentMenuId).getMenuText());
+            System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
             int resp = scn.nextInt();
-            if (resp == MenuMap.get(currentMenuId).getExitValue())
+            if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
             System.out.println("Menu working ...");

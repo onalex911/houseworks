@@ -21,7 +21,7 @@ public class MainPB {
     public static void main(String[] args) {
         try {
             MenuHandler mh = new MenuHandler("LoginMenu");
-            mh.execute("LoginMenu");
+            mh.execute();
         }catch(Exception ex){
             System.out.println(MenuHandler.errMsg+ex.getMessage()+"Программа будет прервана!");
         }

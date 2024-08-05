@@ -2,9 +2,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ContactsDataBase {
     private File file;
@@ -14,7 +12,7 @@ public class ContactsDataBase {
     private HashMap<Integer, Contact> contDB;
     private boolean existData;
     private final String fileName = "ContactDB.txt";
-    private final String serviceFileName = "service.txt";
+    private final String settingsFileName = "settings.txt";
     private final long initId = 1L;
 
     {
@@ -86,14 +84,14 @@ public class ContactsDataBase {
     public void addContact(Contact contact) throws IOException, DataNotFoundException, SecurityException {
         FileWriter fw = new FileWriter(file, true);
         lastId = getLastId();
-        fw.write(lastId + "\t" + contact.getUserId() + "\t" + contact.getContactName() + "\t" + contact.getContactSurname() + "\t" + contact.getContactNumberText() + "\n");
+        fw.write(lastId + "\t" + contact.getUserId() + "\t" + contact.getContactName() + "\t" + contact.getContactSurname() + "\t" + contact.getContactNumberText() + "\t" + contact.getContactNumber() + "\n");
         fw.close();
         writeLastId(++lastId);
 
     }
 
     public void writeLastId(long id) throws IOException, DataNotFoundException {
-        File idFile = new File(MainPB.workDirName + "/" + userIdText + "/" + serviceFileName);
+        File idFile = new File(MainPB.workDirName + "/" + userIdText + "/" + settingsFileName);
         if (idFile.exists()) {
             FileWriter fw = new FileWriter(idFile, false);
             fw.write(id + "\n");
@@ -112,7 +110,7 @@ public class ContactsDataBase {
     public long getLastId() throws NullPointerException, IOException, NumberFormatException {
         try {
             MainPB.checkWorkDir();
-            File idFile = new File(MainPB.workDirName + "/" + this.userIdText + "/" + serviceFileName);
+            File idFile = new File(MainPB.workDirName + "/" + this.userIdText + "/" + settingsFileName);
             if (idFile.exists()) {
                 char[] buffer = new char[(int) idFile.length()];
                 FileReader fr = new FileReader(idFile);

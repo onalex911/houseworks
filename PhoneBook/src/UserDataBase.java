@@ -12,7 +12,7 @@ public class UserDataBase {
     private HashMap<Long, User> userDB;
     private boolean existData;
     private final String fileName = "UsersDB.txt";
-    private final String serviceFileName = "service.txt";
+    private final String settingsFileName = "settings.txt";
     private final long initId = 1L;
 
     {
@@ -133,7 +133,7 @@ public class UserDataBase {
     public long getLastId() throws NullPointerException, IOException, NumberFormatException {
         try {
             MainPB.checkWorkDir();
-            File idFile = new File(MainPB.workDirName + "/" + serviceFileName);
+            File idFile = new File(MainPB.workDirName + "/" + settingsFileName);
             if (idFile.exists()) {
                 char[] buffer = new char[(int) idFile.length()];
                 FileReader fr = new FileReader(idFile);
@@ -159,7 +159,7 @@ public class UserDataBase {
     }
 
     public void writeLastId(long id) throws IOException, DataNotFoundException {
-        File idFile = new File(MainPB.workDirName + "/" + serviceFileName);
+        File idFile = new File(MainPB.workDirName + "/" + settingsFileName);
         if (idFile.exists()) {
             FileWriter fw = new FileWriter(idFile, false);
             fw.write(id + "\n");
