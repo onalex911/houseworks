@@ -72,36 +72,37 @@ public class ContactsDataBase {
             existData = true;
         }
     }
-static int Num = 1;
+
+    static int Num = 1;
+
     public String getContactsForPrint(String mask) throws DataNotFoundException, IOException {
         String out = "";
         Num = 1;
-        if(contactDB.isEmpty()) {
+        if (contactDB.isEmpty()) {
             getContactDB();
         }
-        if(mask.isEmpty()){
-            contactDB.stream()
-                    .forEach(c->{
-                        System.out.println((Num++)+". "+c.getContactNumberText()+" "+c.getContactName()+" "+c.getContactSurname());
-                    } );
-        }else{
-            contactDB.stream()
-                    .filter(s ->{
-//                        String template = mask;
-                        String template = mask;//"^"+mask+"$";
-                        template = template.replace(".","\\".concat("."));
-                        template = template.replace("+","\\".concat("+"));
-                        template = template.replace("(","\\".concat("("));
-                        template = template.replace(")","\\".concat(")"));
-                        template = template.replace("_",".");
-                        template = template.replace("*",".*");
-                        template = template.replace(" ","\\".concat("s"));
-                        return s.getContactNumberText().matches(template);
-                    })
-                    .forEach(c->{
-                        System.out.println((Num++)+". "+c.getContactNumberText()+" "+c.getContactName()+" "+c.getContactSurname());
-                    } );
-        }
+
+        contactDB.stream()
+                .filter(s -> {
+                    String template = "";
+                    if (mask.isEmpty()) {
+                        template = ".*";
+                    } else {
+                        template = mask;//"^"+mask+"$";
+                        template = template.replace(".", "\\".concat("."));
+                        template = template.replace("+", "\\".concat("+"));
+                        template = template.replace("(", "\\".concat("("));
+                        template = template.replace(")", "\\".concat(")"));
+                        template = template.replace("_", ".");
+                        template = template.replace("*", ".*");
+                        template = template.replace(" ", "\\".concat("s"));
+                    }
+                    return s.getContactNumberText().matches(template);
+                })
+                .forEach(c -> {
+                    System.out.println((Num++) + ". " + c.getContactNumberText() + " " + c.getContactName() + " " + c.getContactSurname());
+                });
+
         return out;
     }
 
@@ -109,7 +110,7 @@ static int Num = 1;
         FileWriter fw = new FileWriter(file, true);
         lastId = getLastId();
 //        fw.write(lastId + "\t" + contact.getUserId() + "\t" + contact.getContactName() + "\t" + contact.getContactSurname() + "\t" + contact.getContactNumberText() + "\t" + contact.getContactNumber() + "\n");
-        fw.write(lastId + "\t" + contact.getContactName() + "\t" + contact.getContactSurname() + "\t" + contact.getContactNumberText() + "\t" + contact.getContactNumber() + "\n");
+        fw.write(lastId + "\t" + contact.getContactName() + "\t" + contact.getContactSurname() + "\t" + contact.getContactNumberText() + "\n");
         fw.close();
         writeLastId(++lastId);
         System.out.println("\nНовый контакт успешно записан!");

@@ -18,6 +18,8 @@ public class MenuHandler {
     public static String inputIsEmpty = "Введено пустое значение.";
     public static String tryAgain = "\nПопробуйте еще раз.";
     public static final int MaxAttempts = 5;
+    public static final int MinPhoneLength = 3;
+    public static final int MaxPhoneLength = 20;
     public static final String SortingAZNameHeader = "  _________________________________________________\n" +
             " |                                                 |\n" +
             " |            << Телефонная книга >>               |\n" +
@@ -330,7 +332,7 @@ public class MenuHandler {
                                     currentUser = userDB.getUserByLogin(login);
                                     System.out.print("Введите пароль: ");
                                     scn3 = new Scanner(System.in);
-                                    password = scn3.next();
+                                    password = scn3.nextLine();
                                     if (password.isEmpty()) {
                                         System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                     } else {
@@ -383,13 +385,13 @@ public class MenuHandler {
                         while (true) {
                             System.out.print("Придумайте и введите пароль: ");
                             scn5 = new Scanner(System.in);
-                            password = scn5.next();
+                            password = scn5.nextLine();
                             if (password.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                             } else {
                                 scn6 = new Scanner(System.in);
                                 System.out.print("Введите пароль еще раз: ");
-                                String password2 = scn6.next();
+                                String password2 = scn6.nextLine();
                                 if (password2.equals(password))
                                     break;
                                 else
@@ -479,21 +481,21 @@ public class MenuHandler {
                         while (true) {
                             System.out.print("Введите имя: ");
                             scn1 = new Scanner(System.in);
-                            name = scn1.next();
+                            name = scn1.nextLine();
                             if (name.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                 continue;
                             }
                             System.out.print("Введите фамилию: ");
                             scn2 = new Scanner(System.in);
-                            surname = scn2.next();
+                            surname = scn2.nextLine();
                             if (surname.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                 continue;
                             }
                             System.out.print("Введите номер телефона: ");
                             scn3 = new Scanner(System.in);
-                            number = scn3.next();
+                            number = scn3.nextLine();
                             if (number.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                 continue;
@@ -648,7 +650,12 @@ public class MenuHandler {
     }
 
     public static boolean checkPhoneNumber(String number) {
-        return number.matches("[0-9+\\s\\-()]{3,18}") && Contact.strToLong(number) > 0;
+        String phoneNum = number.trim();
+        if(phoneNum.isEmpty() || phoneNum.length() > MaxPhoneLength)
+            return false;
+        String template = "[0-9\\s\\+\\-\\(\\)]{"+MinPhoneLength+","+MaxPhoneLength+"}";
+//        String template = "[0-9\\".concat("s")+"\\".concat("+")+"\\".concat("-")+"\\".concat("(")+"\\".concat(")")+"]{"+MinPhoneLength+","+MaxPhoneLength+"}";
+        return number.matches(template) && Contact.strToLong(number) > 0;
     }
 
     public static boolean checkEmail(String email) {
