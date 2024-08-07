@@ -2,59 +2,71 @@ import java.util.stream.IntStream;
 
 public class Contact {
     private long userId;
-    private long contactId;
-    private String contactName;
-    private String contactSurname;
-    private String contactNumberText;
-    private long contactNumber;
+    private int id;
+    private String name;
+    private String surname;
+    private String numberText;
+    private long number;
 
-    public Contact(long userId,String contactName, String contactSurname, String contactNumberText) {
+    public Contact(long userId, String name, String surname, String numberText) {
         this.userId = userId;
-        this.contactName = contactName;
-        this.contactSurname = contactSurname;
-        this.contactNumberText = contactNumberText;
-        this.contactNumber = strToLong(contactNumberText);
+        this.name = name;
+        this.surname = surname;
+        this.numberText = numberText;
+        this.number = strToLong(numberText);
     }
-    public Contact(long userId, long contactId, String contactName, String contactSurname, String contactNumberText) {
-        this(userId, contactName, contactSurname, contactNumberText);
-        this.contactId = contactId;
+    public Contact(long userId, int contactId, String name, String surname, String numberText) {
+        this(userId, name, surname, numberText);
+        this.id = contactId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public long getUserId() {
         return userId;
     }
 
-    public long getContactId() {
-        return contactId;
+    public int getId() {
+        return id;
     }
 
-    public String getContactName() {
-        return contactName;
+    public String getName() {
+        return name;
     }
 
-    public String getContactSurname() {
-        return contactSurname;
+    public String getSurname() {
+        return surname;
     }
 
-    public String getContactNumberText() {
-        return contactNumberText;
+    public String getNumberText() {
+        return numberText;
     }
 
-    public long getContactNumber() {
-        return contactNumber;
+    public long getNumber() {
+        return number;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setContactSurname(String contactSurname) {
-        this.contactSurname = contactSurname;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public void setContactNumber(String contactNumberText) {
-        this.contactNumberText = contactNumberText;
-        this.contactNumber = strToLong(contactNumberText);
+    public void setNumber(String contactNumberText) {
+        this.numberText = contactNumberText;
+        this.number = strToLong(contactNumberText);
+    }
+
+    public String toString(){
+        return "ID: "+ id +", Имя: "+ name +", Фамилия: "+ surname +", тел.: "+ numberText;
     }
 
     static long strToLong(String str){
