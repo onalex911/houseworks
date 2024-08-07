@@ -20,6 +20,8 @@ public class MenuHandler {
     public static final int MaxAttempts = 5;
     public static final int MinPhoneLength = 3;
     public static final int MaxPhoneLength = 20;
+    public static final String separator = "_______________________________________________________________";
+
     public static final String SortingAZNameHeader = "  _________________________________________________\n" +
             " |                                                 |\n" +
             " |            << Телефонная книга >>               |\n" +
@@ -416,8 +418,14 @@ public class MenuHandler {
             } catch (InputMismatchException ime) {
                 System.out.println(warnMsg + wrongValue + tryAgain);
                 continue;
-            } catch (IOException | NullPointerException | DataNotFoundException ex) {
+            } catch (IOException ex) {
                 System.out.println(errMsg + "Не удалось прочитать файл пользователей\n" + ex.getMessage());
+                break;
+            } catch (NullPointerException ex) {
+                System.out.println(errMsg + "Неверный указатель\n" + ex.getMessage());
+                break;
+            } catch (DataNotFoundException ex) {
+                System.out.println(errMsg + "Данные не найдены\n" + ex.getMessage());
                 break;
             }
             if (needBreak) break;
@@ -470,6 +478,7 @@ public class MenuHandler {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
+            ContactsDataBase contDB;
             try {
                 int resp = scn.nextInt();
                 if (resp == MenuMap.get(menuName).getExitValue())
@@ -493,24 +502,80 @@ public class MenuHandler {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                 continue;
                             }
-                            System.out.print("Введите номер телефона: ");
-                            scn3 = new Scanner(System.in);
-                            number = scn3.nextLine();
-                            if (number.isEmpty()) {
-                                System.out.println(warnMsg + inputIsEmpty + tryAgain);
-                                continue;
-                            } else if (!checkPhoneNumber(number)) {
-                                System.out.println(warnMsg + "Введено значение не соответствующее формату телефонного номера" + tryAgain);
-                                continue;
-                            } else break;
+                            while (true) {
+                                System.out.print("Введите номер телефона: ");
+                                scn3 = new Scanner(System.in);
+                                number = scn3.nextLine();
+                                boolean needExit = false;
+                                if (number.isEmpty()) {
+                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                } else if (!checkPhoneNumber(number)) {
+                                    System.out.println(warnMsg + "Введено значение не соответствующее формату телефонного номера" + tryAgain);
+                                } else {
+                                    needExit = true;
+                                    break;
+                                }
+                                if (needExit) break;
+                            }
+                            break;
                         }
                         Contact contact = new Contact(currentUser.getId(), name, surname, number);
-                        ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                        contDB = new ContactsDataBase(currentUser.getId());
                         contDB.addContact(contact);
                         break;
                     case 1: //Edit
+                        MenuHandler contEdit = new MenuHandler("ContactEditMenu");
+                        contEdit.setCurrentUser(currentUser);
+                        contEdit.execute();
                         break;
                     case 2: //Delete
+                        while (true) {
+                            //boolean needExit = false;
+                            System.out.print("Введите строку для поиска записи, которую требуется удалить (0 - для выхода): ");
+                            scn = new Scanner(System.in);
+                            try {
+                                String mask = scn.nextLine();
+                                if (mask.isEmpty()) {
+                                    System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                    continue;
+                                } else if (mask.equals("0")) {
+                                    //needExit = true;
+                                    break;
+                                }
+
+                                contDB = new ContactsDataBase(currentUser.getId());
+                                contDB.printContactsByMask(mask);
+                                if (contDB.getFoundContactsSize() == 0) {
+                                    System.out.println("По введенному запросу ничего не найдено." + tryAgain);
+                                } else if (contDB.getFoundContactsSize() == 1) {
+                                    System.out.print("Вы действительно хотите удалить данную запись? (y/n): ");
+                                    scn1 = new Scanner(System.in);
+                                    if (scn1.next().equals("y")) {
+                                        contDB.deleteFoundContacts(0);
+                                    }
+                                } else if (contDB.getFoundContactsSize() > 1) {
+                                    while(true) {
+                                        System.out.print("Выберите ID, который требуется удалить (0 - удалить все записи; -1 - выход): ");
+                                        scn2 = new Scanner(System.in);
+                                        try{
+                                            int idToDel = scn2.nextInt();
+                                            if(idToDel < 0)
+                                                break;
+                                            else{
+                                                contDB.deleteFoundContacts(idToDel);
+                                                System.out.println("\nЗапись(-и) успешно удалены.\n");
+                                                break;
+                                            }
+                                        }catch (InputMismatchException imex){
+                                            System.out.println(warnMsg+wrongValue+tryAgain);
+                                        }
+                                    }
+                                }
+                                break;
+                            } catch (InputMismatchException ime) {
+                                System.out.println(warnMsg + wrongValue + tryAgain);
+                            }
+                        }
                         break;
                     default:
                         System.out.println(warnMsg + wrongValue + tryAgain);
@@ -530,7 +595,12 @@ public class MenuHandler {
             if (resp == MenuMap.get(menuName).getExitValue())
                 return;
 
-            System.out.println("Menu working ...");
+            switch (resp) {
+                case 0://Edit name
+                case 1://Edit surname
+                case 2://Edit number
+                case 3://Edit all
+            }
         }
     }
 
@@ -549,15 +619,19 @@ public class MenuHandler {
                 ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
                 switch (resp) {
                     case 0:
-                        System.out.println(contDB.getContactsForPrint(""));
-                        System.out.println("-------------------------------------------------------------");
+//                        contDB.printByMask("*");
+                        contDB.getContactsByMask("*","");
+                        contDB.printPaged();
+                        System.out.println(separator);
                         break;
                     case 1:
                         scn1 = new Scanner(System.in);
-                        System.out.print("Введите поисковую строку для номера: ");
+                        System.out.print("Введите строку для поиска: ");
                         String mask = scn1.nextLine();
-                        System.out.println(contDB.getContactsForPrint(mask));
-                        System.out.println("-------------------------------------------------------------");
+//                        contDB.printByMask(mask);
+                        contDB.getContactsByMask(mask,"");
+                        contDB.printPaged();
+                        System.out.println(separator);
                         break;
                     default:
                         System.out.println(warnMsg + wrongValue + tryAgain);
@@ -625,19 +699,55 @@ public class MenuHandler {
         }
     }
 
-    private void doSearchMenu() throws InputMismatchException {
+    private void doSearchMenu() throws IOException {
+        Scanner scn,scn1,scn2,scn3;
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
-            Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
+            scn = new Scanner(System.in);
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
 
-            System.out.println("Menu working ...");
+                ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                System.out.print("Введите поисковую фразу: ");
+                scn1 = new Scanner(System.in);
+                String phrase = scn1.nextLine();
+                if(phrase.isEmpty()){
+                    System.out.println(warnMsg+wrongValue+tryAgain);
+                    continue;
+                }
+                String fieldName = "";
+                switch (resp){
+                    case 0://Name
+                        fieldName="Имя";
+                        contDB.getContactsByMask(phrase,"name");
+                        break;
+                    case 1://Surname
+                        fieldName="Фамилия";
+                        contDB.getContactsByMask(phrase,"surname");
+                        break;
+                    case 2://Number
+                        fieldName="Телефонный номер";
+                        contDB.getContactsByMask(phrase,"number");
+                        break;
+                    default: System.out.println(warnMsg+wrongValue+tryAgain);
+                    //continue;
+                }
+                //ContactsDataBase.Num =
+                System.out.println("\nКонтактов, содержащих "+phrase+" в поле «"+fieldName+"»: "+contDB.getFoundContactsSize());
+                contDB.printPaged();
+                //break;
+            }catch (InputMismatchException imex){
+                System.out.println(warnMsg+wrongValue+tryAgain);
+            }catch(DataNotFoundException dnfex){
+                System.out.println(errMsg+dnfex.getMessage());
+                break;
+            }
         }
     }
-
+/////////////////////////////////// static methods
     public static String insertName(String name) {
         int maxWidth = 49;
         if (name.length() < maxWidth) {
@@ -651,9 +761,9 @@ public class MenuHandler {
 
     public static boolean checkPhoneNumber(String number) {
         String phoneNum = number.trim();
-        if(phoneNum.isEmpty() || phoneNum.length() > MaxPhoneLength)
+        if (phoneNum.isEmpty() || phoneNum.length() > MaxPhoneLength)
             return false;
-        String template = "[0-9\\s\\+\\-\\(\\)]{"+MinPhoneLength+","+MaxPhoneLength+"}";
+        String template = "[0-9\\s\\+\\-\\(\\)]{" + MinPhoneLength + "," + MaxPhoneLength + "}";
 //        String template = "[0-9\\".concat("s")+"\\".concat("+")+"\\".concat("-")+"\\".concat("(")+"\\".concat(")")+"]{"+MinPhoneLength+","+MaxPhoneLength+"}";
         return number.matches(template) && Contact.strToLong(number) > 0;
     }
