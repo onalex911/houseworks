@@ -16,6 +16,7 @@ public class MenuHandler {
     public static String wrongPhoneNum = "Введено значение, не соответствующее формату телефонного номера";
     public static String inputIsEmpty = "Введено пустое значение.";
     public static String tryAgain = "\nПопробуйте еще раз.";
+    public static String nothingDeleted = "\nНичего не удалено.";
     public static final int MaxAttempts = 5;
     public static final int MinPhoneLength = 3;
     public static final int MaxPhoneLength = 20;
@@ -547,7 +548,7 @@ public class MenuHandler {
                                     System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                     continue;
                                 } else if (mask.equals("0")) {
-                                    //needExit = true;
+                                    System.out.println(nothingDeleted);
                                     break;
                                 }
 
@@ -558,8 +559,11 @@ public class MenuHandler {
                                 } else if (contDB.getFoundContactsSize() == 1) {
                                     System.out.print("Вы действительно хотите удалить данную запись? (y/n): ");
                                     scn1 = new Scanner(System.in);
+
                                     if (scn1.next().equals("y")) {
                                         contDB.deleteFoundContacts(0);
+                                    }else{
+                                        System.out.println(nothingDeleted);
                                     }
                                 } else if (contDB.getFoundContactsSize() > 1) {
                                     while (true) {
@@ -567,8 +571,10 @@ public class MenuHandler {
                                         scn2 = new Scanner(System.in);
                                         try {
                                             int idToDel = scn2.nextInt();
-                                            if (idToDel < 0)
+                                            if (idToDel < 0) {
+                                                System.out.println(nothingDeleted);
                                                 break;
+                                            }
                                             else {
                                                 contDB.deleteFoundContacts(idToDel);
                                                 System.out.println("\nЗапись(-и) успешно удалены.\n");
