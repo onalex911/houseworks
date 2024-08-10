@@ -22,6 +22,10 @@ public class MainPB {
         try {
             MenuHandler mh = new MenuHandler("LoginMenu");
             mh.execute();
+//            ContactsDataBase cdb = new ContactsDataBase(4);
+//            List<Contact> contactList = cdb.getAllContacts();
+//            contactList.stream().sorted((x,y)->(int)(x.getNumber()-y.getNumber())).forEach(System.out::println);
+            //System.out.println(cdb.getContactById(33,false));
         }catch(Exception ex){
             System.out.println(MenuHandler.errMsg+ex.getMessage()+"Программа будет прервана!");
         }

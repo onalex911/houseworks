@@ -8,6 +8,8 @@ public class Contact {
     private String numberText;
     private long number;
 
+    public static final int feldsLenght = 4;
+
     public Contact(long userId, String name, String surname, String numberText) {
         this.userId = userId;
         this.name = name;

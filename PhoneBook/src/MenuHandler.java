@@ -1,7 +1,5 @@
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class MenuHandler {
     private String menuName;
@@ -15,6 +13,7 @@ public class MenuHandler {
     public static String warnMsg = "ВНИМАНИЕ! ";
     public static String inputPhrase = "Введите значение: ";
     public static String wrongValue = "Введено неверное значение.";
+    public static String wrongPhoneNum = "Введено значение, не соответствующее формату телефонного номера";
     public static String inputIsEmpty = "Введено пустое значение.";
     public static String tryAgain = "\nПопробуйте еще раз.";
     public static final int MaxAttempts = 5;
@@ -33,25 +32,25 @@ public class MenuHandler {
             " |            << Телефонная книга >>               |\n" +
             " |        Сортировка по Имени от Я до А            |\n" +
             " |_________________________________________________|";
-    public static final String SortingAZSurNameHeader = "  _________________________________________________\n" +
+    public static final String SortingAZSurnameHeader = "  _________________________________________________\n" +
             " |                                                 |\n" +
             " |            << Телефонная книга >>               |\n" +
             " |       Сортировка по Фамилии от А до Я           |\n" +
             " |_________________________________________________|";
 
-    public static final String SortingZASurNameHeader = "  _________________________________________________\n" +
+    public static final String SortingZASurnameHeader = "  _________________________________________________\n" +
             " |                                                 |\n" +
             " |             << Телефонная книга >>              |\n" +
             " |       Сортировка по Фамилии от Я до А           |\n" +
             " |_________________________________________________|";
 
-    public static final String Sorting09Header = "  _________________________________________________\n" +
+    public static final String Sorting09NumberHeader = "  _________________________________________________\n" +
             " |                                                 |\n" +
             " |             << Телефонная книга >>              |\n" +
             " |         Сортировка по Номеру от 0 до 9          |\n" +
             " |_________________________________________________|";
 
-    public static final String Sorting90Header = "  _________________________________________________\n" +
+    public static final String Sorting90NumberHeader = "  _________________________________________________\n" +
             " |                                                 |\n" +
             " |             << Телефонная книга >>              |\n" +
             " |         Сортировка по Номеру от 9 до 0          |\n" +
@@ -443,28 +442,37 @@ public class MenuHandler {
                 int resp = scn.nextInt();
                 if (resp == MenuMap.get(menuName).getExitValue())
                     return false;
+                if(resp > 1 && resp < MenuMap.get(menuName).getMaxValue()){
+                    //проверяем, есть ли контакты для текущего пользователя
+                    ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                    if(!contDB.isExistData()){
+                        System.out.println(warnMsg+"Нет данных о контактах. Выбранное меню недоступно."+tryAgain);
+                        continue;
+                    }
+                }
+                MenuHandler currentMenu;
+                String menuName = "";
                 switch (resp) {
                     case 1:
-                        MenuHandler contMenu = new MenuHandler("ContactMenu", currentUser);
-                        contMenu.execute();
+                        menuName = "ContactMenu";
                         break;
                     case 2:
-                        MenuHandler prnMenu = new MenuHandler("PrintMenu", currentUser);
-                        prnMenu.execute();
+                        menuName = "PrintMenu";
                         break;
                     case 3:
-                        MenuHandler sortMenu = new MenuHandler("SortingMenu", currentUser);
-                        sortMenu.execute();
+                        menuName = "SortingMenu";
                         break;
                     case 4:
-                        MenuHandler searchMenu = new MenuHandler("SearchMenu", currentUser);
-                        searchMenu.execute();
+                        menuName = "SearchMenu";
                         break;
                     case 5:
                         return true;
                     default:
                         System.out.println(warnMsg + wrongValue + tryAgain);
+                        continue;
                 }
+                currentMenu = new MenuHandler(menuName, currentUser);
+                currentMenu.execute();
             } catch (InputMismatchException ime) {
                 System.out.println(warnMsg + wrongValue + tryAgain);
             }
@@ -510,7 +518,7 @@ public class MenuHandler {
                                 if (number.isEmpty()) {
                                     System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                 } else if (!checkPhoneNumber(number)) {
-                                    System.out.println(warnMsg + "Введено значение не соответствующее формату телефонного номера" + tryAgain);
+                                    System.out.println(warnMsg + wrongPhoneNum + tryAgain);
                                 } else {
                                     needExit = true;
                                     break;
@@ -554,20 +562,20 @@ public class MenuHandler {
                                         contDB.deleteFoundContacts(0);
                                     }
                                 } else if (contDB.getFoundContactsSize() > 1) {
-                                    while(true) {
+                                    while (true) {
                                         System.out.print("Выберите ID, который требуется удалить (0 - удалить все записи; -1 - выход): ");
                                         scn2 = new Scanner(System.in);
-                                        try{
+                                        try {
                                             int idToDel = scn2.nextInt();
-                                            if(idToDel < 0)
+                                            if (idToDel < 0)
                                                 break;
-                                            else{
+                                            else {
                                                 contDB.deleteFoundContacts(idToDel);
                                                 System.out.println("\nЗапись(-и) успешно удалены.\n");
                                                 break;
                                             }
-                                        }catch (InputMismatchException imex){
-                                            System.out.println(warnMsg+wrongValue+tryAgain);
+                                        } catch (InputMismatchException imex) {
+                                            System.out.println(warnMsg + wrongValue + tryAgain);
                                         }
                                     }
                                 }
@@ -586,25 +594,123 @@ public class MenuHandler {
         }
     }
 
-    private void doContactEditMenu() throws InputMismatchException {
+    private void doContactEditMenu() throws DataNotFoundException, IOException {
+        Scanner scn, scn2;
+        String inputed, fieldName, nameDataTxt;
         while (true) {
+            boolean isPhone = false;
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
-            Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
+            scn = new Scanner(System.in);
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
 
-            switch (resp) {
-                case 0://Edit name
-                case 1://Edit surname
-                case 2://Edit number
-                case 3://Edit all
+                ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                switch (resp) {
+                    case 0://Edit name
+                        nameDataTxt = "имя";
+                        fieldName = "name";
+                        break;
+                    case 1://Edit surname
+                        nameDataTxt = "фамилию";
+                        fieldName = "surname";
+                        break;
+                    case 2://Edit number
+                        nameDataTxt = "тел. номер";
+                        fieldName = "number";
+                        isPhone = true;
+                        break;
+                    case 3://Edit all
+                        nameDataTxt = "поисковый запрос";
+                        fieldName = "";
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                        continue;
+                }
+                int idToEdit = 0;
+                inputed = inputData(nameDataTxt, false, false); //вводим строку для поиска, она может не соответствовать формату тел. номера
+                contDB.printContactsByMask(inputed);
+                if (contDB.getFoundContactsSize() == 1) {
+                    idToEdit = contDB.getFoundContactId();
+                } else if (contDB.getFoundContactsSize() > 1) {
+                    while (true) {
+                        System.out.print("Выберите ID, который требуется отредактировать (0 - выход): ");
+                        scn2 = new Scanner(System.in);
+                        try {
+                            idToEdit = scn2.nextInt();
+                            break;
+                        } catch (InputMismatchException imex) {
+                            System.out.println(warnMsg + wrongValue + tryAgain);
+                        }
+                    }
+                } else {
+                    System.out.println("По запросу " + inputed + " ничего не найдено." + tryAgain);
+                    continue;
+                }
+                Contact contToEdit = contDB.getContactById(idToEdit, false); //получаем запись из файла на случай, если уже кто-то (например, из другой сессии) отредактировал или удадлил требуемую запись
+                if (contToEdit == null) {
+                    System.out.println(errMsg + "Выбранная для редактирования запись отсутствует!" + tryAgain);
+                    continue;
+                }
+                String newVal = "";
+                if (!fieldName.isEmpty()) {
+                    newVal = inputData(nameDataTxt, isPhone, true);
+                    switch (fieldName) {
+                        case "name":
+                            contToEdit.setName(newVal);
+                            break;
+                        case "surname":
+                            contToEdit.setSurname(newVal);
+                            break;
+                        case "number":
+                            contToEdit.setNumber(newVal);
+                            break;
+                        default:
+                            System.out.println(errMsg + "Выбрано недопустимое поле!" + tryAgain);
+                            continue;
+                    }
+                } else {
+                    newVal = inputData("имя", false, true);
+                    if (!newVal.isEmpty())
+                        contToEdit.setName(newVal);
+                    newVal = inputData("фамилию", false, true);
+                    if (!newVal.isEmpty())
+                        contToEdit.setSurname(newVal);
+                    newVal = inputData("тел. номер", true, true);
+                    if (!newVal.isEmpty())
+                        contToEdit.setNumber(newVal);
+                }
+                contDB.editContact(contToEdit);
+                System.out.println("\nЗапись успешно отредактирована.\n");
+            }catch (InputMismatchException imex){
+                System.out.println(warnMsg + wrongValue + tryAgain);
             }
         }
     }
 
-    private void doPrintMenu() throws RuntimeException, IOException {
+    private String inputData(String nameData, boolean isPhoneNum, boolean isNew) {
+        while (true) {
+            String out = "";
+            String newValTxt = isNew ? " (новое значение) " : "";
+            System.out.print("Введите  " + nameData + newValTxt + ": ");
+            Scanner scn = new Scanner(System.in);
+            out = scn.nextLine();
+            if (out.isEmpty()) {
+                System.out.println(warnMsg + inputIsEmpty + "(не ввели " + nameData + ")" + tryAgain);
+            } else {
+                if (isPhoneNum && !checkPhoneNumber(out)) {
+                    System.out.println(warnMsg + wrongPhoneNum + tryAgain);
+                } else
+                    return out;
+            }
+        }
+    }
+
+    private void doPrintMenu() throws RuntimeException, IOException, DataNotFoundException {
+
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
@@ -620,7 +726,7 @@ public class MenuHandler {
                 switch (resp) {
                     case 0:
 //                        contDB.printByMask("*");
-                        contDB.getContactsByMask("*","");
+                        contDB.getContactsByMask("*", "");
                         contDB.printPaged();
                         System.out.println(separator);
                         break;
@@ -629,7 +735,7 @@ public class MenuHandler {
                         System.out.print("Введите строку для поиска: ");
                         String mask = scn1.nextLine();
 //                        contDB.printByMask(mask);
-                        contDB.getContactsByMask(mask,"");
+                        contDB.getContactsByMask(mask, "");
                         contDB.printPaged();
                         System.out.println(separator);
                         break;
@@ -647,60 +753,135 @@ public class MenuHandler {
         }
     }
 
-    private void doSortingMenu() throws InputMismatchException {
+    private void doSortingMenu() throws DataNotFoundException, IOException {
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
 
-            System.out.println("Menu working ...");
+                MenuHandler contEdit;
+                switch (resp) {
+                    case 0://Name
+                        contEdit = new MenuHandler("SortingNameMenu");
+                        break;
+                    case 1://Surname
+                        contEdit = new MenuHandler("SortingSurnameMenu");
+                        break;
+                    case 2://Number
+                        contEdit = new MenuHandler("SortingNumberMenu");
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                        continue;
+                }
+                contEdit.setCurrentUser(currentUser);
+                contEdit.execute();
+            } catch (InputMismatchException imex) {
+                System.out.println(warnMsg + wrongValue + tryAgain);
+            }
         }
     }
 
-    private void doSortingNameMenu() throws InputMismatchException {
+    private void doSortingNameMenu() throws DataNotFoundException, IOException {
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
 
-            System.out.println("Contact Edit Menu working ...");
+                ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                List<Contact> contactList = contDB.getAllContacts();
+                switch (resp) {
+                    case 0: //sorting Name A-Z
+                        System.out.println(SortingAZNameHeader);
+                        contDB.printPaged(contactList.stream().sorted((x, y) -> x.getName().compareTo(y.getName())).toList(), 1);
+                        break;
+                    case 1: //sorting Name Z-A
+                        System.out.println(SortingZANameHeader);
+                        contDB.printPaged(contactList.stream().sorted((y, x) -> x.getName().compareTo(y.getName())).toList(), 1);
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                        continue;
+                }
+            } catch (InputMismatchException imex) {
+                System.out.println(warnMsg + wrongValue + tryAgain);
+            }
         }
     }
 
-    private void doSortingSurnameMenu() throws InputMismatchException {
+    private void doSortingSurnameMenu() throws DataNotFoundException, IOException {
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
 
-            System.out.println("Menu working ...");
+                ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                List<Contact> contactList = contDB.getAllContacts();
+                switch (resp) {
+                    case 0: //sorting Surname A-Z
+                        System.out.println(SortingAZSurnameHeader);
+                        contDB.printPaged(contactList.stream().sorted((x, y) -> x.getSurname().compareTo(y.getSurname())).toList(), 1);
+                        break;
+                    case 1: //sorting Surname Z-A
+                        System.out.println(SortingZASurnameHeader);
+                        contDB.printPaged(contactList.stream().sorted((y, x) -> x.getSurname().compareTo(y.getSurname())).toList(), 1);
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                        continue;
+                }
+            } catch (InputMismatchException imex) {
+                System.out.println(warnMsg + wrongValue + tryAgain);
+            }
         }
     }
 
-    private void doSortingNumberMenu() throws InputMismatchException {
+    private void doSortingNumberMenu() throws DataNotFoundException, IOException {
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
             Scanner scn = new Scanner(System.in);
-            int resp = scn.nextInt();
-            if (resp == MenuMap.get(menuName).getExitValue())
-                return;
+            try {
+                int resp = scn.nextInt();
+                if (resp == MenuMap.get(menuName).getExitValue())
+                    return;
 
-            System.out.println("Menu working ...");
+                ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
+                List<Contact> contactList = contDB.getAllContacts();
+                switch (resp) {
+                    case 0: //sorting Number A-Z
+                        System.out.println(Sorting09NumberHeader);
+//                    contDB.printPaged(contactList.stream().sorted((x,y)-> (int)(x.getNumber() - y.getNumber())).toList(),1);
+                        contDB.printPaged(contactList.stream().sorted(Comparator.comparingLong(Contact::getNumber)).toList(), 1);
+                        break;
+                    case 1: //sorting Number Z-A
+                        System.out.println(Sorting90NumberHeader);
+                        contDB.printPaged(contactList.stream().sorted(Comparator.comparingLong(Contact::getNumber).reversed()).toList(), 1);
+                        break;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                        continue;
+                }
+            } catch (InputMismatchException imex) {
+                System.out.println(warnMsg + wrongValue + tryAgain);
+            }
         }
     }
 
     private void doSearchMenu() throws IOException {
-        Scanner scn,scn1,scn2,scn3;
+        Scanner scn, scn1, scn2, scn3;
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
@@ -714,40 +895,42 @@ public class MenuHandler {
                 System.out.print("Введите поисковую фразу: ");
                 scn1 = new Scanner(System.in);
                 String phrase = scn1.nextLine();
-                if(phrase.isEmpty()){
-                    System.out.println(warnMsg+wrongValue+tryAgain);
+                if (phrase.isEmpty()) {
+                    System.out.println(warnMsg + wrongValue + tryAgain);
                     continue;
                 }
                 String fieldName = "";
-                switch (resp){
+                switch (resp) {
                     case 0://Name
-                        fieldName="Имя";
-                        contDB.getContactsByMask(phrase,"name");
+                        fieldName = "Имя";
+                        contDB.getContactsByMask(phrase, "name");
                         break;
                     case 1://Surname
-                        fieldName="Фамилия";
-                        contDB.getContactsByMask(phrase,"surname");
+                        fieldName = "Фамилия";
+                        contDB.getContactsByMask(phrase, "surname");
                         break;
                     case 2://Number
-                        fieldName="Телефонный номер";
-                        contDB.getContactsByMask(phrase,"number");
+                        fieldName = "Телефонный номер";
+                        contDB.getContactsByMask(phrase, "number");
                         break;
-                    default: System.out.println(warnMsg+wrongValue+tryAgain);
-                    //continue;
+                    default:
+                        System.out.println(warnMsg + wrongValue + tryAgain);
+                        //continue;
                 }
                 //ContactsDataBase.Num =
-                System.out.println("\nКонтактов, содержащих "+phrase+" в поле «"+fieldName+"»: "+contDB.getFoundContactsSize());
+                System.out.println("\nКонтактов, содержащих " + phrase + " в поле «" + fieldName + "»: " + contDB.getFoundContactsSize());
                 contDB.printPaged();
                 //break;
-            }catch (InputMismatchException imex){
-                System.out.println(warnMsg+wrongValue+tryAgain);
-            }catch(DataNotFoundException dnfex){
-                System.out.println(errMsg+dnfex.getMessage());
+            } catch (InputMismatchException imex) {
+                System.out.println(warnMsg + wrongValue + tryAgain);
+            } catch (DataNotFoundException dnfex) {
+                System.out.println(errMsg + dnfex.getMessage());
                 break;
             }
         }
     }
-/////////////////////////////////// static methods
+
+    /////////////////////////////////// static methods
     public static String insertName(String name) {
         int maxWidth = 49;
         if (name.length() < maxWidth) {

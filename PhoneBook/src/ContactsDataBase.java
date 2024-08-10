@@ -3,14 +3,13 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class ContactsDataBase {
-    private File file;
+    private final File file;
     private int lastId;
-    private long userId;
-    private String userIdText;
-    private List<Contact> contactDB;
+    private final long userId;
+    private final String userIdText;
+    private final List<Contact> contactDB;
     private boolean existData;
     private List<Contact> foundContacts;
 
@@ -18,11 +17,12 @@ public class ContactsDataBase {
     private final String settingsFileName = "settings.txt";
     private final int initId = 1;
     private final int posInPage = 5;
-    static int Num = 1;
+    private static int Num = 1;
 
     {
         contactDB = new ArrayList<>();
         lastId = initId;
+        existData = false;
     }
 
     ContactsDataBase(long userId) throws NullPointerException, IOException, DataNotFoundException {
@@ -34,21 +34,31 @@ public class ContactsDataBase {
             dir.mkdir();
         }
         file = new File(MainPB.workDirName + "/" + this.userIdText + "/" + fileName);
-        if (file.exists() && file.length() > 0) {
+        if (file.exists()) {
             System.out.println("DEBUG! ContactDB for userId:" + userId + " length = " + file.length());
         } else {
             if (file.createNewFile()) {
                 writeLastId(lastId);
-                existData = false;
+                //existData = false;
             } else {
                 throw new IOException("Невозможно создать файл контактов.");
             }
         }
+        if(file.length() > 0)
+            existData = true;
+    }
+
+    public boolean isExistData() {
+        return existData;
     }
 
     public int getFoundContactsSize() {
         return foundContacts == null ? 0 : foundContacts.size();
     }
+    public int getFoundContactId() {
+        return getFoundContactsSize() != 0 ? foundContacts.getFirst().getId() : 0;
+    }
+
 
     private void getContactDB() throws FileNotFoundException, IOException, DataNotFoundException {
         FileReader fr = new FileReader(file);
@@ -66,7 +76,7 @@ public class ContactsDataBase {
                     tmp = "";
                     countField++;
                 } else if (buffer[i] == '\n') {
-                    if (countField == 3) {
+                    if (++countField == Contact.feldsLenght) {
                         line.add(tmp);
                         tmp = "";
                         contactDB.add(new Contact(userId, Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3)));
@@ -83,7 +93,71 @@ public class ContactsDataBase {
         }
     }
 
+    //fromDB = true - получаем ConatctDB, затем получаем из нее запись
+    //fromDB = false - получаем запись напрямую из файла
+    public Contact getContactById(int id, boolean fromDB) throws FileNotFoundException, IOException, DataNotFoundException {
 
+        if (fromDB) {
+            if (contactDB.isEmpty()) {
+                getContactDB();
+            }
+            return contactDB.stream().filter(c -> c.getId() == id).findFirst().get();
+        } else {
+            FileReader fr = new FileReader(file);
+            char[] buffer = new char[(int) file.length()];
+            int countRead = fr.read(buffer);
+            if (countRead > 0) {
+
+                String tmp = "";
+                int countField = 0;
+                List<String> line = new ArrayList<>();
+                boolean found = false;
+                for (int i = 0; i < countRead; i++) {
+                    if (buffer[i] == '\t') {
+                        if (found || Integer.parseInt(tmp) == id) {
+                            line.add(tmp);
+                            tmp = "";
+                            countField++;
+                            found = true;
+                        } else {
+                            tmp = "";
+                            while (buffer[i] != '\n')
+                                i++;
+                        }
+                        continue;
+                    } else if (buffer[i] == '\n' && found) {
+                        if (++countField == Contact.feldsLenght) {
+                            line.add(tmp);
+                            existData = true;
+                            return new Contact(userId, Integer.parseInt(line.get(0)), line.get(1), line.get(2), line.get(3));
+                        } else {
+                            throw new DataNotFoundException("Нарушение целостности данных в БД контакта.");
+                        }
+                    } else {
+                        tmp += buffer[i];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public void editContact(Contact contact) throws IOException, DataNotFoundException {
+        if(contactDB.isEmpty()) {
+            getContactDB();
+        }
+        FileWriter fw = new FileWriter(file);
+        fw.write(buildStringForWrite(contact));
+        contactDB.stream().filter(s->s.getId() != contact.getId()).forEach(c-> {
+            try {
+                fw.write(buildStringForWrite(c));
+            } catch (IOException e) {
+                throw new RuntimeException(MenuHandler.errMsg + "Невозможно записать отредактированные данные: " + e.getMessage());
+            }
+        });
+        fw.close();
+
+    }
     public void printByMask(String mask) throws DataNotFoundException, IOException {
 
         Num = 1;
@@ -116,12 +190,16 @@ public class ContactsDataBase {
                 .forEach(c -> {
                     System.out.println((Num++) + ".\t" + c.getName() + "\t" + c.getSurname() + "\t" + c.getNumberText());
                 });*/
-        getContactsByMask(mask,"");
+        getContactsByMask(mask, "");
         foundContacts.stream().forEach(c -> System.out.println((Num++) + ".\t" + c.getName() + "\t" + c.getSurname() + "\t" + c.getNumberText()));
 
     }
+    public List<Contact> getAllContacts() throws DataNotFoundException, IOException {
+        getContactsByMask("*","");
+        return contactDB;
+    }
 
-    public void getContactsByMask(String mask,String field) throws DataNotFoundException, IOException {
+    public void getContactsByMask(String mask, String field) throws DataNotFoundException, IOException {
 
         if (contactDB.isEmpty()) {
             getContactDB();
@@ -143,7 +221,7 @@ public class ContactsDataBase {
                         template = template.replace(" ", "\\".concat("s"));
 
                     }
-                    switch(field) {
+                    switch (field) {
                         case "name":
                             return s.getName().toLowerCase().matches(template);
                         case "surname":
@@ -153,9 +231,9 @@ public class ContactsDataBase {
                                     String.valueOf(s.getNumber()).toLowerCase().matches(template);
                         default:
                             return s.getName().toLowerCase().matches(template) ||
-                                s.getSurname().toLowerCase().matches(template) ||
-                                s.getNumberText().toLowerCase().matches(template) ||
-                                String.valueOf(s.getNumber()).toLowerCase().matches(template);
+                                    s.getSurname().toLowerCase().matches(template) ||
+                                    s.getNumberText().toLowerCase().matches(template) ||
+                                    String.valueOf(s.getNumber()).toLowerCase().matches(template);
                     }
                 })
                 .toList();
@@ -166,7 +244,7 @@ public class ContactsDataBase {
 
     public void printContactsByMask(String mask) throws DataNotFoundException, IOException {
         if (foundContacts == null) {
-            getContactsByMask(mask,"");
+            getContactsByMask(mask, "");
         }
         foundContacts.forEach(c -> System.out.println(c.toString()));
 
@@ -211,6 +289,18 @@ public class ContactsDataBase {
         } else {
             throw new DataNotFoundException("Нет данных для записи в файл.");
         }
+    }
+
+    public List<Contact> getContactListButId(int id) throws DataNotFoundException, IOException {
+        if(contactDB.isEmpty())
+            getContactDB();
+
+        List<Contact> out = new ArrayList<>();
+        for (Contact contact : contactDB) {
+            if (contact.getId() != id)
+                out.add(contact);
+        }
+        return out;
     }
 
     public void addContact(Contact contact) throws IOException, DataNotFoundException, SecurityException {
@@ -290,26 +380,25 @@ public class ContactsDataBase {
             for (int i = 1; i <= totalPages; i++) {
                 System.out.printf("%d ", i);
             }
-            while(true) {
+            while (true) {
                 System.out.print("\n\nВыберите номер страницы для просмотра (0 - выход): ");
                 Scanner scn = new Scanner(System.in);
                 try {
                     int nextPage = scn.nextInt();
-                    if(nextPage == 0)
+                    if (nextPage == 0)
                         return;
-                    if(nextPage > totalPages){
-                        System.out.println(MenuHandler.warnMsg+MenuHandler.wrongValue+MenuHandler.tryAgain);
+                    if (nextPage > totalPages) {
+                        System.out.println(MenuHandler.warnMsg + MenuHandler.wrongValue + MenuHandler.tryAgain);
                         continue;
                     }
-                    printPaged(contacts,nextPage);
+                    printPaged(contacts, nextPage);
                     break;
-                }catch(InputMismatchException imex){
-                    System.out.println(MenuHandler.warnMsg+MenuHandler.wrongValue+MenuHandler.tryAgain);
+                } catch (InputMismatchException imex) {
+                    System.out.println(MenuHandler.warnMsg + MenuHandler.wrongValue + MenuHandler.tryAgain);
                 }
             }
         }
     }
-
 
 
     public static String buildStringForWrite(Contact contact) {
