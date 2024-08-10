@@ -64,13 +64,13 @@ public class MenuHandler {
                 " |              Выберите действие :                |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | 0 - Exit           ( Exit the program )         |\n" +
+                " | 0 - Выход          ( Выход из программы )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 1 - Sign In        ( Enter go to existing user )|\n" +
+                " | 1 - Авторизация    ( Вход для зарег. польз. )   |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 2 - Sign Up        ( Register new user )        |\n" +
+                " | 2 - Регистрация    ( Зарегистрироваться )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 3 - Print Users    ( Print existing user )      |\n" +
+                " | 3 - Печать польз.  ( Список загистрир. польз. ) |\n" +
                 " |_________________________________________________|\n";
         MenuMap.put("LoginMenu", new MenuSettings(loginMenu, 3, 0));
 
@@ -103,17 +103,17 @@ public class MenuHandler {
                 " |" + insertName("Основное меню") + "|\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | 0 - Save and Exit ( Save and Exit the program)  |\n" +
+                " | 0 - Выйти из программы                          |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 1 - Contacts      ( Add / Edite / Delete)       |\n" +
+                " | 1 - Контакты     ( Доб. / Ред. / Удалить )      |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 2 - Print         ( All / Specific)             |\n" +
+                " | 2 - Печать       ( Всё / Специальная)           |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 3 - Sorting       ( Name / Surname / Number )   |\n" +
+                " | 3 - Сортировка   ( по Имени / Фамилии / Номеру) |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 4 - Search        ( by Name / Surname / Number )|\n" +
+                " | 4 - Поиск        ( по Имени / Фамилии / Номеру) |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 5 - Come Back     ( Save and Exit phonebook )   |\n" +
+                " | 5 - Назад        ( Выход из Тел. книги )        |\n" +
                 " |_________________________________________________|";
         MenuMap.put("MainMenu", new MenuSettings(mainMenu, 5, 0));
         String contactMenu = " ___________________________________________________\n" +
@@ -124,13 +124,13 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back    ( Return to the main menu)    |\n" +
+                " | -1 - Назад        ( Возврат в осн. меню )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Add          ( Add new contact )           |\n" +
+                " |  0 - Добавить     ( Добавить новый контакт )    |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Edit         ( Edit contact )              |\n" +
+                " |  1 - Редактир.    ( Редактировать контакт )     |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  2 - Delete       ( Delete contact )            |\n" +
+                " |  2 - Удалить      ( Удаление контакта/-ов )     |\n" +
                 " |_________________________________________________|";
         MenuMap.put("ContactMenu", new MenuSettings(contactMenu, 2, -1));
         String contactEditMenu = " ___________________________________________________\n" +
@@ -141,15 +141,15 @@ public class MenuHandler {
                 " |         Что требуется отредактировать ?         |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back    ( Return to the Contact menu) |\n" +
+                " | -1 - Назад       ( Возврат в осн. меню )        |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Name         ( Edit contact name )         |\n" +
+                " |  0 - Имя         ( Редактировать имя )          |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Surname      ( Edit contact surname )      |\n" +
+                " |  1 - Фамилию     ( Редактировать фамилию )      |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  2 - Number       ( Edit contact number )       |\n" +
+                " |  2 - Тел. номер  ( Редактировать тел. номер )   |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  3 - All          ( Edit name/surname/number )  |\n" +
+                " |  3 - Всё         ( Ред. имя/фамилию/тел.номер ) |\n" +
                 " |_________________________________________________|";
         MenuMap.put("ContactEditMenu", new MenuSettings(contactEditMenu, 3, -1));
         String printMenu = " ___________________________________________________\n" +
@@ -160,11 +160,11 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back    ( Return to the main menu )   |\n" +
+                " | -1 - Назад        ( Возврат в осн. меню )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Print        ( All )                       |\n" +
+                " |  0 - Печать       ( Всё )                       |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Print        ( Specific )                  |\n" +
+                " |  1 - Печать       ( Специальная )               |\n" +
                 " |_________________________________________________|";
         MenuMap.put("PrintMenu", new MenuSettings(printMenu, 1, -1));
         String sortingMenu = " ___________________________________________________\n" +
@@ -175,13 +175,13 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back    ( Return to the main menu )   |\n" +
+                " | -1 - Назад        ( Возврат в осн. меню )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Name         ( Sort  A-Z / Z-A )           |\n" +
+                " |  0 - Имён         ( от А до Я / от Я до А )     |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Surname      ( Sort  A-Z / Z-A )           |\n" +
+                " |  1 - Фамилий      ( от А до Я / от Я до А )     |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  2 - Number       ( Sort  1-9 / 9-1 )           |\n" +
+                " |  2 - Тел. номеров ( от 0 до 9 / от 9 до 0 )     |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingMenu", new MenuSettings(sortingMenu, 2, -1));
         String sortingNameMenu = " ___________________________________________________\n" +
@@ -192,11 +192,11 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back    ( Return to the Sorting )     |\n" +
+                " | -1 - Назад        ( Возврат в осн. меню )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Name         ( Sort  A - Z )               |\n" +
+                " |  0 - Имя          ( от А до Я )                 |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Name         ( Sort  Z - A )               |\n" +
+                " |  1 - Имя          ( от Я до А )                 |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingNameMenu", new MenuSettings(sortingNameMenu, 1, -1));
         String sortingSurnameMenu = " ___________________________________________________\n" +
@@ -207,11 +207,11 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back    ( Return to the Sorting )     |\n" +
+                " | -1 - Назад           ( Возврат в осн. меню )    |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Surname         ( Sort  A - Z )            |\n" +
+                " |  0 - Фамилия         ( от А до Я )              |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Surname         ( Sort  Z - A )            |\n" +
+                " |  1 - Фамилия         ( от Я до А )              |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingSurnameMenu", new MenuSettings(sortingSurnameMenu, 1, -1));
         String sortingNumberMenu = " ___________________________________________________\n" +
@@ -222,11 +222,11 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back    ( Return to the Sorting )     |\n" +
+                " | -1 - Назад           ( Возврат в осн. меню )    |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Number       ( Sort  1 - 9 )               |\n" +
+                " |  0 - Тел. номер      ( от 0 до 9 )              |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Number       ( Sort  9 - 1 )               |\n" +
+                " |  1 - Тел. номер      ( от 9 до 0 )              |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingNumberMenu", new MenuSettings(sortingNumberMenu, 1, -1));
         String searchMenu = " ___________________________________________________\n" +
@@ -237,27 +237,15 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " |_________________________________________________|\n" +
                 " |                                                 |\n" +
-                " | -1 - Come back  ( Return to the Main menu )     |\n" +
+                " | -1 - Назад           ( Возврат в осн. меню )    |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Name       ( Search by Name  )             |\n" +
+                " |  0 - Имя             ( Поиск по имени )         |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Surname    ( Search by Surname )           |\n" +
+                " |  1 - Фамилия         ( Поиск по фамилии )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  2 - Number     ( Search by  Number )           |\n" +
+                " |  2 - Тел. номер      ( Поиск по тел. номеру )   |\n" +
                 " |_________________________________________________|\n";
         MenuMap.put("SearchMenu", new MenuSettings(searchMenu, 2, -1));
-    }
-
-    public String getMenuString() {
-        return menuString;
-    }
-
-    public int getMenuMaxValue() {
-        return menuMaxValue;
-    }
-
-    public int getMenuExitValue() {
-        return menuExitValue;
     }
 
     public boolean execute() throws InputMismatchException, IOException, NullPointerException, DataNotFoundException {
@@ -481,8 +469,6 @@ public class MenuHandler {
     }
 
     private void doContactMenu() throws IOException, NullPointerException, DataNotFoundException {
-//        MenuHandler mh = new MenuHandler("ContactMenu");
-//        mh.setCurrentUser(currentUser);
         while (true) {
             System.out.println(MenuMap.get(menuName).getMenuText());
             System.out.print(inputPhrase);
@@ -957,7 +943,7 @@ public class MenuHandler {
         return number.matches(template) && Contact.strToLong(number) > 0;
     }
 
-    public static boolean checkEmail(String email) {
-        return email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$");
-    }
+//    public static boolean checkEmail(String email) {
+//        return email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$");
+//    }
 }

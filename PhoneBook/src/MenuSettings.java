@@ -1,4 +1,4 @@
-public class MenuSettings{
+public class MenuSettings {
     private String menuText;
     private int maxValue;
     private int exitValue;

@@ -28,7 +28,7 @@ public class ContactsDataBase {
     ContactsDataBase(long userId) throws NullPointerException, IOException, DataNotFoundException {
         this.userId = userId;
         this.userIdText = String.format("%010d", userId);
-        //MainPB.checkWorkDir();
+
         File dir = new File(MainPB.workDirName + "/" + this.userIdText);
         if (!dir.exists()) {
             dir.mkdir();
@@ -44,7 +44,7 @@ public class ContactsDataBase {
                 throw new IOException("Невозможно создать файл контактов.");
             }
         }
-        if(file.length() > 0)
+        if (file.length() > 0)
             existData = true;
     }
 
@@ -55,17 +55,16 @@ public class ContactsDataBase {
     public int getFoundContactsSize() {
         return foundContacts == null ? 0 : foundContacts.size();
     }
+
     public int getFoundContactId() {
         return getFoundContactsSize() != 0 ? foundContacts.getFirst().getId() : 0;
     }
-
 
     private void getContactDB() throws FileNotFoundException, IOException, DataNotFoundException {
         FileReader fr = new FileReader(file);
         char[] buffer = new char[(int) file.length()];
         int countRead = fr.read(buffer);
         if (countRead > 0) {
-            //lastId = getLastId();
             //id \t name \t surname \t phoneNumber \t phoneNumberLong
             String tmp = "";
             int countField = 0;
@@ -143,12 +142,12 @@ public class ContactsDataBase {
     }
 
     public void editContact(Contact contact) throws IOException, DataNotFoundException {
-        if(contactDB.isEmpty()) {
+        if (contactDB.isEmpty()) {
             getContactDB();
         }
         FileWriter fw = new FileWriter(file);
         fw.write(buildStringForWrite(contact));
-        contactDB.stream().filter(s->s.getId() != contact.getId()).forEach(c-> {
+        contactDB.stream().filter(s -> s.getId() != contact.getId()).forEach(c -> {
             try {
                 fw.write(buildStringForWrite(c));
             } catch (IOException e) {
@@ -158,44 +157,9 @@ public class ContactsDataBase {
         fw.close();
 
     }
-    public void printByMask(String mask) throws DataNotFoundException, IOException {
 
-        Num = 1;
-        /*if (contactDB.isEmpty()) {
-            getContactDB();
-        }
-
-        contactDB.stream()
-                .filter(s -> {
-                    String template = "";
-                    //String strForSearch = s.getContactName().concat(s.getContactSurname().concat(s.getContactNumberText()));
-                    if (mask.isEmpty()) {
-                        template = ".*";
-                    } else {
-                        template = mask.toLowerCase();//"^"+mask+"$";
-                        template = template.replace(".", "\\".concat("."));
-                        template = template.replace("+", "\\".concat("+"));
-                        template = template.replace("(", "\\".concat("("));
-                        template = template.replace(")", "\\".concat(")"));
-                        template = template.replace("_", ".");
-                        template = template.replace("*", ".*");
-                        template = template.replace(" ", "\\".concat("s"));
-
-                    }
-                    return s.getName().toLowerCase().matches(template) ||
-                            s.getSurname().toLowerCase().matches(template) ||
-                            s.getNumberText().toLowerCase().matches(template) ||
-                            String.valueOf(s.getNumber()).toLowerCase().matches(template);
-                })
-                .forEach(c -> {
-                    System.out.println((Num++) + ".\t" + c.getName() + "\t" + c.getSurname() + "\t" + c.getNumberText());
-                });*/
-        getContactsByMask(mask, "");
-        foundContacts.stream().forEach(c -> System.out.println((Num++) + ".\t" + c.getName() + "\t" + c.getSurname() + "\t" + c.getNumberText()));
-
-    }
     public List<Contact> getAllContacts() throws DataNotFoundException, IOException {
-        getContactsByMask("*","");
+        getContactsByMask("*", "");
         return contactDB;
     }
 
@@ -237,9 +201,6 @@ public class ContactsDataBase {
                     }
                 })
                 .toList();
-
-//        return out;
-
     }
 
     public void printContactsByMask(String mask) throws DataNotFoundException, IOException {
@@ -292,7 +253,7 @@ public class ContactsDataBase {
     }
 
     public List<Contact> getContactListButId(int id) throws DataNotFoundException, IOException {
-        if(contactDB.isEmpty())
+        if (contactDB.isEmpty())
             getContactDB();
 
         List<Contact> out = new ArrayList<>();
@@ -306,7 +267,6 @@ public class ContactsDataBase {
     public void addContact(Contact contact) throws IOException, DataNotFoundException, SecurityException {
         FileWriter fw = new FileWriter(file, true);
         lastId = getLastId();
-//        fw.write(lastId + "\t" + contact.getUserId() + "\t" + contact.getContactName() + "\t" + contact.getContactSurname() + "\t" + contact.getContactNumberText() + "\t" + contact.getContactNumber() + "\n");
         contact.setId(lastId);
         fw.write(buildStringForWrite(contact));
         fw.close();

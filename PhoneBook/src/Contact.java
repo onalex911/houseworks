@@ -17,21 +17,14 @@ public class Contact {
         this.numberText = numberText;
         this.number = strToLong(numberText);
     }
+
     public Contact(long userId, int contactId, String name, String surname, String numberText) {
         this(userId, name, surname, numberText);
         this.id = contactId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
     public void setId(int id) {
         this.id = id;
-    }
-
-    public long getUserId() {
-        return userId;
     }
 
     public int getId() {
@@ -67,11 +60,11 @@ public class Contact {
         this.number = strToLong(contactNumberText);
     }
 
-    public String toString(){
-        return "ID: "+ id +", Имя: "+ name +", Фамилия: "+ surname +", тел.: "+ numberText;
+    public String toString() {
+        return "ID: " + id + ", Имя: " + name + ", Фамилия: " + surname + ", тел.: " + numberText;
     }
 
-    static long strToLong(String str){
+    static long strToLong(String str) {
         IntStream streamFromString = str.chars();
         try {
             String txtResult = streamFromString
@@ -80,7 +73,7 @@ public class Contact {
                     .reduce("", String::concat);
 
             return Long.parseLong(txtResult);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 0;
         }
     }

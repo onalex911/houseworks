@@ -14,19 +14,6 @@ public class User {
         this.id = id;
     }
 
-    /*public User(String login) {
-        try {
-            UserDataBase userDB = new UserDataBase();
-            User user = userDB.getUserByLogin(login);
-            this.id = user.getId();
-            this.name = user.getName();
-            this.login = login;
-            this.passwordHash = user.getPasswordHash();
-        }catch(Exception ex){
-            this.id = 0;
-        }
-    }*/
-
     public long getId() {
         return id;
     }

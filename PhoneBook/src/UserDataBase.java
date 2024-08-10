@@ -32,18 +32,7 @@ public class UserDataBase {
                 int countRead = fr.read(buffer);
                 if (countRead > 0) {
                     lastId = getLastId();
-                    /*String idText = "";
-                    int posToSkip = 0;
-                    for (int i = 0; i < 10; i++) {
-                        if (buffer[i] == '\n') {
-                            try {
-                                lastId = Integer.parseInt(idText);
-                                posToSkip = i + 1;
-                            } catch (NumberFormatException nfe) {
-                                throw nfe;
-                            }
-                        }
-                    }*/
+
                     //id \t login \t name \t password
                     String tmp = "";
                     int countField = 0;
@@ -58,7 +47,7 @@ public class UserDataBase {
                                 line.add(tmp);
                                 tmp = "";
                                 long id = Long.parseLong(line.get(0));
-                                userDB.put(id, new User(id,line.get(1), line.get(2), line.get(3)));
+                                userDB.put(id, new User(id, line.get(1), line.get(2), line.get(3)));
                                 line.clear();
                                 countField = 0;
                             } else {
@@ -106,7 +95,7 @@ public class UserDataBase {
         return false;
     }
 
-    public User getUserByLogin(String login){
+    public User getUserByLogin(String login) {
         if (existData) {
             for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
@@ -143,7 +132,7 @@ public class UserDataBase {
                     if (buffer[i] == '\n')
                         break;
 //                    else if (buffer[i] >= 48 && buffer[i] <= 57)
-                    else if(Character.isDigit(buffer[i]))
+                    else if (Character.isDigit(buffer[i]))
                         tmp += buffer[i];
                 }
                 return Long.parseLong(tmp);
@@ -172,7 +161,6 @@ public class UserDataBase {
             } else {
                 throw new IOException("Невозможно создать служебный файл для пользователя.");
             }
-            //throw new DataNotFoundException("Отсутствует служебный файл");
         }
     }
 }
