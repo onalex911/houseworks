@@ -86,12 +86,12 @@ public class UserDataBase {
         String out = "";
         long count = 0;
         if (existData) {
-            if(userDB.isEmpty()){
+            if (userDB.isEmpty()) {
                 getUserDB();
             }
             for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
-                out += ++count + ". " + curUser.getName() + "\n";
+                out += "  " + (++count) + ". " + curUser.getName() + "\n";
             }
         }
         return out;
@@ -99,7 +99,7 @@ public class UserDataBase {
 
     public boolean isLoginExists(String login) throws DataNotFoundException, IOException {
         if (existData) {
-            if(userDB.isEmpty()){
+            if (userDB.isEmpty()) {
                 getUserDB();
             }
             for (Long id : userDB.keySet()) {
@@ -113,7 +113,7 @@ public class UserDataBase {
 
     public User getUserByLogin(String login) throws DataNotFoundException, IOException {
         if (existData) {
-            if(userDB.isEmpty()){
+            if (userDB.isEmpty()) {
                 getUserDB();
             }
             for (Long id : userDB.keySet()) {

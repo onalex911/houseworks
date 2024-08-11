@@ -9,71 +9,98 @@ public class MenuHandler {
     private final HashMap<String, MenuSettings> MenuMap = new HashMap<>();
     private User currentUser;
     //private String currentMenuId;
-    public static String errMsg = "\nОШИБКА! ";
-    public static String warnMsg = "\nВНИМАНИЕ! ";
-    public static String inputPhrase = "Введите значение: ";
+    public static String errMsg = "\n ОШИБКА! ";
+    public static String warnMsg = "\n ВНИМАНИЕ! ";
+    public static String inputPhrase = " Введите значение: ";
+    public static String inputSearchRequest = " Введите поисковый запрос: ";
     public static String wrongValue = "Введено неверное значение.";
     public static String wrongPhoneNum = "Введено значение, не соответствующее формату телефонного номера";
     public static String inputIsEmpty = "Введено пустое значение.";
-    public static String tryAgain = "\nПопробуйте еще раз.";
-    public static String nothingDeleted = "\nНичего не удалено.";
+    public static String tryAgain = "\n Попробуйте еще раз.";
+    public static String nothingDeleted = "\n Ничего не удалено.";
     private final String noUserData = "Нет данных о пользователях.";
     private final String noContactData = "Нет данных о контактах. Выбранное меню недоступно.";
+    private final String noFoundContactData = "Контактов не найдено.";
     public static final int MaxAttempts = 5;
     public static final int MinPhoneLength = 3;
     public static final int MaxPhoneLength = 20;
     public static final String separator = "_______________________________________________________________";
 
-    public static final String SortingAZNameHeader = "  _________________________________________________\n" +
+    public static final String RegisteredUsers =
+            " ___________________________________________________\n" +
+            " |                                                 |\n" +
+            " |            << Телефонная книга >>               |\n" +
+            " |     Список зарегистрированных пользователей     |\n" +
+            " |_________________________________________________|";
+    public static final String SortingAZNameHeader =
+            " ___________________________________________________\n" +
             " |                                                 |\n" +
             " |            << Телефонная книга >>               |\n" +
             " |        Сортировка по Имени от А до Я            |\n" +
             " |_________________________________________________|";
 
-    private final String SortingZANameHeader = "  _________________________________________________\n" +
+    private final String SortingZANameHeader =
+            " ___________________________________________________\n" +
             " |                                                 |\n" +
             " |            << Телефонная книга >>               |\n" +
             " |        Сортировка по Имени от Я до А            |\n" +
             " |_________________________________________________|";
-    public static final String SortingAZSurnameHeader = "  _________________________________________________\n" +
+    public static final String SortingAZSurnameHeader =
+            " ___________________________________________________\n" +
             " |                                                 |\n" +
             " |            << Телефонная книга >>               |\n" +
             " |       Сортировка по Фамилии от А до Я           |\n" +
             " |_________________________________________________|";
 
-    public static final String SortingZASurnameHeader = "  _________________________________________________\n" +
+    public static final String SortingZASurnameHeader =
+            " ___________________________________________________\n" +
             " |                                                 |\n" +
-            " |             << Телефонная книга >>              |\n" +
+            " |            << Телефонная книга >>               |\n" +
             " |       Сортировка по Фамилии от Я до А           |\n" +
             " |_________________________________________________|";
 
-    public static final String Sorting09NumberHeader = "  _________________________________________________\n" +
+    public static final String Sorting09NumberHeader =
+            " ___________________________________________________\n" +
             " |                                                 |\n" +
-            " |             << Телефонная книга >>              |\n" +
+            " |            << Телефонная книга >>               |\n" +
             " |         Сортировка по Номеру от 0 до 9          |\n" +
             " |_________________________________________________|";
 
-    public static final String Sorting90NumberHeader = "  _________________________________________________\n" +
+    public static final String Sorting90NumberHeader =
+            " ___________________________________________________\n" +
             " |                                                 |\n" +
-            " |             << Телефонная книга >>              |\n" +
+            " |            << Телефонная книга >>               |\n" +
             " |         Сортировка по Номеру от 9 до 0          |\n" +
+            " |_________________________________________________|";
+    public static final String SearchHeader =
+            " ___________________________________________________\n" +
+            " |                                                 |\n" +
+            " |            << Телефонная книга >>               |\n" +
+            " |               Результаты поиска                 |\n" +
+            " |_________________________________________________|";
+    public static final String PrintHeader =
+            " ___________________________________________________\n" +
+            " |                                                 |\n" +
+            " |            << Телефонная книга >>               |\n" +
+            " |               Печать контактов                  |\n" +
             " |_________________________________________________|";
 
     {
-        String loginMenu = " ___________________________________________________\n" +
-                " |                                                 |\n" +
-                " |            << Телефонная книга >>               |\n" +
-                " |              Выберите действие :                |\n" +
-                " |_________________________________________________|\n" +
-                " |                                                 |\n" +
-                " | 0 - Выход          ( Выход из программы )       |\n" +
-                " |-------------------------------------------------|\n" +
-                " | 1 - Авторизация    ( Вход для зарег. польз. )   |\n" +
-                " |-------------------------------------------------|\n" +
-                " | 2 - Регистрация    ( Зарегистрироваться )       |\n" +
-                " |-------------------------------------------------|\n" +
-                " | 3 - Печать польз.  ( Список загистрир. польз. ) |\n" +
-                " |_________________________________________________|\n";
+        String loginMenu =
+            " ___________________________________________________\n" +
+            " |                                                 |\n" +
+            " |            << Телефонная книга >>               |\n" +
+            " |              Выберите действие :                |\n" +
+            " |_________________________________________________|\n" +
+            " |                                                 |\n" +
+            " | 0 - Выход          ( Выход из программы )       |\n" +
+            " |-------------------------------------------------|\n" +
+            " | 1 - Авторизация    ( Вход для зарег. польз. )   |\n" +
+            " |-------------------------------------------------|\n" +
+            " | 2 - Регистрация    ( Зарегистрироваться )       |\n" +
+            " |-------------------------------------------------|\n" +
+            " | 3 - Печать польз.  ( Список загистрир. польз. ) |\n" +
+            " |_________________________________________________|\n";
         MenuMap.put("LoginMenu", new MenuSettings(loginMenu, 3, 0));
 
     }
@@ -318,7 +345,7 @@ public class MenuHandler {
                         //запрашиваем имя/пароль пользователя
                         while (true) {
                             isOk = false;
-                            System.out.print("Введите логин: ");
+                            System.out.print(" Введите логин: ");
                             scn2 = new Scanner(System.in);
                             login = scn2.next();
                             if (login.isEmpty()) {
@@ -328,7 +355,7 @@ public class MenuHandler {
                                     currentUser = userDB.getUserByLogin(login);
                                 }
                                 while (true) {
-                                    System.out.print("Введите пароль: ");
+                                    System.out.print(" Введите пароль: ");
                                     scn3 = new Scanner(System.in);
                                     password = scn3.nextLine();
                                     if (password.isEmpty()) {
@@ -360,7 +387,7 @@ public class MenuHandler {
                     case 2: //Sign Up
                         userDB.getUserDB();
                         while (true) {
-                            System.out.print("Придумайте и введите логин: ");
+                            System.out.print(" Придумайте и введите логин: ");
                             scn2 = new Scanner(System.in);
                             login = scn2.next();
                             if (login.isEmpty()) {
@@ -373,7 +400,7 @@ public class MenuHandler {
                             }
                         }
                         while (true) {
-                            System.out.print("Введите ваше имя: ");
+                            System.out.print(" Введите ваше имя: ");
                             scn3 = new Scanner(System.in);
                             name = scn3.nextLine();
                             if (name.isEmpty()) {
@@ -382,14 +409,14 @@ public class MenuHandler {
                                 break;
                         }
                         while (true) {
-                            System.out.print("Придумайте и введите пароль: ");
+                            System.out.print(" Придумайте и введите пароль: ");
                             scn4 = new Scanner(System.in);
                             password = scn4.nextLine();
                             if (password.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                             } else {
                                 scn5 = new Scanner(System.in);
-                                System.out.print("Введите пароль еще раз: ");
+                                System.out.print(" Введите пароль еще раз: ");
                                 String password2 = scn5.nextLine();
                                 if (password2.equals(password))
                                     break;
@@ -408,7 +435,8 @@ public class MenuHandler {
                         if (usersNames.isEmpty()) {
                             System.out.println(warnMsg + "Нет зарегистрированных пользователей.");
                         } else {
-                            System.out.println("Список зарегистрированных пользователей:\n" + usersNames);
+                            System.out.println(RegisteredUsers);
+                            System.out.println(usersNames);
                         }
                         break;
                     default:
@@ -500,19 +528,19 @@ public class MenuHandler {
                         continue;
                     }
                 }
-                Scanner scn1, scn2, scn3;
+                Scanner scn1, scn2, scn3, scn4;
                 switch (resp) {
                     case 0: //Add
                         String name, surname, number;
                         while (true) {
-                            System.out.print("Введите имя: ");
+                            System.out.print(" Введите имя: ");
                             scn1 = new Scanner(System.in);
                             name = scn1.nextLine();
                             if (name.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                                 continue;
                             }
-                            System.out.print("Введите фамилию: ");
+                            System.out.print(" Введите фамилию: ");
                             scn2 = new Scanner(System.in);
                             surname = scn2.nextLine();
                             if (surname.isEmpty()) {
@@ -520,7 +548,7 @@ public class MenuHandler {
                                 continue;
                             }
                             while (true) {
-                                System.out.print("Введите номер телефона: ");
+                                System.out.print(" Введите номер телефона: ");
                                 scn3 = new Scanner(System.in);
                                 number = scn3.nextLine();
                                 boolean needExit = false;
@@ -548,7 +576,7 @@ public class MenuHandler {
                     case 2: //Delete
                         while (true) {
                             //boolean needExit = false;
-                            System.out.print("Введите строку для поиска записи, которую требуется удалить (0 - для выхода): ");
+                            System.out.print(" Введите запрос для поиска записи, которую требуется удалить (0 - для выхода): ");
                             scn = new Scanner(System.in);
                             try {
                                 String mask = scn.nextLine();
@@ -561,11 +589,12 @@ public class MenuHandler {
                                 }
 
                                 contDB = new ContactsDataBase(currentUser.getId());
-                                contDB.printContactsByMask(mask);
+                                //contDB.getContactsByMask(mask,"");
+                                contDB.printContactsByMask(mask); //вывод найденных записей
                                 if (contDB.getFoundContactsSize() == 0) {
-                                    System.out.println("По введенному запросу ничего не найдено." + tryAgain);
+                                    System.out.println(" По введенному запросу ничего не найдено." + tryAgain);
                                 } else if (contDB.getFoundContactsSize() == 1) {
-                                    System.out.print("Вы действительно хотите удалить данную запись? (y/n): ");
+                                    System.out.print(" Вы действительно хотите удалить данную запись? (y/n): ");
                                     scn1 = new Scanner(System.in);
 
                                     if (scn1.next().equals("y")) {
@@ -575,17 +604,38 @@ public class MenuHandler {
                                     }
                                 } else if (contDB.getFoundContactsSize() > 1) {
                                     while (true) {
-                                        System.out.print("Выберите ID, который требуется удалить (0 - удалить все записи; -1 - выход): ");
+                                        System.out.print(" Выберите ID, который требуется удалить (0 - удалить все записи; -1 - выход): ");
                                         scn2 = new Scanner(System.in);
                                         try {
                                             int idToDel = scn2.nextInt();
                                             if (idToDel < 0) {
                                                 System.out.println(nothingDeleted);
                                                 break;
-                                            } else {
-                                                contDB.deleteFoundContacts(idToDel);
-                                                System.out.println("\nЗапись(-и) успешно удалены.\n");
-                                                break;
+                                            } else if (idToDel == 0) {
+                                                System.out.print(" Вы действительно хотите удалить ВСЕ вышеуказанные записи? (y/n): ");
+                                                scn3 = new Scanner(System.in);
+
+                                                if (scn3.next().equals("y")) {
+                                                    contDB.deleteFoundContacts(0);
+                                                    break;
+                                                } else {
+                                                    System.out.println(nothingDeleted);
+                                                }
+                                            }else{
+                                                if(contDB.isIdInFound(idToDel)) {
+                                                    System.out.print(" Вы действительно хотите удалить запись с ID=" + idToDel + "? (y/n): ");
+                                                    scn4 = new Scanner(System.in);
+
+                                                    if (scn4.next().equals("y")) {
+                                                        contDB.deleteFoundContacts(idToDel);
+                                                        break;
+                                                    } else {
+                                                        System.out.println(nothingDeleted);
+                                                    }
+                                                    System.out.println("\n Запись(-и) успешно удалены.\n");
+                                                    break;
+                                                }
+                                                System.out.println(warnMsg+"Указанный ID отсутствует в списке найденных результатов."+tryAgain);
                                             }
                                         } catch (InputMismatchException imex) {
                                             System.out.println(warnMsg + wrongValue + tryAgain);
@@ -645,12 +695,13 @@ public class MenuHandler {
                 }
                 int idToEdit = 0;
                 inputed = inputData(nameDataTxt, false, false); //вводим строку для поиска, она может не соответствовать формату тел. номера
-                contDB.printContactsByMask(inputed);
+                //contDB.getContactsByMask(inputed, fieldName);
+                contDB.printContactsByMask(inputed); //вывод найденных записей
                 if (contDB.getFoundContactsSize() == 1) {
                     idToEdit = contDB.getFoundContactId();
                 } else if (contDB.getFoundContactsSize() > 1) {
                     while (true) {
-                        System.out.print("Выберите ID, который требуется отредактировать (0 - выход): ");
+                        System.out.print(" Выберите ID, который требуется отредактировать (0 - выход): ");
                         scn2 = new Scanner(System.in);
                         try {
                             idToEdit = scn2.nextInt();
@@ -660,7 +711,7 @@ public class MenuHandler {
                         }
                     }
                 } else {
-                    System.out.println("По запросу " + inputed + " ничего не найдено." + tryAgain);
+                    System.out.println(" По запросу " + inputed + " ничего не найдено." + tryAgain);
                     continue;
                 }
                 Contact contToEdit = contDB.getContactById(idToEdit, false); //получаем запись из файла на случай, если уже кто-то (например, из другой сессии) отредактировал или удадлил требуемую запись
@@ -697,7 +748,7 @@ public class MenuHandler {
                         contToEdit.setNumber(newVal);
                 }
                 contDB.editContact(contToEdit);
-                System.out.println("\nЗапись успешно отредактирована.\n");
+                System.out.println("\n Запись успешно отредактирована.\n");
             } catch (InputMismatchException imex) {
                 System.out.println(warnMsg + wrongValue + tryAgain);
             }
@@ -709,7 +760,7 @@ public class MenuHandler {
             String out = "";
             String newValTxt = isNew ? "новое значение" : "поисковую фразу";
             String nameDataTxt = nameData.equals("") ? "" : " для поля «" + nameData + "»";
-            System.out.print("Введите " + newValTxt + nameDataTxt + ": ");
+            System.out.print(" Введите " + newValTxt + nameDataTxt + ": ");
             Scanner scn = new Scanner(System.in);
             out = scn.nextLine();
             if (out.isEmpty()) {
@@ -741,22 +792,22 @@ public class MenuHandler {
                     case 0:
 //                        contDB.printByMask("*");
                         contDB.getContactsByMask("*", "");
-                        contDB.printPaged();
-                        System.out.println(separator);
                         break;
                     case 1:
                         scn1 = new Scanner(System.in);
-                        System.out.print("Введите строку для поиска: ");
+                        System.out.print(inputSearchRequest);
                         String mask = scn1.nextLine();
-//                        contDB.printByMask(mask);
                         contDB.getContactsByMask(mask, "");
-                        contDB.printPaged();
-                        System.out.println(separator);
                         break;
                     default:
                         System.out.println(warnMsg + wrongValue + tryAgain);
                 }
-
+                if (contDB.getFoundContactsSize() > 0) {
+                    System.out.println(MenuHandler.PrintHeader);
+                    contDB.printPaged();
+                } else {
+                    System.out.println(warnMsg + noFoundContactData);
+                }
             } catch (InputMismatchException ime) {
                 System.out.println(errMsg + wrongValue + tryAgain);
             } catch (DataNotFoundException e) {
@@ -877,7 +928,6 @@ public class MenuHandler {
                 switch (resp) {
                     case 0: //sorting Number A-Z
                         System.out.println(Sorting09NumberHeader);
-//                    contDB.printPaged(contactList.stream().sorted((x,y)-> (int)(x.getNumber() - y.getNumber())).toList(),1);
                         contDB.printPaged(contactList.stream().sorted(Comparator.comparingLong(Contact::getNumber)).toList(), 1);
                         break;
                     case 1: //sorting Number Z-A
@@ -906,7 +956,7 @@ public class MenuHandler {
                     return;
 
                 ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
-                System.out.print("Введите поисковую фразу: ");
+                System.out.print(inputSearchRequest);
                 scn1 = new Scanner(System.in);
                 String phrase = scn1.nextLine();
                 if (phrase.isEmpty()) {
@@ -932,9 +982,13 @@ public class MenuHandler {
                         System.out.println(warnMsg + wrongValue + tryAgain);
                         //continue;
                 }
-
-                System.out.println("\nКонтактов, содержащих \"" + phrase + "\" в поле «" + fieldName + "»: " + contDB.getFoundContactsSize());
-                contDB.printPaged();
+                if (contDB.getFoundContactsSize() > 0) {
+                    System.out.println(MenuHandler.SearchHeader);
+                    System.out.println("  Контактов, содержащих \"" + phrase + "\" в поле «" + fieldName + "»: " + contDB.getFoundContactsSize());
+                    contDB.printPaged();
+                } else {
+                    System.out.println(warnMsg + noFoundContactData);
+                }
 
             } catch (InputMismatchException imex) {
                 System.out.println(warnMsg + wrongValue + tryAgain);

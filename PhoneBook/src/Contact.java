@@ -61,7 +61,7 @@ public class Contact {
     }
 
     public String toString() {
-        return "ID: " + id + ", Имя: " + name + ", Фамилия: " + surname + ", тел.: " + numberText;
+        return "  ID: " + id + ", Имя: " + name + ", Фамилия: " + surname + ", тел.: " + numberText;
     }
 
     static long strToLong(String str) {

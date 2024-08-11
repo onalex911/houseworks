@@ -35,7 +35,7 @@ public class ContactsDataBase {
         }
         file = new File(MainPB.workDirName + "/" + this.userIdText + "/" + fileName);
         if (file.exists()) {
-            System.out.println("DEBUG! ContactDB for userId:" + userId + " length = " + file.length());
+            //System.out.println("DEBUG! ContactDB for userId:" + userId + " length = " + file.length());
         } else {
             if (file.createNewFile()) {
                 writeLastId(lastId);
@@ -94,7 +94,7 @@ public class ContactsDataBase {
 
     //fromDB = true - получаем ConatctDB, затем получаем из нее запись
     //fromDB = false - получаем запись напрямую из файла
-    public Contact getContactById(int id, boolean fromDB) throws FileNotFoundException, IOException, DataNotFoundException {
+    public Contact getContactById(int id, boolean fromDB) throws IOException, DataNotFoundException {
 
         if (fromDB) {
             if (contactDB.isEmpty()) {
@@ -176,7 +176,7 @@ public class ContactsDataBase {
                         template = ".*";
                     } else {
                         template = mask.toLowerCase();
-                        template = "^"+template+"$";
+                        template = "^" + template + "$";
                         template = template.replace(".", "\\".concat("."));
                         template = template.replace("+", "\\".concat("+"));
                         template = template.replace("(", "\\".concat("("));
@@ -203,7 +203,9 @@ public class ContactsDataBase {
                 })
                 .toList();
     }
-
+    public boolean isIdInFound(int id){
+        return getFoundContactsSize() > 0 && foundContacts.stream().anyMatch(c->c.getId() == id);
+    }
     public void printContactsByMask(String mask) throws DataNotFoundException, IOException {
         if (foundContacts == null) {
             getContactsByMask(mask, "");
