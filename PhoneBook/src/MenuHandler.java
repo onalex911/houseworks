@@ -17,6 +17,7 @@ public class MenuHandler {
     public static String inputIsEmpty = "Введено пустое значение.";
     public static String tryAgain = "\nПопробуйте еще раз.";
     public static String nothingDeleted = "\nНичего не удалено.";
+    private final String noUserData = "Нет данных о пользователях.";
     public static final int MaxAttempts = 5;
     public static final int MinPhoneLength = 3;
     public static final int MaxPhoneLength = 20;
@@ -288,7 +289,7 @@ public class MenuHandler {
     }
 
     private void doLoginMenu() {
-        Scanner scn1, scn2, scn3, scn4, scn5, scn6, scn7, scn8, scn9;
+        Scanner scn1, scn2, scn3, scn4, scn5;
         while (true) { //login menu
             //MenuHandler mh = new MenuHandler("LoginMenu");
 
@@ -297,59 +298,67 @@ public class MenuHandler {
             scn1 = new Scanner(System.in);
             boolean needBreak = false;
             try {
+                UserDataBase userDB = new UserDataBase();
                 int response = scn1.nextInt();
-                if (response == menuExitValue)
+                if (response == menuExitValue) {
                     break;
+                }
 
-                UserDataBase userDB;// = new UserDataBase();
-                String login, name, email, password;
+                String login, name, password;
                 switch (response) {
                     case 1: //Sign In
-                        userDB = new UserDataBase();
+                        if (!userDB.isExistData()) {
+                            System.out.println(warnMsg + noUserData);
+                            continue;
+                        }
                         User currentUser = null;
                         int attempt = 0;
+                        boolean isOk;
                         //запрашиваем имя/пароль пользователя
                         while (true) {
+                            isOk = false;
                             System.out.print("Введите логин: ");
                             scn2 = new Scanner(System.in);
                             login = scn2.next();
                             if (login.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                             } else {
-                                if (!userDB.isLoginExists(login)) {
-                                    System.out.println(warnMsg + "Введенный логин не существует." + tryAgain);
-                                } else {
+                                if (userDB.isLoginExists(login)) {
                                     currentUser = userDB.getUserByLogin(login);
+                                }
+                                while (true) {
                                     System.out.print("Введите пароль: ");
                                     scn3 = new Scanner(System.in);
                                     password = scn3.nextLine();
                                     if (password.isEmpty()) {
                                         System.out.println(warnMsg + inputIsEmpty + tryAgain);
+                                        continue;
                                     } else {
-                                        if (!password.equals(currentUser.getPasswordHash())) {
-                                            System.out.println(warnMsg + "Введен неверный пароль." + tryAgain);
+                                        if (currentUser != null && password.equals(currentUser.getPasswordHash())) {
+                                            isOk = true;
+                                            break;
                                         } else {
+                                            System.out.println(warnMsg + "Введены неверные данные авторизации." + tryAgain);
+                                            attempt++;
                                             break;
                                         }
                                     }
                                 }
                             }
-                            if (++attempt >= MaxAttempts) {
+                            if (isOk) {
+                                System.out.println("\nДобро пожаловать, " + currentUser.getName() + "!");
+                                MenuHandler mainMenu = new MenuHandler("MainMenu", currentUser);
+                                needBreak = mainMenu.execute();
+                                break;
+                            } else if (attempt >= MaxAttempts) {
                                 System.out.println(errMsg + "Вы исчерпали количество попыток для авторизации. Программа будет закрыта!");
                                 needBreak = true;
                                 break;
                             }
                         }
-                        if (!needBreak) {
-                            //выводим меню контактов для авторизовавшегося пользователя
-                            MenuHandler mainMenu = new MenuHandler("MainMenu", currentUser);
-
-                            needBreak = !mainMenu.execute();
-                            //needBreak=true;
-                        }
                         break;
                     case 2: //Sign Up
-                        userDB = new UserDataBase();
+                        userDB.getUserDB();
                         while (true) {
                             System.out.print("Придумайте и введите логин: ");
                             scn2 = new Scanner(System.in);
@@ -374,14 +383,14 @@ public class MenuHandler {
                         }
                         while (true) {
                             System.out.print("Придумайте и введите пароль: ");
-                            scn5 = new Scanner(System.in);
-                            password = scn5.nextLine();
+                            scn4 = new Scanner(System.in);
+                            password = scn4.nextLine();
                             if (password.isEmpty()) {
                                 System.out.println(warnMsg + inputIsEmpty + tryAgain);
                             } else {
-                                scn6 = new Scanner(System.in);
+                                scn5 = new Scanner(System.in);
                                 System.out.print("Введите пароль еще раз: ");
-                                String password2 = scn6.nextLine();
+                                String password2 = scn5.nextLine();
                                 if (password2.equals(password))
                                     break;
                                 else
@@ -391,7 +400,10 @@ public class MenuHandler {
                         userDB.addUser(new User(login, name, password));
                         break;
                     case 3: //Print Users
-                        userDB = new UserDataBase();
+                        if (!userDB.isExistData()) {
+                            System.out.println(warnMsg + noUserData);
+                            continue;
+                        }
                         String usersNames = userDB.getUsersNames();
                         if (usersNames.isEmpty()) {
                             System.out.println(warnMsg + "Нет зарегистрированных пользователей.");
@@ -430,12 +442,12 @@ public class MenuHandler {
             try {
                 int resp = scn.nextInt();
                 if (resp == MenuMap.get(menuName).getExitValue())
-                    return false;
-                if(resp > 1 && resp < MenuMap.get(menuName).getMaxValue()){
+                    return true; //выходим из предыдущего меню и из программы
+                if (resp > 1 && resp < MenuMap.get(menuName).getMaxValue()) {
                     //проверяем, есть ли контакты для текущего пользователя
                     ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
-                    if(!contDB.isExistData()){
-                        System.out.println(warnMsg+"Нет данных о контактах. Выбранное меню недоступно."+tryAgain);
+                    if (!contDB.isExistData()) {
+                        System.out.println(warnMsg + "Нет данных о контактах. Выбранное меню недоступно." + tryAgain);
                         continue;
                     }
                 }
@@ -455,7 +467,7 @@ public class MenuHandler {
                         menuName = "SearchMenu";
                         break;
                     case 5:
-                        return true;
+                        return false; //возвращаемся в предыдущее меню
                     default:
                         System.out.println(warnMsg + wrongValue + tryAgain);
                         continue;
@@ -548,7 +560,7 @@ public class MenuHandler {
 
                                     if (scn1.next().equals("y")) {
                                         contDB.deleteFoundContacts(0);
-                                    }else{
+                                    } else {
                                         System.out.println(nothingDeleted);
                                     }
                                 } else if (contDB.getFoundContactsSize() > 1) {
@@ -560,8 +572,7 @@ public class MenuHandler {
                                             if (idToDel < 0) {
                                                 System.out.println(nothingDeleted);
                                                 break;
-                                            }
-                                            else {
+                                            } else {
                                                 contDB.deleteFoundContacts(idToDel);
                                                 System.out.println("\nЗапись(-и) успешно удалены.\n");
                                                 break;
@@ -677,7 +688,7 @@ public class MenuHandler {
                 }
                 contDB.editContact(contToEdit);
                 System.out.println("\nЗапись успешно отредактирована.\n");
-            }catch (InputMismatchException imex){
+            } catch (InputMismatchException imex) {
                 System.out.println(warnMsg + wrongValue + tryAgain);
             }
         }

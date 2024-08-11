@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +10,8 @@ public class UserDataBase {
     private boolean existData;
     private final String fileName = "UsersDB.txt";
     private final String settingsFileName = "settings.txt";
-    private final long initId = 1L;
+    private final int initId = 1;
+
 
     {
         userDB = new HashMap<>();
@@ -25,38 +23,9 @@ public class UserDataBase {
         try {
             MainPB.checkWorkDir();
             file = new File(MainPB.workDirName + "/" + fileName);
-            if (file.exists() && file.length() > 0) {
-                System.out.println("DEBUG! UsersDB length = " + file.length());
-                FileReader fr = new FileReader(file);
-                char[] buffer = new char[(int) file.length()];
-                int countRead = fr.read(buffer);
-                if (countRead > 0) {
-                    lastId = getLastId();
-
-                    //id \t login \t name \t password
-                    String tmp = "";
-                    int countField = 0;
-                    List<String> line = new ArrayList<>();
-                    for (int i = 0; i < buffer.length; i++) {
-                        if (buffer[i] == '\t') {
-                            line.add(tmp);
-                            tmp = "";
-                            countField++;
-                        } else if (buffer[i] == '\n') {
-                            if (countField == 3) {
-                                line.add(tmp);
-                                tmp = "";
-                                long id = Long.parseLong(line.get(0));
-                                userDB.put(id, new User(id, line.get(1), line.get(2), line.get(3)));
-                                line.clear();
-                                countField = 0;
-                            } else {
-                                throw new DataNotFoundException("Нарушение целостности данных в БД пользователей.");
-                            }
-                        } else {
-                            tmp += buffer[i];
-                        }
-                    }
+            if (file.exists()) {
+                //System.out.println("DEBUG! UsersDB length = " + file.length());
+                if (file.length() > 0) {
                     existData = true;
                 }
             } else {
@@ -67,15 +36,59 @@ public class UserDataBase {
                     throw new IOException("Невозможно создать файл пользователей.");
                 }
             }
-        } catch (NullPointerException | IOException npe) {
-            throw npe;
+        } catch (NullPointerException npex) {
+            System.out.println("Ссылка на несуществующий объект: " + npex.getMessage());
+        } catch (IOException ioex) {
+            System.out.println("Ошибка ввода-вывода: " + ioex.getMessage());
         }
     }
 
-    public String getUsersNames() {
+    public void getUserDB() throws IOException, DataNotFoundException {
+        FileReader fr = new FileReader(file);
+        char[] buffer = new char[(int) file.length()];
+        int countRead = fr.read(buffer);
+        if (countRead > 0) {
+            lastId = getLastId();
+
+            //id \t login \t name \t password
+            String tmp = "";
+            int countField = 0;
+            List<String> line = new ArrayList<>();
+            for (int i = 0; i < buffer.length; i++) {
+                if (buffer[i] == '\t') {
+                    line.add(tmp);
+                    tmp = "";
+                    countField++;
+                } else if (buffer[i] == '\n') {
+                    if (countField == 3) {
+                        line.add(tmp);
+                        tmp = "";
+                        long id = Long.parseLong(line.get(0));
+                        userDB.put(id, new User(id, line.get(1), line.get(2), line.get(3)));
+                        line.clear();
+                        countField = 0;
+                    } else {
+                        throw new DataNotFoundException("Нарушение целостности данных в БД пользователей.");
+                    }
+                } else {
+                    tmp += buffer[i];
+                }
+            }
+            existData = true;
+        }
+    }
+
+    public boolean isExistData() {
+        return existData;
+    }
+
+    public String getUsersNames() throws DataNotFoundException, IOException {
         String out = "";
         long count = 0;
         if (existData) {
+            if(userDB.isEmpty()){
+                getUserDB();
+            }
             for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
                 out += ++count + ". " + curUser.getName() + "\n";
@@ -84,8 +97,11 @@ public class UserDataBase {
         return out;
     }
 
-    public boolean isLoginExists(String login) {
+    public boolean isLoginExists(String login) throws DataNotFoundException, IOException {
         if (existData) {
+            if(userDB.isEmpty()){
+                getUserDB();
+            }
             for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
                 if (curUser.getLogin().equals(login))
@@ -95,8 +111,11 @@ public class UserDataBase {
         return false;
     }
 
-    public User getUserByLogin(String login) {
+    public User getUserByLogin(String login) throws DataNotFoundException, IOException {
         if (existData) {
+            if(userDB.isEmpty()){
+                getUserDB();
+            }
             for (Long id : userDB.keySet()) {
                 User curUser = userDB.get(id);
                 if (curUser.getLogin().equals(login))
