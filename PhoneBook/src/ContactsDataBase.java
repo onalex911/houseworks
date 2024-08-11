@@ -175,7 +175,8 @@ public class ContactsDataBase {
                     if (mask.isEmpty()) {
                         template = ".*";
                     } else {
-                        template = mask.toLowerCase();//"^"+mask+"$";
+                        template = mask.toLowerCase();
+                        template = "^"+template+"$";
                         template = template.replace(".", "\\".concat("."));
                         template = template.replace("+", "\\".concat("+"));
                         template = template.replace("(", "\\".concat("("));
@@ -252,18 +253,6 @@ public class ContactsDataBase {
         }
     }
 
-    public List<Contact> getContactListButId(int id) throws DataNotFoundException, IOException {
-        if (contactDB.isEmpty())
-            getContactDB();
-
-        List<Contact> out = new ArrayList<>();
-        for (Contact contact : contactDB) {
-            if (contact.getId() != id)
-                out.add(contact);
-        }
-        return out;
-    }
-
     public void addContact(Contact contact) throws IOException, DataNotFoundException, SecurityException {
         FileWriter fw = new FileWriter(file, true);
         lastId = getLastId();
@@ -331,7 +320,7 @@ public class ContactsDataBase {
 
         contacts.stream().skip(start)
                 .limit(posInPage)
-                .forEach(c -> System.out.println((Num++) + ".\t" + c.getName() + "\t" + c.getSurname() + "\t" + c.getNumberText()));
+                .forEach(c -> System.out.printf("   %d\t%s\t%s\t%s\n", Num++, c.getName(), c.getSurname(), c.getNumberText()));
 
         System.out.println(MenuHandler.separator);
 

@@ -9,8 +9,8 @@ public class MenuHandler {
     private final HashMap<String, MenuSettings> MenuMap = new HashMap<>();
     private User currentUser;
     //private String currentMenuId;
-    public static String errMsg = "ОШИБКА! ";
-    public static String warnMsg = "ВНИМАНИЕ! ";
+    public static String errMsg = "\nОШИБКА! ";
+    public static String warnMsg = "\nВНИМАНИЕ! ";
     public static String inputPhrase = "Введите значение: ";
     public static String wrongValue = "Введено неверное значение.";
     public static String wrongPhoneNum = "Введено значение, не соответствующее формату телефонного номера";
@@ -18,6 +18,7 @@ public class MenuHandler {
     public static String tryAgain = "\nПопробуйте еще раз.";
     public static String nothingDeleted = "\nНичего не удалено.";
     private final String noUserData = "Нет данных о пользователях.";
+    private final String noContactData = "Нет данных о контактах. Выбранное меню недоступно.";
     public static final int MaxAttempts = 5;
     public static final int MinPhoneLength = 3;
     public static final int MaxPhoneLength = 20;
@@ -106,15 +107,15 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " | 0 - Выйти из программы                          |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 1 - Контакты     ( Доб. / Ред. / Удалить )      |\n" +
+                " | 1 - Контакты    ( Доб. / Ред. / Удалить )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 2 - Печать       ( Всё / Специальная)           |\n" +
+                " | 2 - Печать      ( Всё / Специальная )           |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 3 - Сортировка   ( по Имени / Фамилии / Номеру) |\n" +
+                " | 3 - Сортировка  ( по Имени / Фамилии / Номеру ) |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 4 - Поиск        ( по Имени / Фамилии / Номеру) |\n" +
+                " | 4 - Поиск       ( по Имени / Фамилии / Номеру ) |\n" +
                 " |-------------------------------------------------|\n" +
-                " | 5 - Назад        ( Выход из Тел. книги )        |\n" +
+                " | 5 - Назад       ( Выход из Тел. книги )         |\n" +
                 " |_________________________________________________|";
         MenuMap.put("MainMenu", new MenuSettings(mainMenu, 5, 0));
         String contactMenu = " ___________________________________________________\n" +
@@ -178,11 +179,11 @@ public class MenuHandler {
                 " |                                                 |\n" +
                 " | -1 - Назад        ( Возврат в осн. меню )       |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  0 - Имён         ( от А до Я / от Я до А )     |\n" +
+                " |  0 - Имя          ( от А до Я / от Я до А )     |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  1 - Фамилий      ( от А до Я / от Я до А )     |\n" +
+                " |  1 - Фамилия      ( от А до Я / от Я до А )     |\n" +
                 " |-------------------------------------------------|\n" +
-                " |  2 - Тел. номеров ( от 0 до 9 / от 9 до 0 )     |\n" +
+                " |  2 - Тел. номер   ( от 0 до 9 / от 9 до 0 )     |\n" +
                 " |_________________________________________________|";
         MenuMap.put("SortingMenu", new MenuSettings(sortingMenu, 2, -1));
         String sortingNameMenu = " ___________________________________________________\n" +
@@ -339,7 +340,6 @@ public class MenuHandler {
                                             break;
                                         } else {
                                             System.out.println(warnMsg + "Введены неверные данные авторизации." + tryAgain);
-                                            attempt++;
                                             break;
                                         }
                                     }
@@ -350,7 +350,7 @@ public class MenuHandler {
                                 MenuHandler mainMenu = new MenuHandler("MainMenu", currentUser);
                                 needBreak = mainMenu.execute();
                                 break;
-                            } else if (attempt >= MaxAttempts) {
+                            } else if (++attempt >= MaxAttempts) {
                                 System.out.println(errMsg + "Вы исчерпали количество попыток для авторизации. Программа будет закрыта!");
                                 needBreak = true;
                                 break;
@@ -447,7 +447,7 @@ public class MenuHandler {
                     //проверяем, есть ли контакты для текущего пользователя
                     ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
                     if (!contDB.isExistData()) {
-                        System.out.println(warnMsg + "Нет данных о контактах. Выбранное меню недоступно." + tryAgain);
+                        System.out.println(warnMsg + noContactData + tryAgain);
                         continue;
                     }
                 }
@@ -472,6 +472,7 @@ public class MenuHandler {
                         System.out.println(warnMsg + wrongValue + tryAgain);
                         continue;
                 }
+
                 currentMenu = new MenuHandler(menuName, currentUser);
                 currentMenu.execute();
             } catch (InputMismatchException ime) {
@@ -488,8 +489,17 @@ public class MenuHandler {
             ContactsDataBase contDB;
             try {
                 int resp = scn.nextInt();
-                if (resp == MenuMap.get(menuName).getExitValue())
+                if (resp == MenuMap.get(menuName).getExitValue()) {
                     return;
+                }
+                if (resp > 0 && resp <= MenuMap.get(menuName).getMaxValue()) {
+                    //проверяем, есть ли контакты для текущего пользователя
+                    contDB = new ContactsDataBase(currentUser.getId());
+                    if (!contDB.isExistData()) {
+                        System.out.println(warnMsg + noContactData + tryAgain);
+                        continue;
+                    }
+                }
                 Scanner scn1, scn2, scn3;
                 switch (resp) {
                     case 0: //Add
@@ -613,20 +623,20 @@ public class MenuHandler {
                 ContactsDataBase contDB = new ContactsDataBase(currentUser.getId());
                 switch (resp) {
                     case 0://Edit name
-                        nameDataTxt = "имя";
+                        nameDataTxt = "Имя";
                         fieldName = "name";
                         break;
                     case 1://Edit surname
-                        nameDataTxt = "фамилию";
+                        nameDataTxt = "Фамилия";
                         fieldName = "surname";
                         break;
                     case 2://Edit number
-                        nameDataTxt = "тел. номер";
+                        nameDataTxt = "Тел. номер";
                         fieldName = "number";
                         isPhone = true;
                         break;
                     case 3://Edit all
-                        nameDataTxt = "поисковый запрос";
+                        nameDataTxt = "";
                         fieldName = "";
                         break;
                     default:
@@ -676,13 +686,13 @@ public class MenuHandler {
                             continue;
                     }
                 } else {
-                    newVal = inputData("имя", false, true);
+                    newVal = inputData("Имя", false, true);
                     if (!newVal.isEmpty())
                         contToEdit.setName(newVal);
-                    newVal = inputData("фамилию", false, true);
+                    newVal = inputData("Фамилия", false, true);
                     if (!newVal.isEmpty())
                         contToEdit.setSurname(newVal);
-                    newVal = inputData("тел. номер", true, true);
+                    newVal = inputData("Тел. номер", true, true);
                     if (!newVal.isEmpty())
                         contToEdit.setNumber(newVal);
                 }
@@ -697,8 +707,9 @@ public class MenuHandler {
     private String inputData(String nameData, boolean isPhoneNum, boolean isNew) {
         while (true) {
             String out = "";
-            String newValTxt = isNew ? " (новое значение) " : "";
-            System.out.print("Введите  " + nameData + newValTxt + ": ");
+            String newValTxt = isNew ? "новое значение" : "поисковую фразу";
+            String nameDataTxt = nameData.equals("") ? "" : " для поля «" + nameData + "»";
+            System.out.print("Введите " + newValTxt + nameDataTxt + ": ");
             Scanner scn = new Scanner(System.in);
             out = scn.nextLine();
             if (out.isEmpty()) {
@@ -902,6 +913,7 @@ public class MenuHandler {
                     System.out.println(warnMsg + wrongValue + tryAgain);
                     continue;
                 }
+
                 String fieldName = "";
                 switch (resp) {
                     case 0://Name
@@ -920,10 +932,10 @@ public class MenuHandler {
                         System.out.println(warnMsg + wrongValue + tryAgain);
                         //continue;
                 }
-                //ContactsDataBase.Num =
-                System.out.println("\nКонтактов, содержащих " + phrase + " в поле «" + fieldName + "»: " + contDB.getFoundContactsSize());
+
+                System.out.println("\nКонтактов, содержащих \"" + phrase + "\" в поле «" + fieldName + "»: " + contDB.getFoundContactsSize());
                 contDB.printPaged();
-                //break;
+
             } catch (InputMismatchException imex) {
                 System.out.println(warnMsg + wrongValue + tryAgain);
             } catch (DataNotFoundException dnfex) {
