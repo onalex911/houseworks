@@ -223,33 +223,32 @@ public class ContactsDataBase {
             getContactDB();
         }
 
-        if (id > 0 && contactDB.stream().noneMatch(c -> c.getId() == id)) {
+        if (id < 0 || id > 0 && contactDB.stream().noneMatch(c -> c.getId() == id)) {
             throw new DataNotFoundException("Указанная запись не содержится в списке контактов.");
         }
 
         List<Contact> contForSave = new ArrayList<>();
-        for (Contact contact : contactDB) {
-            boolean doAdd = true;
-            if (id == 0) {
-                for (Contact c : foundContacts) {
-                    if (contact.getId() == c.getId()) {
-                        doAdd = false;
-                        break;
-                    }
-                }
-            } else {
-                if (contact.getId() == id)
-                    doAdd = false;
-            }
-            if (doAdd)
-                contForSave.add(contact);
+
+        if(id > 0){
+            contForSave = contactDB.stream().filter(c->c.getId() != id).toList();
+        }else{
+            List<Integer> uniqIds = foundContacts
+                    .stream()
+                    .map(c->c.getId())
+                    .distinct()
+                    .toList();
+            contForSave = contactDB.stream()
+                    .filter(c->!uniqIds.contains(c.getId()))
+                    .toList();
         }
+        
         if (!contForSave.isEmpty()) {
             FileWriter fw = new FileWriter(file, false);
             for (Contact contact : contForSave) {
                 fw.write(buildStringForWrite(contact));
             }
             fw.close();
+            System.out.println();
         } else {
             throw new DataNotFoundException("Нет данных для записи в файл.");
         }
