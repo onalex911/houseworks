@@ -15,7 +15,7 @@ public class CellArray {
 //        this.arr = arr;
 //    }
     public void add(Cell val){
-        this.arr[size] = val;
+        this.arr[size++] = val;
     }
 
     private void checkCapacity(int size){

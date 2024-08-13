@@ -13,7 +13,7 @@ public class CoordArray {
         }
 
         public void add(Coord val){
-            this.arr[size] = val;
+            this.arr[size++] = val;
         }
 
         private void checkCapacity(int size){
