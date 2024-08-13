@@ -241,7 +241,7 @@ public class ContactsDataBase {
                     .filter(c->!uniqIds.contains(c.getId()))
                     .toList();
         }
-        
+
         if (!contForSave.isEmpty()) {
             FileWriter fw = new FileWriter(file, false);
             for (Contact contact : contForSave) {

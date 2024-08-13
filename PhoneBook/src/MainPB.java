@@ -16,8 +16,8 @@ public class MainPB {
             MenuHandler mh = new MenuHandler("LoginMenu");
             mh.execute();
         } catch (Exception ex) {
-            System.out.println(MenuHandler.errMsg + ex.getMessage() + "Программа будет прервана!");
+            System.out.println(MenuHandler.errMsg + ex.getMessage() + "Программа прервана!");
         }
-        System.out.println("\n\nДо новых встреч!");
+        System.out.println("\nДо новых встреч!");
     }
 }

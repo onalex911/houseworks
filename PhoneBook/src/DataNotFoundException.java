@@ -1,5 +1,4 @@
 //        DataNotFoundException для ситуации, когда запрашиваемые данные не найдены.
-//        Определение конструктора и методов:
 
 public class DataNotFoundException extends Exception {
 
