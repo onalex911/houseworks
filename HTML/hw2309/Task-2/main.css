@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+h1, h2, li {
+  font-size: 17px;
+  color: #f8f8f8;
+}
+
+h1, h2 {
+  padding-left: 58px;
+}
+
+.container {
+  width: 980px;
+  height: auto;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+header, div.header-top, nav, main, footer {
+  width: 100%;
+}
+
+div.header-top, nav, footer {
+  display: flex;
+  align-items: center;
+}
+
+.header-top {
+  background-color: rgb(146, 49, 99);
+  height: 82px;
+}
+
+header h1 {
+  padding-left: 58px;
+}
+
+nav, footer {
+  background-color: rgb(110, 18, 55);
+  height: 48px;
+}
+
+nav {
+  margin-top: 12px;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin-left: 20px;
+}
+
+main > * {
+  margin-top: 12px;
+}
+
+main {
+  height: 312px;
+  display: flex;
+  justify-content: space-between;
+}
+main .asides-left-wrapper {
+  width: 228px;
+}
+main .asides-left-wrapper aside {
+  display: flex;
+  background-color: rgb(182, 91, 128);
+}
+main .asides-right-wrapper {
+  width: 112px;
+  margin-top: 0;
+}
+main .asides-right-wrapper aside {
+  background-color: rgb(182, 91, 128);
+  height: 230px;
+}
+main .asides-right-wrapper aside h2 {
+  padding: 30px;
+  margin: 12px 25px;
+  word-wrap: break-word;
+  width: 15px;
+  height: 90px;
+}
+main article {
+  width: 612px;
+  background-color: rgb(182, 91, 128);
+}
+main article h1 {
+  margin-top: 30px;
+}
+main article section {
+  height: 90px;
+  padding-left: 58px;
+  margin: 12px 55px;
+  background-color: rgb(219, 146, 175);
+}
+main article section h2 {
+  padding: 14px 0;
+}
+
+#first {
+  height: 60px;
+  padding-top: 18px;
+}
+
+#second {
+  height: 112px;
+  padding-top: 18px;
+  margin-top: 12px;
+}
+
+footer {
+  margin-top: 12px;
+}/*# sourceMappingURL=main.css.map */

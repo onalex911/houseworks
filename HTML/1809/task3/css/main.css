@@ -1,0 +1,24 @@
+body{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size:medium;
+}
+a {
+      text-decoration: none;
+      color: #4e42ac;
+}
+dt h1 {
+      font-size: large;
+      text-transform:  uppercase;
+}
+
+.container{
+      margin:20px;
+      background-color: #f5f5f5;
+      padding:5px 20px 20px 20px;
+}
+dd p{
+      margin:3px 0;      
+}
+.grey{
+      color:gray;
+}

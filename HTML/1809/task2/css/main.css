@@ -1,0 +1,50 @@
+body {
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: medium;
+}
+.container{
+      width: 760px;
+      background-color: #f5f5f5;
+      margin:20px;
+      padding: 10px 30px;
+}
+.container_title{
+      font-size: x-large;
+      font-weight: bold;
+}
+ul{
+      list-style: none;
+      margin-left:-40px;
+}
+ul li{
+      background-color: #add8e6;
+      padding: 15px 0 15px 45px;
+      
+}
+/* .container_list ul li.even{} */
+ul li.odd{
+      background-color: #a5ccda;
+}
+ul li.done {
+      background-color: #e2e2e2;
+}
+ul li.done .icon_start {
+      width:20px;
+      height: 20px;
+      background-image: url("../img/free-icon-check-box-checked.png");
+      background-size: 20px 20px;
+      background-repeat: no-repeat;            
+}
+/* .icon_start,.icon_end {
+      margin: 0 50px 0 15px;
+} */
+.icon_start {
+      background-image: url("../img/free-icon-check-box-empty.png");
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      padding-left: 35px;
+}
+
+.icon_end {
+      padding-left: 30px;
+}

@@ -1,0 +1,49 @@
+$container-bg: #f5f5f5;
+$cell-padding: 10px 5px;
+$header-bg: rgb(173,216,230);
+$even-cell-bg: #e0e0e0;
+
+body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+}
+
+.container {
+      background-color: $container-bg;
+      margin: 0;
+      padding: 30px; 
+      border: 1px $container-bg solid;
+
+      table{
+            width: 100%;
+            border-collapse: collapse;
+
+            thead {
+                  background-color: $header-bg;
+                  padding:0;
+                  position: sticky;
+                  top: 0;
+                  z-index: 10;
+            
+                  th {
+                        padding: $cell-padding;
+                        margin: 0;
+                  }
+            }
+            td {
+                  padding: $cell-padding;
+                  margin:0;
+                  text-align: center;
+
+            }
+            tbody{
+                  tr:nth-child(even) {
+                        background-color: $even-cell-bg;
+                  }
+                  td:nth-child(1){
+                        background-color: $header-bg;
+                        font-weight: bold;
+                  };
+            }
+      }
+}

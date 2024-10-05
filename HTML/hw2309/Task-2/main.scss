@@ -1,0 +1,136 @@
+$cont-width: 980px;
+$head-color: rgb(146,49,88);
+$nav-color: rgb(110,18,55);
+$menu-color: rgb(182,91,128);
+$sect-color: rgb(219,146,175);
+$left-padding:58px;
+$top-margin: 12px;
+body{
+      margin:0;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      // background: url('./src.png') 0 0 no-repeat;
+}
+
+
+
+h1,h2,li{
+      font-size: 17px;
+      color: #f8f8f8;
+    }
+h1,h2{
+      padding-left: $left-padding; 
+    }
+
+.container {
+      width: $cont-width;
+      height:auto;
+      background-color: #f5f5f5; 
+      display:flex;
+      flex-wrap: wrap;
+      padding: 20px;
+}
+
+header, div.header-top, nav, main, footer{
+      width:100%;
+}
+div.header-top, nav, footer{
+      display:flex;
+      align-items: center;
+}
+
+.header-top{
+      background-color: $head-color;  
+      height:82px;
+
+}
+header h1 {
+      padding-left: $left-padding;
+}
+nav,footer{
+      background-color: $nav-color;         
+      height: 48px;
+      
+}
+
+nav{
+      margin-top: $top-margin;
+}
+
+nav ul{
+      display:flex;
+      list-style: none;
+      margin-left:20px;
+}
+main>*{
+      margin-top:12px;
+}
+
+main{
+      height:312px;
+      display:flex;
+      justify-content: space-between;
+      .asides-left-wrapper{
+            width:228px;
+         
+            aside {
+                  display:flex;
+                  background-color:$menu-color;                 
+                  
+            }
+            
+      }
+      .asides-right-wrapper{
+            width:112px;
+            margin-top:0;
+            aside {
+                  // display:flex;
+                  background-color:$menu-color;
+                  height:230px;
+                  
+                  h2{
+                        padding:30px;
+                        margin:$top-margin 25px;
+                        word-wrap: break-word;
+                        width:15px;
+                        height:90px;
+                        
+                  }
+            }
+            
+      }
+      article {
+            width:612px;
+            background-color: $menu-color;
+            h1{
+                  margin-top: 30px;
+            }
+            section{
+                  h2 {
+                        padding:14px 0;
+                  }
+                  height:90px;                  
+                  padding-left: $left-padding; 
+                  margin: 12px 55px;
+                  background-color: $sect-color;
+            }
+      }
+}
+
+#first{
+      height:60px;
+      padding-top: 18px;
+}
+#second{
+      height:112px;
+      padding-top: 18px;
+      margin-top: 12px;
+}
+
+footer{
+      margin-top: $top-margin;
+}
+
+// footer h1{
+//       padding-left: $left-padding; 
+// }
+

@@ -1,0 +1,44 @@
+body {
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: large;      
+}
+
+.container{
+      width:600px;
+      background-color: #ed9eae;
+      padding:10px 0;
+      margin:25px 20px;
+}
+ol {
+	list-style-type: none; 
+	counter-reset: num;
+}
+ol li {
+	position: relative;
+}
+ol li::before{
+      left:-10px;
+      background-color: #c56275;
+      content: counter(num) '.'; 
+	counter-increment: num;
+	display: inline-block;	
+	position: absolute;
+	top: 0px;
+      padding:10px;
+	/* left: -15px; */
+	width: 20px;    
+	color: white;
+	text-align: right;
+}
+
+li {
+      background-color: #c56275;
+      color: white;
+      padding:10px 20px 10px 20px;
+      margin: 15px 30px 0 0;
+}
+
+span{
+      background-color: #9d3449;
+      padding: 10px 20px;
+}

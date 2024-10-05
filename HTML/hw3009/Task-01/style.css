@@ -1,0 +1,76 @@
+body {
+  font-family: "Times New Roman", Times, serif;
+  font-size: medium;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+.container {
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 10px;
+  border: 1px #f8f8f8 solid;
+}
+.container .left-menu {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: fixed;
+  width: 100px;
+  height: 100%;
+  background-color: #999;
+  padding: 0;
+}
+.container .left-menu .menu-caption {
+  color: white;
+  font-size: large;
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+  margin: 20px 0;
+}
+.container .left-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.container .left-menu ul li {
+  display: flex;
+  justify-content: flex-start;
+  height: 100px;
+  margin: 0;
+  padding: 0;
+}
+.container .left-menu ul li a {
+  width: 100%;
+  padding: 20px 0;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: white;
+  font-size: large;
+}
+.container .left-menu ul li a img {
+  width: 100px;
+  position: relative;
+  top: -20px;
+}
+.container .left-menu span.menu-caption {
+  position: relative;
+  top: -63px;
+  display: none;
+}
+.container .left-menu:hover {
+  width: 250px;
+}
+.container .left-menu:hover span.menu-caption {
+  display: inline;
+}
+.container li:hover {
+  background-color: #777;
+}
+.container .article {
+  margin-left: 100px;
+  padding: 30px 10px 10px 50px;
+}/*# sourceMappingURL=style.css.map */

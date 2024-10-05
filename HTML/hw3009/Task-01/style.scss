@@ -1,0 +1,84 @@
+$container-bg: #f8f8f8;
+$menu-width: 100px;
+body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: medium;
+      margin: 0;
+      padding: 0;
+}
+
+h1{
+      text-transform: uppercase;
+}
+.container {
+      background-color: $container-bg;
+      margin: 0;
+      padding: 10px; 
+      border: 1px $container-bg solid;
+
+      .left-menu{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position:fixed;
+            width: $menu-width;
+            height:100%;
+            background-color: #999;
+            padding:0;
+
+            .menu-caption {
+                  color: white;                  
+                  font-size: large;
+                  display: flex;
+                  justify-content: center;
+                  text-transform: uppercase;
+                  margin:20px 0;
+            }
+
+            ul {
+                  list-style: none;
+                  margin:0;
+                  padding:0;
+                  li {
+                        display:flex;
+                        justify-content: flex-start;
+                        height:100px;
+                       
+                        margin:0;
+                        padding:0;
+                        a{
+                              width:100%;
+                              padding:20px 0;
+                              text-decoration: none;
+                              text-transform: uppercase;
+                              color: white;
+                              font-size: large;
+                              img{
+                                    width:100px;
+                                    position:relative;
+                                    top:-20px;
+                              }
+                              
+                        }
+                  }
+            }
+            span.menu-caption{
+                  position:relative;
+                  top:-63px;
+                  
+                  display: none;
+            }
+      }
+      .left-menu:hover{
+            width: $menu-width+150px;            
+            span.menu-caption{
+                  display: inline;                  
+            }
+      }
+      li:hover{
+            background-color: #777;
+      }
+      .article{
+            margin-left: $menu-width;
+            padding: 30px 10px 10px 50px;
+      }
+      
+}
