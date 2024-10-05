@@ -1,13 +1,167 @@
+$main-text-color: rgb(82,84,102);
 $top-menu-bg: rgb(27,85,157);
+$blue-panel-bg: rgb(204,229,255);
+$grey-button-bg: rgb(108,117,125);
+$light-grey-button-bg: rgb(248,249,250);
+$borders: 2px solid #e0e0e0;
+$arrow-borders: 2px solid #e0e0e0;
+$main-radius: 7px;
+$top-news-mg: 15px;
+
+@mixin wide-button($text-color,$bg-color){
+      color: $text-color;
+      background-color: $bg-color;
+      width:100%;
+      border: 1px solid $bg-color;
+      border-radius: $main-radius;
+      padding: 5px 0;
+      text-align: center;
+      margin: 20px 0;
+      font-weight: 500;
+}
+
+body {
+      // font: 1rem var(--bs-font-sans-serif); 
+      color: $main-text-color;
+    }
+    a {
+      color: var(--bs-blue);
+    }
 
 .navbar {
       background-color: $top-menu-bg;
+      padding: 0 5%;
+      .navbar-brand{
+            margin:0;
+      }
+      .avatar{
+            padding: 10px;
+            img{
+                  width:40px;
+            }
+      }
+}
+
+.main-container{
+      padding: 0 5%;
+      h1, h2, h3, h4, h5, h6{
+            font-weight:100;
+      }
+}
+.name-title{
+      margin:25px auto; 
+      // padding: 10px;
+      border-bottom: $borders;
       
-//       a{
-//             color: rgba(255,255,255,0.2);
-//       }
-// }
-//       a:hover{
-//             color: rgba(255,255,255,0.9);
-//       }
+}
+.news-area{
+      button{
+            @include wide-button(white,$grey-button-bg);
+      }
+}
+.news-block{
+      border: $borders;
+      border-radius: $main-radius;
+      padding: 0;
+      .news-item{
+            display:flex;
+            flex-wrap: nowrap;
+            .news-img {
+                  margin: $top-news-mg 0 0 $top-news-mg;
+                  width:90px;
+                  height:90px;
+            }
+            .news-data{
+                  margin: $top-news-mg;
+                  .news-top{
+                        display:flex;
+                        justify-content: space-between;
+                        .news-title{
+                              font-size: 1.3rem;
+                              font-weight: 500;
+                        }
+                        .news-date{
+                              // margin-right:10px;
+                        }
+                  }
+            }
+      }
+      .news-item:not(:last-child){
+            border-bottom: $borders;            
+      }
+}
+
+.rewards-area{
+      table.rewards{
+            width:100%;
+            td {padding: 10px;}
+            td>span{
+                  padding-top:3px;
+                  padding-bottom:3px;
+                  
+            }
+            td:nth-child(1){
+                  text-align: right;
+            }
+            td:nth-child(2){
+                  text-align: center;
+            }
+            td:nth-child(3){
+                  text-align: left;
+            }
+            .col-20prc{
+                  width:16%;
+            }
+            .col-40prc{
+                  width:42%;
+            }
+            .tbl-col-l{
+                  padding-left:10px;
+                  border-top: $arrow-borders;
+                  border-left: $arrow-borders;
+                  border-bottom: $arrow-borders;                  
+            }
+            .tbl-col-l::after{
+                  position: relative;
+                  left: 15px;
+                  top: 8px;
+                  width:15px;
+                  height:30px;
+                  display:inline-block;
+                  // background-color: red;
+                  background: 0 0 url("images/arr-to-right.png") no-repeat;
+                  content: " ";
+            }
+            .tbl-col-c{
+                  // text-align: center;
+                  font-size: 1.3rem;
+                  font-weight: bold;
+                  vertical-align: middle;
+                  img {
+                        top: -1px;
+                        position: relative;
+                  }
+            }
+            .tbl-col-r{
+                  padding-right:10px;                 
+                  border-top: $arrow-borders;
+                  border-right: $arrow-borders;
+                  border-bottom: $arrow-borders; 
+            }
+            .tbl-col-r::before{
+                  position: relative;
+                  left: -15px;
+                  top: 8px;
+                  width:15px;
+                  height:30px;
+                  display:inline-block;
+                  // background-color: red;
+                  background: 0 0 url("images/arr-to-right.png") no-repeat;
+                  transform: rotate(180deg);
+                  content: " ";
+            }
+      }
+      button{
+            @include wide-button($main-text-color,$light-grey-button-bg);
+      }
 }
