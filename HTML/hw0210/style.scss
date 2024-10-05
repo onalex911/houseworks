@@ -1,3 +1,4 @@
+$side-fields: 5%;
 $main-text-color: rgb(82,84,102);
 $top-menu-bg: rgb(27,85,157);
 $blue-panel-bg: rgb(204,229,255);
@@ -20,6 +21,11 @@ $top-news-mg: 15px;
       font-weight: 500;
 }
 
+.grey {background-color: #f0f0f0;}
+.green {background-color: #6fd084;}
+.blue {background-color: #37b0c1;}
+.red {background-color: #f98691;}
+
 body {
       // font: 1rem var(--bs-font-sans-serif); 
       color: $main-text-color;
@@ -30,7 +36,7 @@ body {
 
 .navbar {
       background-color: $top-menu-bg;
-      padding: 0 5%;
+      padding: 0 $side-fields;
       .navbar-brand{
             margin:0;
       }
@@ -39,6 +45,16 @@ body {
             img{
                   width:40px;
             }
+      }
+      .navbar-toggler{
+            border-color:white;
+      }
+      .navbar-toggler:focus{
+            box-shadow: 0 0 0 2px rgba(255,255,255,1.0);
+      }
+      .navbar-toggler-icon {
+            opacity: 1;
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); 
       }
 }
 
@@ -51,8 +67,9 @@ body {
 .name-title{
       margin:25px auto; 
       // padding: 10px;
-      border-bottom: $borders;
-      
+      hr{
+            border-bottom: $borders;
+      }
 }
 .news-area{
       button{
@@ -133,10 +150,10 @@ body {
                   content: " ";
             }
             .tbl-col-c{
-                  // text-align: center;
                   font-size: 1.3rem;
                   font-weight: bold;
-                  vertical-align: middle;
+                  position: relative;
+                  top: 4px;
                   img {
                         top: -1px;
                         position: relative;
@@ -164,4 +181,27 @@ body {
       button{
             @include wide-button($main-text-color,$light-grey-button-bg);
       }
+}
+
+.legend {
+      // border:1px solid red;
+      display: block;
+      position:absolute;
+      width:200px;
+      right:$side-fields;     
+      text-align: right;
+      // align-items: flex-start;
+      ul {
+            list-style: none;
+      }
+      .circle{
+            display:inline-block;
+            position:relative;
+            top:4px;
+            width:20px;
+            height:20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+      }
+      
 }
