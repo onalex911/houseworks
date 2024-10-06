@@ -64,14 +64,17 @@ body {
             font-weight:100;
       }
 }
+.main-area{
+      margin-top: 15px;
+}
 .name-title{
-      margin:25px auto; 
+      margin:25px auto 0; 
       // padding: 10px;
       hr{
             border-bottom: $borders;
       }
 }
-.news-area{
+.news-area{     
       button{
             @include wide-button(white,$grey-button-bg);
       }
@@ -207,3 +210,100 @@ body {
       }
       
 }
+.cards{
+      display:flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+}
+.card{
+      display:block;
+      width:300px;
+      height:120px;
+      margin:10px;
+      padding:10px 15px;
+      font-size: 0.9rem;
+      a{
+            display: inline-block;
+            color:rgba(255,255,255,0.75);
+            text-decoration: none;
+            margin-bottom: 3px;
+      }
+      a:hover{
+            color:rgba(255,255,255,1.0);
+      }
+      .card-title{
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin:0;
+      }
+      .card-date{
+            font-size:0.8em;
+            margin-bottom:12px;
+      }
+      .card-actions{
+            width:100%;
+            border: 1px solid white;
+            border-radius: .25rem;
+            display: flex;
+            justify-content: space-around;
+            
+      }
+      .action-download{
+            width:50%;
+            border-right:1px solid white;
+            padding: 3px;
+            text-align: center;
+      }
+      .action-download::before{
+            content: " ";
+            position:relative;
+            display:inline-block;
+            top:3px;
+            left:-5px;
+            width:20px;
+            height:20px;
+            // background: red;
+            background: url("images/download.png") no-repeat;
+            background-size: 20px 20px;
+      }
+      .action-remove{
+            width:50%;
+            padding: 3px;
+            text-align: center;
+      }
+      .action-remove::before{
+            content: " ";
+            position:relative;
+            display:inline-block;
+            top:3px;
+            left:-5px;
+            width:20px;
+            height:20px;
+            // background: red;
+            background: url("images/delete.png") no-repeat;
+            background-size: 20px 20px;
+      }
+      .action-resend{
+            width:50%;
+            padding: 3px;
+            text-align: center;
+      }
+      .action-resend::before{
+            content: " ";
+            position:relative;
+            display:inline-block;
+            top:3px;
+            left:-5px;
+            width:20px;
+            height:20px;
+            // background: red;
+            background: url("images/update.png") no-repeat;
+            background-size: 20px 20px;
+      }
+}
+.badge{
+      right: 15px;
+      position:absolute;
+}
+
