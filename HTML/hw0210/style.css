@@ -145,12 +145,16 @@ a {
 .rewards-area table.rewards .tbl-col-c {
   font-size: 1.3rem;
   font-weight: bold;
-  position: relative;
-  top: 4px;
 }
-.rewards-area table.rewards .tbl-col-c img {
-  top: -1px;
+.rewards-area table.rewards .tbl-col-c::after {
   position: relative;
+  left: 0;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background: 0 0 url("images/reward.png") no-repeat;
+  content: " ";
 }
 .rewards-area table.rewards .tbl-col-r {
   padding-right: 10px;
