@@ -143,12 +143,12 @@ body {
             }
             .tbl-col-l::after{
                   position: relative;
-                  left: 15px;
-                  top: 8px;
-                  width:15px;
-                  height:30px;
+                  left: 16px;
+                  top: 9px;
+                  width:16px;
+                  height:31px;
                   display:inline-block;
-                  background: 0 0 url("images/arr-to-right.png") no-repeat;
+                  background: 0 0 url("images/arr-to-right.svg") no-repeat;
                   content: " ";
             }
             .tbl-col-c{
@@ -173,12 +173,12 @@ body {
             }
             .tbl-col-r::before{
                   position: relative;
-                  left: -15px;
-                  top: 8px;
-                  width:15px;
-                  height:30px;
+                  left: -16px;
+                  top: 9px;
+                  width:16px;
+                  height:31px;
                   display:inline-block;
-                  background: 0 0 url("images/arr-to-right.png") no-repeat;
+                  background: 0 0 url("images/arr-to-right.svg") no-repeat;
                   transform: rotate(180deg);
                   content: " ";
             }
