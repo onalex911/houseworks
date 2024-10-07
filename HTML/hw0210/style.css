@@ -105,38 +105,41 @@ a {
   border-bottom: 2px solid #e0e0e0;
 }
 
-.rewards-area table.rewards {
+.rewards-area .rewards {
   width: 100%;
 }
-.rewards-area table.rewards td {
+.rewards-area .rewards .cell {
   padding: 10px;
 }
-.rewards-area table.rewards td > span {
+.rewards-area .rewards .cell > span {
   padding-top: 3px;
   padding-bottom: 3px;
 }
-.rewards-area table.rewards td:nth-child(1) {
+.rewards-area .rewards .cell:nth-child(1) {
   text-align: right;
 }
-.rewards-area table.rewards td:nth-child(2) {
+.rewards-area .rewards .cell:nth-child(2) {
   text-align: center;
 }
-.rewards-area table.rewards td:nth-child(3) {
+.rewards-area .rewards .cell:nth-child(3) {
   text-align: left;
 }
-.rewards-area table.rewards .col-20prc {
+.rewards-area .rewards .col-20prc {
+  padding-top: 17px;
   width: 16%;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
-.rewards-area table.rewards .col-40prc {
+.rewards-area .rewards .col-40prc {
   width: 42%;
 }
-.rewards-area table.rewards .tbl-col-l {
+.rewards-area .rewards .tbl-col-l {
   padding-left: 10px;
   border-top: 2px solid #e0e0e0;
   border-left: 2px solid #e0e0e0;
   border-bottom: 2px solid #e0e0e0;
 }
-.rewards-area table.rewards .tbl-col-l::after {
+.rewards-area .rewards .tbl-col-l::after {
   position: relative;
   left: 16px;
   top: 9px;
@@ -146,11 +149,7 @@ a {
   background: 0 0 url("images/arr-to-right.svg") no-repeat;
   content: " ";
 }
-.rewards-area table.rewards .tbl-col-c {
-  font-size: 1.3rem;
-  font-weight: bold;
-}
-.rewards-area table.rewards .tbl-col-c::after {
+.rewards-area .rewards .tbl-col-c::after {
   position: relative;
   left: 0;
   top: 3px;
@@ -160,13 +159,13 @@ a {
   background: 0 0 url("images/reward.png") no-repeat;
   content: " ";
 }
-.rewards-area table.rewards .tbl-col-r {
+.rewards-area .rewards .tbl-col-r {
   padding-right: 10px;
   border-top: 2px solid #e0e0e0;
   border-right: 2px solid #e0e0e0;
   border-bottom: 2px solid #e0e0e0;
 }
-.rewards-area table.rewards .tbl-col-r::before {
+.rewards-area .rewards .tbl-col-r::before {
   position: relative;
   left: -16px;
   top: 9px;

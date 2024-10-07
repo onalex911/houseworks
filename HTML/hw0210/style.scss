@@ -112,25 +112,28 @@ body {
 }
 
 .rewards-area{
-      table.rewards{
+      .rewards{
             width:100%;
-            td {padding: 10px;}
-            td>span{
+            .cell {padding: 10px;}
+            .cell>span{
                   padding-top:3px;
                   padding-bottom:3px;
                   
             }
-            td:nth-child(1){
+            .cell:nth-child(1){
                   text-align: right;
             }
-            td:nth-child(2){
+            .cell:nth-child(2){
                   text-align: center;
             }
-            td:nth-child(3){
+            .cell:nth-child(3){
                   text-align: left;
             }
             .col-20prc{
+                  padding-top:17px;
                   width:16%;
+                  font-size: 1.3rem;
+                  font-weight: bold;
             }
             .col-40prc{
                   width:42%;
@@ -151,10 +154,8 @@ body {
                   background: 0 0 url("images/arr-to-right.svg") no-repeat;
                   content: " ";
             }
-            .tbl-col-c{
-                  font-size: 1.3rem;
-                  font-weight: bold;
-            }
+            // .tbl-col-c{
+            // }
             .tbl-col-c::after{
                   position: relative;
                   left: 0;
