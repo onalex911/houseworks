@@ -70,7 +70,7 @@ a {
   width: 100%;
   border: 1px solid rgb(108, 117, 125);
   border-radius: 7px;
-  padding: 5px 0;
+  padding: 10px 0;
   text-align: center;
   margin: 20px 0;
   font-weight: 500;
@@ -87,6 +87,8 @@ a {
 }
 .news-block .news-item .news-img {
   margin: 15px 0 0 15px;
+}
+.news-block .news-item .news-img img {
   width: 90px;
   height: 90px;
 }
@@ -157,6 +159,7 @@ a {
   height: 20px;
   display: inline-block;
   background: 0 0 url("images/reward.png") no-repeat;
+  background-size: 20px 20px;
   content: " ";
 }
 .rewards-area .rewards .tbl-col-r {
@@ -182,7 +185,7 @@ a {
   width: 100%;
   border: 1px solid rgb(248, 249, 250);
   border-radius: 7px;
-  padding: 5px 0;
+  padding: 10px 0;
   text-align: center;
   margin: 20px 0;
   font-weight: 500;
@@ -300,4 +303,111 @@ a {
 .badge {
   right: 15px;
   position: absolute;
+}
+
+.table-area {
+  display: flex;
+  flex-wrap: wrap;
+}
+.table-area .column {
+  min-width: 200px;
+  padding: 0;
+}
+.table-area .column input, .table-area .column button {
+  width: 100%;
+  margin: 7px 0;
+}
+.table-area .column input {
+  border: 2px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+}
+.table-area .column button {
+  color: white;
+  background-color: rgb(108, 117, 125);
+  width: 100%;
+  border: 1px solid rgb(108, 117, 125);
+  border-radius: 7px;
+  padding: 10px 0;
+  text-align: center;
+  margin: 20px 0;
+  font-weight: 500;
+}
+.table-area .column .head {
+  background-color: #cce5ff;
+  color: #37679d;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+.table-area .column .form-area {
+  padding: 5px 15px;
+}
+@media (max-width: 500px) {
+  .table-area .column .form-area {
+    padding: 3px 5px;
+  }
+}
+.table-area .column:nth-child(1) {
+  width: 18%;
+  text-align: center;
+}
+.table-area .column:nth-child(1) .head {
+  border-radius: 5px 0 0 5px;
+}
+@media (max-width: 500px) {
+  .table-area .column:nth-child(1) {
+    width: 100% !important;
+  }
+  .table-area .column:nth-child(1) .head {
+    border-radius: 5px !important;
+  }
+}
+@media (max-width: 1234px) {
+  .table-area .column:nth-child(1) {
+    width: 50%;
+  }
+}
+.table-area .column:nth-child(2) {
+  width: 41%;
+}
+@media (max-width: 500px) {
+  .table-area .column:nth-child(2) {
+    width: 100% !important;
+  }
+  .table-area .column:nth-child(2) .head {
+    border-radius: 5px !important;
+  }
+}
+@media (max-width: 1234px) {
+  .table-area .column:nth-child(2) {
+    width: 50%;
+  }
+  .table-area .column:nth-child(2) .head {
+    border-radius: 0 5px 5px 0;
+  }
+}
+.table-area .column:nth-child(3) {
+  width: 41%;
+}
+.table-area .column:nth-child(3) .head {
+  border-radius: 0 5px 5px 0;
+}
+@media (max-width: 500px) {
+  .table-area .column:nth-child(3) {
+    width: 100%;
+  }
+  .table-area .column:nth-child(3) .head {
+    border-radius: 5px !important;
+  }
+}
+@media (max-width: 1234px) {
+  .table-area .column:nth-child(3) {
+    width: 100%;
+  }
+  .table-area .column:nth-child(3) .head {
+    border-radius: 5px !important;
+  }
 }/*# sourceMappingURL=style.css.map */
