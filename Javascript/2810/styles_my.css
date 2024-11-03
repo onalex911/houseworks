@@ -16,4 +16,77 @@
 
 .alert {
   display: none;
+}
+
+img {
+  height: 400px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.col-4 {
+  padding: 10px;
+}
+
+.card {
+  border: 2px solid coral;
+}
+
+body {
+  background-color: antiquewhite;
+}
+
+.card-body {
+  overflow: hidden;
+  height: 250px;
+}
+.card-body .card-title {
+  height: 20%;
+}
+.card-body .movie-short-info {
+  height: 60%;
+  font-size: small;
+}
+.card-body a {
+  height: 20%;
+}
+.card-body .box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 60px;
+  margin-bottom: 100px;
+}
+
+#movie-type-found {
+  text-transform: capitalize;
+}
+
+.movie-info {
+  border: 2px solid coral;
+  border-radius: 10px;
+}
+.movie-info .movie-info-head {
+  font-size: xx-large;
+  justify-content: center;
+}
+.movie-info .movie-info-body {
+  display: flex;
+}
+.movie-info .movie-info-body img#movie-info-image {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 100%;
+  height: auto;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.movie-info .movie-info-body table {
+  font-size: large;
 }/*# sourceMappingURL=styles_my.css.map */
