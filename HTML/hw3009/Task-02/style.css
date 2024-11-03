@@ -1,105 +1,107 @@
-@charset "UTF-8";
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+}
+@media (max-width: 800px) {
+  body {
+    font-size: 1.2rem;
+  }
+}
+@media (max-width: 800px) {
+  body {
+    font-size: 1.4rem;
+  }
 }
 
 .container {
-  background-color: #f0f0f0;
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-}
-.container .container-cards {
-  width: 860px;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
-  align-self: center;
-}
-.container .container-cards .card {
-  width: 200px;
-  height: 400px;
   background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 0;
+  padding: 30px;
+  margin: 0;
+  height: auto;
+  min-height: 620px;
+}
+.container .wrapper {
+  width: 100%;
+}
+.container .wrapper .text-block {
+  width: calc(100% - 300px);
+}
+@media (max-width: 800px) {
+  .container .wrapper .text-block {
+    width: 100%;
+  }
+}
+.container .wrapper .img-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 300px;
+  padding: 15px;
+}
+@media (max-width: 800px) {
+  .container .wrapper .img-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 0;
+  }
+}
+@media (max-width: 600px) {
+  .container .wrapper .img-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: block;
+    padding: 0;
+  }
+}
+.container .wrapper .img-wrapper .img-block {
   margin: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
-  transition: 0.1s;
 }
-.container .container-cards .card div {
-  text-align: center;
+@media (max-width: 800px) {
+  .container .wrapper .img-wrapper .img-block {
+    margin: 0;
+    width: 50%;
+  }
 }
-.container .container-cards .card .card-header {
-  padding: 25px 0 5px 0;
-  text-transform: uppercase;
-  font-size: 16px;
-  font-weight: bold;
+@media (max-width: 600px) {
+  .container .wrapper .img-wrapper .img-block {
+    margin: 20px 0;
+    width: 100%;
+  }
 }
-.container .container-cards .card hr {
-  height: 3px; /* Толщина линии */
-  border: none; /* Убираем стандартную границу */
+.container .wrapper .img-wrapper .img-block img {
+  width: 100%;
+  margin: 0;
+  border-radius: 10px 10px 0 0;
 }
-.container .container-cards .card .price {
-  margin: 20px 0;
-  font-weight: bold;
-  font-size: 12px;
+.container .wrapper .img-wrapper .img-block .img-caption {
+  width: 250px;
+  text-align: right;
+  background-color: #37516b;
+  color: white;
+  padding: 10px 15px;
+  margin: 0;
+  border-radius: 0 0 10px 10px;
 }
-.container .container-cards .card .price .price-value {
-  font-size: 50px;
+@media (max-width: 800px) {
+  .container .wrapper .img-wrapper .img-block .img-caption {
+    width: calc(100% - 30px);
+  }
 }
-.container .container-cards .card .price .price-type {
-  color: #ccc;
-  margin-bottom: 20px;
-  font-size: 14px;
+@media (max-width: 800px) {
+  .container .wrapper .img-wrapper .img-block:first-child {
+    margin-right: 20px;
+  }
 }
-.container .container-cards .card button {
-  padding: 10px 20px;
-  margin: 25px;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  cursor: pointer;
-  text-transform: uppercase;
-}
-.container .container-cards .card:hover {
-  width: 241px;
-  height: 410px;
-  z-index: 10;
-  margin: 0 -10px;
-  padding-top: 10px;
-  transition: 1s;
-}
-
-button.cat-1 {
-  background-color: rgb(199, 55, 86);
-}
-
-hr.cat-1 {
-  background-color: rgb(199, 55, 86);
-}
-
-button.cat-2 {
-  background-color: rgb(215, 145, 59);
-}
-
-hr.cat-2 {
-  background-color: rgb(215, 145, 59);
-}
-
-button.cat-3 {
-  background-color: rgb(43, 102, 137);
-}
-
-hr.cat-3 {
-  background-color: rgb(43, 102, 137);
-}
-
-button.cat-4 {
-  background-color: rgb(99, 187, 52);
-}
-
-hr.cat-4 {
-  background-color: rgb(99, 187, 52);
+@media (max-width: 100px) {
+  .container .wrapper .img-wrapper .img-block:first-child {
+    margin: 0;
+  }
 }/*# sourceMappingURL=style.css.map */
