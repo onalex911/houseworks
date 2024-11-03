@@ -1,0 +1,44 @@
+img {
+  height: 300px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.col-4 {
+  padding: 10px;
+}
+
+.card {
+  border: 3px solid blue;
+}
+
+body {
+  background-color: lightblue;
+}
+
+.card-body {
+  overflow: hidden;
+  height: 250px;
+}
+.card-body .card-title {
+  height: 20%;
+}
+.card-body .card-text {
+  height: 60%;
+}
+.card-body a {
+  height: 20%;
+}
+.card-body .box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 60px;
+  margin-bottom: 100px;
+}/*# sourceMappingURL=style.css.map */

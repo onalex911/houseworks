@@ -1,0 +1,47 @@
+$h-pad:10px;
+$v-pad: calc($h-pad - 1px);
+$txt-color: #333;
+
+body{ 
+      margin:0; padding:0 20px; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size:x-large;
+      color:$txt-color;
+}
+
+a{
+      text-decoration: none;
+      color:$txt-color;
+}
+.container {
+      background-color: oldlace;
+      padding:20px;
+      
+      #questions-block{
+            .question{
+                  padding: $v-pad $h-pad;
+                  display:none;
+                  ul.answer-vars{
+                        list-style: none;
+                        padding:5px 0;
+                        label{margin-left:10px;}
+                  }
+                  button {
+                        font-size: x-large;
+                        background-color: silver;
+                        border:1px solid $txt-color;
+                        padding: $v-pad;
+                        width:200px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        margin-right: 10px;
+                  }
+            }
+
+      }
+
+      #result-block{
+            display:none;
+      }
+}
+

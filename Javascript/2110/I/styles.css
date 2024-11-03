@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  padding: 0 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+.container {
+  background-color: oldlace;
+  padding: 20px;
+}
+
+.tbl-main {
+  border-collapse: collapse;
+  border: 2px solid #333;
+  margin: 10px;
+}
+.tbl-main thead {
+  margin: 0;
+  padding: 0;
+  background-color: bisque;
+  font-weight: bold;
+}
+.tbl-main thead td {
+  cursor: pointer;
+}
+.tbl-main tbody {
+  margin: 0;
+  padding: 0;
+}
+.tbl-main tr {
+  margin: 0;
+  padding: 0;
+}
+.tbl-main td {
+  border: 2px solid #333;
+  margin: 10px;
+  padding: 9px 10px;
+  font-size: x-large;
+}
+.tbl-main td input[type=checkbox] {
+  display: none;
+}
+.tbl-main td span:hover {
+  color: #666;
+}
+.tbl-main td .icon {
+  display: none;
+}/*# sourceMappingURL=styles.css.map */

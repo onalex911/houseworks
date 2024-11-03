@@ -1,0 +1,49 @@
+$h-pad:10px;
+$v-pad: calc($h-pad - 1px);
+$txt-color: #333;
+
+body{ 
+      margin:0; padding:0 20px;  
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      // display:flex;
+      color:$txt-color;
+}
+
+a{
+      text-decoration: none;
+      color:$txt-color;
+}
+.container {
+      background-color: oldlace;
+      padding:20px;
+}
+.tbl-main {
+      border-collapse: collapse;
+      border: 2px solid $txt-color;
+      margin:10px;
+      thead{ 
+            margin:0; padding: 0; 
+            background-color:  bisque;
+            font-weight: bold;
+            td{
+                  cursor: pointer;
+            }
+      }
+      tbody{ margin:0; padding: 0;}
+      tr{ margin:0; padding: 0;}
+      td{
+            border: 2px solid $txt-color; 
+            margin: 10px;
+            padding: $v-pad $h-pad;
+            font-size: x-large;      
+            input[type='checkbox']{                  
+                  display: none;      
+            }            
+            span:hover{
+                  color:#666;
+            } 
+            .icon{
+                  display: none;
+            }
+      }
+}

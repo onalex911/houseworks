@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="styles.css">
+      <title>Document</title>
+</head>
+<body>
+      <h1>Do a styling of yout text!</h1>
+      <div class="container">
+            <div class="set-style">
+                        <div class="text-stylers">
+                        <div class="styler do-bold">
+                              <input type="checkbox" id="do-bold" name="do-bold">
+                              <label for="do-bold">Bold</label>
+                        </div>
+                        <div class="styler do-italic">
+                              <input type="checkbox" id="do-italic" name="do-italic">
+                              <label for="do-italic">Italic</label>
+                        </div>
+                        <div class="styler do-underline">
+                              <input type="checkbox" id="do-underline" name="do-underline">
+                              <label for="do-underline">Underline</label>
+                        </div>
+                        <div class="styler do-align">
+                              <input type="radio" id="do-align-left" name="do-align">
+                              <label for="do-align-left">Left</label>
+                        </div>
+                        <div class="styler do-align">
+                              <input type="radio" id="do-align-right" name="do-align">
+                              <label for="do-align-right">Right</label>
+                        </div>
+                        <div class="styler do-align">
+                              <input type="radio" id="do-align-justify" name="do-align">
+                              <label for="do-align-justify">Justify</label>
+                        </div>
+                  </div>
+                  <div class="text-content">
+                        <textarea id="textarea" maxlength="1000"></textarea>
+                  </div>
+                  <div class="button-area"><button id="show-text">Show text</button></div>
+            </div>
+            <div class="result">
+                  <div><b>Result:</b></div>
+                  <div id="output"></div>
+                  <div class="button-area"><button id="go-styles">Go back</button></div>
+            </div>
+            
+      </div>
+           
+      <script src="script.js"></script>
+</body>
+</html>
