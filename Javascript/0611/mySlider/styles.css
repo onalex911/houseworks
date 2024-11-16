@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  background-color: aquamarine;
+}
+.container .slides {
+  margin: 20px;
+}
+.container .slides .img-container {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  width: 800px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container .slides .img-container img {
+  margin: 0 auto;
+}
+.container .slides #maximize {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  float: right;
+  right: 35px;
+  top: 14px;
+  font-size: x-large;
+  z-index: 10;
+}
+.container .image-selectors {
+  margin: 10px;
+}
+.container .image-selectors i {
+  font-size: medium;
+  margin: 0 5px;
+}
+.container .controls {
+  margin: 15px;
+  margin-bottom: 100px;
+}
+.container .controls i {
+  font-size: x-large;
+  margin: 0 15px;
+}
+.container i {
+  color: rgba(0, 0, 0, 0.5);
+}
+.container i:hover, .container i:active {
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+.modal-area {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 20;
+}
+.modal-area .modal-img-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+.modal-area #minimize {
+  position: absolute;
+  display: block;
+  top: 20px;
+  right: 20px;
+}
+.modal-area i {
+  font-size: 40px;
+  color: rgba(255, 255, 255, 0.3);
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.1);
+}
+.modal-area i:hover, .modal-area i:active {
+  color: rgb(255, 255, 255);
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+.modal-area #max-previous, .modal-area #max-next {
+  position: absolute;
+  top: 50%;
+  margin: -30px 20px;
+}
+.modal-area #max-previous {
+  left: 0;
+}
+.modal-area #max-next {
+  right: 0;
+}/*# sourceMappingURL=styles.css.map */

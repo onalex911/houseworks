@@ -6,7 +6,7 @@ let alertSuccess = document.querySelector('.alert-success');
 let alertDanger = document.querySelector('.alert-danger');
 let title = '';
 let currentPage = 1;
-let pagesLimit = 3;
+let pagesLimit = 5;
 let maxPages = 10;
 let ul = document.querySelector('.pagination');
 
@@ -24,6 +24,7 @@ myForm.addEventListener('submit',async function(e){
 async function renderMovieByTitle(page = 1) {
 
       let searchResult = await getMovies(myForm.flexRadio.value,page);
+      let nav = document.querySelector("nav");
 
       if(searchResult.Response == 'True'){
             let movies = searchResult.Search;
@@ -62,9 +63,10 @@ async function renderMovieByTitle(page = 1) {
             localStorage.setItem('numMoviesPages',sizePage);
             renderPagination(sizePage);
             
-            document.getElementById("pages-amount-input").innerText = pagesLimit;
-            document.querySelector("nav").style.setProperty("display","flex");
+            document.getElementById("pages-amount-input").value = pagesLimit;
+            nav.style.setProperty("display","flex");
       }else{
+            nav.style.setProperty("display","none");
             alertDanger.style.setProperty('display','block');
       }
 
@@ -132,7 +134,8 @@ function renderPagination(pages) {
           ul.innerHTML += '<li class="page-item"><a class="page-link" href="#">Previous</a></li>';
       }
   
-      for (let i = currentPage - pagesLimit; i <= newSize; i++) {
+      // for (let i = currentPage - pagesLimit; i <= newSize; i++) {
+      for (let i = currentPage; i < newSize; i++) {
           if (i > 0 && i <= pages) {
               ul.innerHTML += `<li class="page-item ${i==currentPage?'active':''}"><a class="page-link" href="#">${i}</a></li>`;
           }
@@ -171,7 +174,10 @@ function renderPagination(pages) {
             pagesLimit = 1;
       }
       else if(newPagesValue <= currentNumPages){
-            pagesLimit = newPagesValue%2 == 0 ? newPagesValue/2 : (newPagesValue - 1)/2;
+            // pagesLimit = newPagesValue%2 == 0 ? newPagesValue/2 : (newPagesValue - 1)/2;
+            pagesLimit = newPagesValue;
+      }else{
+            e.target.value = currentNumPages;
       }
       
       // console.log("new pagesLimit = " + pagesLimit);

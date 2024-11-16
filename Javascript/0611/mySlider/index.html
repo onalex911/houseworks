@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="fontawesome-free-6.6.0-web/css/all.min.css">
+      <link rel="stylesheet" href="styles.css">
+      <title>Document</title>
+</head>
+<body>
+      <div class="container">
+            <div class="slides">
+                  <!-- <img id="main-image" src="images/01.jpg"> -->
+                  <i class="ui-control fa-solid fa-maximize" id="maximize" title="расширить изображение"></i>
+                  <div class="img-container">
+                        <img id="main-image">
+                  </div>
+            </div>
+            <div class="image-selectors"></div>
+            <div class="controls">                 
+                  <i class="ui-control fa-solid fa-backward-fast" id="first" title="к первому изображению"></i>
+                  <i class="ui-control fa-solid fa-backward" id="previous" title="предыдущее изображение"></i>
+                  <i class="ui-control fa-solid fa-play" id="pause-play" title="запустить слайдшоу"></i>
+                  <i class="ui-control fa-solid fa-forward" id="next" title="следующее изображение"></i>
+                  <i class="ui-control fa-solid fa-forward-fast" id="last" title="к последнему изображению"></i>
+            </div>
+            
+      </div>
+      <div class="modal-area">
+            <i class="fa-solid fa-xmark" id="minimize"></i>
+            <i class="fa-solid fa-chevron-left" id="max-previous"></i>
+            <!-- <i class="fa-solid fa-play" id="max-pause-play"></i> -->
+            <div class="modal-img-container">
+                  <img id='modal-img' src="images/19.jpg" alt="01">
+            </div>
+            <i class="fa-solid fa-chevron-right" id="max-next"></i>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+      <script src="script.js"></script>
+</body>
+</html>
