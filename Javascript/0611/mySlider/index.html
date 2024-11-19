@@ -5,6 +5,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="fontawesome-free-6.6.0-web/css/all.min.css">
       <link rel="stylesheet" href="styles.css">
+      <script defer src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+      <script defer src="script.js"></script>
       <title>Document</title>
 </head>
 <body>
@@ -28,14 +30,20 @@
       </div>
       <div class="modal-area">
             <i class="fa-solid fa-xmark" id="minimize"></i>
-            <i class="fa-solid fa-chevron-left" id="max-previous"></i>
-            <!-- <i class="fa-solid fa-play" id="max-pause-play"></i> -->
+            <div class="controls-area">
+                  <div class="control-area left-control">
+                        <i class="fa-solid fa-chevron-left" id="max-previous" title="предыдущее изображение"></i>
+                  </div>
+                  <div class="control-area center-control">
+                        <i class="fa-solid fa-play" id="max-pause-play" title="запустить слайдшоу"></i>
+                  </div>
+                  <div class="control-area right-control">
+                        <i class="fa-solid fa-chevron-right" id="max-next" title="следующее изображение"></i>
+                  </div>
+            </div>
             <div class="modal-img-container">
                   <img id='modal-img' src="images/19.jpg" alt="01">
             </div>
-            <i class="fa-solid fa-chevron-right" id="max-next"></i>
       </div>
-      <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-      <script src="script.js"></script>
 </body>
 </html>

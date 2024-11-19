@@ -4,9 +4,11 @@ let imagesArray = ['01.jpg','02.jpg','03.jpg','04.jpg','05.jpg','06.jpg','07.jpg
 '20.jpg','21.jpg','22.jpg','23.jpg','24.jpg','25.jpg'];
 let imagesNum = imagesArray.length;
 let playing = false;
+let playingMax = false;
 let imageMaximized = false;
 let currentNum = 0;
 
+let fadeSpeed = 1000;
 
 let $firstButton = $('#first');
 let $previousButton = $('#previous');
@@ -14,24 +16,28 @@ let $pausePlayButton = $('#pause-play');
 let $nextButton = $('#next');
 let $lastButton = $('#last');
 let $mainImage = $('#main-image');
+
 let $maxImage = $('#modal-img');
+let $previousMaxButton = $('#max-previous');
+let $pauseMaxPlayButton = $('#max-pause-play');
+let $nextMaxButton = $('#max-next');
 
 let colorUiEnabled = 'rgba(0,0,0,0.5)';
 let colorUiDisabled = 'rgba(0,0,0,0.2)';
 
 initSelectors(currentNum);
 
-console.log($(window).width() + ' x ' + $(window).height());
-console.log(currentNum);
 let maxWidth = 800;
 let maxHeight = $(window).height() > 800 ? 600 : 450;
-$('.img-container').css('height',maxHeight+10)
+
+$('.img-container').css('height',maxHeight+10);
+
 showImage(parseInt(currentNum));
 
 $('.container').on('click',function(e){
       if(e.target.classList.contains('indicator')){
             let curId = parseInt(e.target.id.substring(4));
-            console.log(curId);
+            // console.log(curId);
             showImage(curId);
 
       }else if(e.target.id == 'first'){
@@ -58,19 +64,25 @@ $('.container').on('click',function(e){
 });
 
 $('.modal-area').on('click',function(e){
-      if(e.target.id == 'minimize'){
+      
+      if(e.target.id == 'minimize'){ 
             imageMaximized = false;
+            pauseMaxSlideShow();
             $('.modal-area').css('display','none');
             showImage(currentNum);
             initSelectors(currentNum);
 
       }else if(e.target.id == 'max-previous'){
-            console.log('previous');
             showMaxImage(currentNum - 1);
 
       }else if(e.target.id == 'max-next'){
-            console.log('next');
             showMaxImage(currentNum + 1);
+
+      }else if(e.target.id == 'max-pause-play'){
+            if (playingMax) 
+                  pauseMaxSlideShow();
+            else 
+                  playMaxSlideShow();
       }
 });
 
@@ -95,53 +107,70 @@ function playSlideShow() {
       playing = true;
       sliderInterval = setInterval(nextSlide, 8000);
 }
+
+function nextMaxSlide() {
+      showMaxImage(currentNum + 1);      
+}
+
+function pauseMaxSlideShow() {
+      $pauseMaxPlayButton.attr('class', 'fa-solid fa-play');
+      $pauseMaxPlayButton.attr('title', 'запустить слайдшоу');
+      playingMax = false;
+      clearInterval(sliderMaxInterval);
+}
+  
+function playMaxSlideShow() {
+      $pauseMaxPlayButton.attr('class', 'fa-solid fa-pause');
+      $pauseMaxPlayButton.attr('title', 'остановить слайдшоу');
+      playingMax = true;
+      sliderMaxInterval = setInterval(nextMaxSlide, 8000);
+}
   
 function showImage(n){
       
       if(!playing && (n < 0 || n > imagesNum-1))
             return;
       
-            $mainImage.fadeOut(1000);
-            
-            // console.log('currentNum = '+currentNum);
-            $(`#img_${currentNum}`).removeClass('fas active');
-            $(`#img_${currentNum}`).addClass('far');
-            currentNum = (imagesNum + n)%imagesNum;
-            // currentNum = n;
-            $(`#img_${currentNum}`).removeClass('far');
-            $(`#img_${currentNum}`).addClass('fas active');
-            console.log('currentNum = '+currentNum);
-
-            if(currentNum == 0){
-                  uiDisable($firstButton);
-                  uiDisable($previousButton);
-            }else{
-                  uiEnable($firstButton);
-                  uiEnable($previousButton);
-            }
+      let delay = 0;
+      if(n != currentNum){
+            $mainImage.fadeOut(fadeSpeed);
+            delay = 1000;
+      }
       
-            if(currentNum == imagesNum - 1){
-                  uiDisable($nextButton);
-                  uiDisable($lastButton);
-            }else{
-                  uiEnable($nextButton);
-                  uiEnable($lastButton);
-            }
+      $(`#img_${currentNum}`).removeClass('fas active');
+      $(`#img_${currentNum}`).addClass('far');
+
+      currentNum = (imagesNum + n)%imagesNum;
+
+      $(`#img_${currentNum}`).removeClass('far');
+      $(`#img_${currentNum}`).addClass('fas active');
+
+      if(currentNum == 0){
+            uiDisable($firstButton);
+            uiDisable($previousButton);
+      }else{
+            uiEnable($firstButton);
+            uiEnable($previousButton);
+      }
+
+      if(currentNum == imagesNum - 1){
+            uiDisable($nextButton);
+            uiDisable($lastButton);
+      }else{
+            uiEnable($nextButton);
+            uiEnable($lastButton);
+      }
       
       let img = new Image();
       img.onload = function() {      
-            let dimensions = getDimensions(this.width,this.height,maxWidth,maxHeight)
-            // console.log(`${this.width}x${this.height}`);
-            // console.log(`${width}x${height}`);
+            let dimensions = getDimensions(this.width,this.height,maxWidth,maxHeight);
             $mainImage.css('width',dimensions.width);
             $mainImage.css('height',dimensions.height);
             
             $mainImage.attr('src', this.src);
-            $mainImage.fadeIn(1000);
+            $mainImage.fadeIn(fadeSpeed);
       }
-      setTimeout(()=>img.src = `${imgPath}${imagesArray[currentNum]}`,1000);
-      // console.log(`Source: ${img.src}: ${img.w}x${img.h}`);
-      
+      setTimeout(()=>img.src = `${imgPath}${imagesArray[currentNum]}`,delay);
 }
 
 function initSelectors(n){
@@ -155,21 +184,27 @@ function initSelectors(n){
 }
 
 function showMaxImage(n){
+      let delay = 0;
+      if(n != currentNum){
+            $maxImage.fadeOut(fadeSpeed);
+            delay = 1000;
+      }
 
-      // console.log(`old image is: ${$mainImage.attr('src')}`);
-      if(n < 0 || n > imagesNum-1)
+      if(!playingMax && (n < 0 || n > imagesNum-1))
             return;
-      if(n == 0)
+      
+      currentNum = (imagesNum + n)%imagesNum;
+
+      if(currentNum == 0)
             $('#max-previous').css('display','none');
       else
             $('#max-previous').css('display','block');
       
-      if(n == imagesNum - 1)
+      if(currentNum == imagesNum - 1)
             $('#max-next').css('display','none');
       else
             $('#max-next').css('display','block');                  
       
-      currentNum = n;
 
       let img = new Image();
       img.onload = function() {      
@@ -179,9 +214,10 @@ function showMaxImage(n){
             $maxImage.css('height',dimensions.height);            
             $maxImage.css('align-items','center');            
             $maxImage.attr('src', this.src);
+            $maxImage.fadeIn(fadeSpeed);
       }
 
-      img.src = `${imgPath}${imagesArray[currentNum]}`;
+      setTimeout(()=>img.src = `${imgPath}${imagesArray[currentNum]}`,delay);
 }
 
 function uiEnable($el){
