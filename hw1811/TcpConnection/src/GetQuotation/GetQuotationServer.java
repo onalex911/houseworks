@@ -14,26 +14,22 @@ public class GetQuotationServer {
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(8080)) {
-                System.out.println("Server started...");
-                while (true) {
-                    Socket clientSocket = serverSocket.accept();
-                    new Thread(() -> handleClient(clientSocket)).start(); // 3 -> heap allocation - 1M -> 1M thread -> ThreadPool(150)
-//                    new Thread(new HandleClient(clientSocket)).start(); // 3 -> heap allocation - 1M -> 1M thread -> ThreadPool(150)
-//                    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-//                    String inputLine;
-//                    while ((inputLine = in.readLine()) != null) {
-//                        System.out.println("Received: " + inputLine);
-//                        out.println("Echo: " + inputLine);
-//                        if ("exit".equalsIgnoreCase(inputLine)) break;
-//                    }
-//                    clientSocket.close();
-                }
-//            System.out.println(e.getMessage());
-        }
-        catch(IOException e){
-            System.err.println();
-        }
+            System.out.println("Server started...");
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+//                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+//                String inputLine;
+//                while ((inputLine = in.readLine()) != null) {
+//                    System.out.println("Received: " + inputLine);
+//                    out.println("Echo: " + inputLine);
+//                    if ("exit".equalsIgnoreCase(inputLine)) break;
+//                }
+//                clientSocket.close();
+                new Thread(() -> handleClient(clientSocket)).start(); // 3 -> heap allocation - 1M -> 1M thread -> ThreadPool(150)
+            }
+        } catch (IOException e) {
+            System.err.println();        }
     }
 
     private static void handleClient(Socket clientSocket) {
