@@ -17,15 +17,6 @@ public class GetQuotationServer {
             System.out.println("Server started...");
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-//                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-//                String inputLine;
-//                while ((inputLine = in.readLine()) != null) {
-//                    System.out.println("Received: " + inputLine);
-//                    out.println("Echo: " + inputLine);
-//                    if ("exit".equalsIgnoreCase(inputLine)) break;
-//                }
-//                clientSocket.close();
                 new Thread(() -> handleClient(clientSocket)).start(); // 3 -> heap allocation - 1M -> 1M thread -> ThreadPool(150)
             }
         } catch (IOException e) {
@@ -107,30 +98,10 @@ public class GetQuotationServer {
                     }
                 }
             }
-//            out.println("До свидания, "+authUser);
-//            for (int i = 0; i < 1_000_000; i++) {
-//
-//            }
             clientSocket.close();
         } catch (IOException e) {
             System.err.println();        }
     }
-//    private static void handleClient(Socket clientSocket) {
-//        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-//            String inputLine;
-//
-//
-//            int i = 0;
-//
-//            while ((inputLine = in.readLine()) != null) {
-//                System.out.println("Received: " + inputLine);
-//                /*System.out.printf("auth: %b, login req: %b, pass req: %b, authUser=%s\n",isAuthorized,isLoginRequested,isPasswordRequested,authUser);
-
-//            }
-//        } catch (IOException e) {
-//            System.err.println();        }
-//    }
 
     private static void writeLog(Log log){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HHmmssSSS");
@@ -150,49 +121,4 @@ public class GetQuotationServer {
             System.out.println(e.getMessage());
         }
     }
-
-//    private static class HandleClient implements Runnable {
-//        private final Socket clientSocket;
-//
-//        public HandleClient(Socket clientSocket) {
-//            this.clientSocket = clientSocket;
-//        }
-//
-//        @Override
-//        public void run() {
-//            try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-//
-//                out.println("Добро пожаловать на сервер цитат!");
-//                out.println("Введите 0 для случайной цитаты, 1-5 для конкретной цитаты или 'EXIT' для выхода.");
-//                out.println("");
-//
-//                Quotations q = new Quotations();
-//
-//                String input;
-//                while ((input = in.readLine()) != null) {
-//                    if ("exit".equalsIgnoreCase(input)) {
-//                        out.println("До свидания!");
-//                        break;
-//                    }
-//
-//                    try {
-//                        int choice = Integer.parseInt(input);
-//                        if (choice == 0) {
-//                            out.println("Случайная цитата: " + q.getRandomQuotation());
-//                        } else if (choice > 0 && choice <= q.getQArraySize()) {
-//                            out.println("Цитата: " + q.getQuotation(choice));
-//                        } else {
-//                            out.println("Неправильный номер. Попробуйте снова.");
-//                        }
-//                    } catch (NumberFormatException e) {
-//                        out.println("Введите корректный номер или 'exit'.");
-//                    }
-//                }
-//                System.out.println("Клиент отключился: " + clientSocket.getInetAddress());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }
