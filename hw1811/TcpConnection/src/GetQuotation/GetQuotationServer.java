@@ -36,11 +36,82 @@ public class GetQuotationServer {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
             String inputLine;
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            String timeConnect = formatter.format(new Date());
+            Quotations q = new Quotations();
+            ArrayList<String> userQuotations = new ArrayList<>();
+            boolean isAuthorized = false;
+            boolean isLoginRequested = false;
+            boolean isExit = false;
+            Boolean isPasswordRequested = false;
+            String authUser = "";
+
             while ((inputLine = in.readLine()) != null) {
+
                 System.out.println("Received: " + inputLine);
-                out.println("Echo: " + inputLine);
-                if ("exit".equalsIgnoreCase(inputLine)) break;
+                //System.out.printf("auth:%b, login req:%b, pass req:%b, user:%s\n",isAuthorized,isLoginRequested,isPasswordRequested,authUser);
+                if ("q".equalsIgnoreCase(inputLine)){
+                    if(isAuthorized) {
+                        String timeDisconnect = formatter.format(new Date());
+                        Log log = new Log(authUser, timeConnect, timeDisconnect, userQuotations);
+                        writeLog(log);
+                        out.println("До свидания!");
+                    }
+                    break;
+                }else if(!isAuthorized){
+                    if(!isLoginRequested) {
+                        out.println("Введите имя пользователя: ");
+                        isLoginRequested = true;
+                    }else{
+                        if (!inputLine.isEmpty()) {
+                            Users users = new Users();
+                            if(!isPasswordRequested || authUser.isEmpty()) { //вероятно, пришел запрос имени пользователя){
+
+                                if (users.checkUser(inputLine)) { //проверяем, есть ли указанное имя польз. в БД
+                                    authUser = inputLine;
+                                    out.println("Введите пароль: "); //если есть - запрашиваем пароль
+                                    isPasswordRequested = true;
+                                } else {
+                                    System.out.println("user " + authUser + " is absent!");
+                                    isLoginRequested = false;
+                                    isPasswordRequested = false;
+                                    out.println("Нет такого пользователя!");
+                                }
+
+                            } else {
+                                if (users.checkUserPass(authUser, inputLine)) {
+                                    isAuthorized = true;
+                                    System.out.println(authUser + " is authorized!");
+                                    out.println("AUTH");
+                                }else{
+                                    out.println("Пользователь НЕ авторизован!");
+                                    isLoginRequested = false;
+                                    isPasswordRequested = false;
+                                }
+                            }
+                        }else{
+                            isLoginRequested = false;
+                            isPasswordRequested = false;
+                            out.println("Недопустимое значение!");
+                            System.out.println("Request from Client is empty!");
+                        }
+                    }
+                }else {
+                    if(inputLine.equals("n")) {
+                        userQuotations.add(q.getRandomQuotation());
+                        out.println("Цитата: " + userQuotations.getLast());
+                    }
+                    else{
+                        out.println("Недопустимая команда!");
+                    }
+                }
             }
+//            out.println("До свидания, "+authUser);
+//            for (int i = 0; i < 1_000_000; i++) {
+//
+//            }
+            clientSocket.close();
         } catch (IOException e) {
             System.err.println();        }
     }
@@ -48,68 +119,14 @@ public class GetQuotationServer {
 //        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 //             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 //            String inputLine;
-//            String info = "aaa";//clientSocket.getChannel().toString();
-//            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-//            String timeConnect = formatter.format(new Date());
-//            Quotations q = new Quotations();
-//            ArrayList<String> userQuotations = new ArrayList<>();
-//            boolean isAuthorized = false;
-//            boolean isLoginRequested = false;
-//            boolean isExit = false;
-//            Boolean isPasswordRequested = false;
-//            String authUser = "";
+//
 //
 //            int i = 0;
 //
 //            while ((inputLine = in.readLine()) != null) {
 //                System.out.println("Received: " + inputLine);
 //                /*System.out.printf("auth: %b, login req: %b, pass req: %b, authUser=%s\n",isAuthorized,isLoginRequested,isPasswordRequested,authUser);
-//                if(!isAuthorized){
-//                        if(!isLoginRequested) {
-//                            out.println("[SRV] Введите имя пользователя: ");
-//                            isLoginRequested = true;
-//                        }else{
-//                            if (!inputLine.isEmpty()) {
-//
-//                                Users users = new Users();
-//                                if (authUser.isEmpty()) { //вероятно, пришел запрос имени пользователя
-//                                    if (users.checkUser(inputLine)) { //проверяем, есть ли указанное имя польз. в БД
-//                                        authUser = inputLine;
-//                                        out.println("[SRV] Введите пароль: "); //если есть - запрашиваем пароль
-//                                        isPasswordRequested = true;
-//                                    }else{
-//                                        System.out.println("user "+authUser+" is absent!");
-//                                    }
-//                                } else {
-//                                    if (users.checkUserPass(authUser, inputLine)) {
-//                                        isAuthorized = true;
-//                                    }
-//                                }
-//                            }else{
-//                                System.out.println("Request from Client is empty!");
-//                            }
-//                        }
-//                        System.out.println(i++);
-//                }else {
-//                    if(inputLine.equals("q")) {
-//                        userQuotations.add(q.getRandomQuotation());
-//                        out.println("[SRV] Цитата: " + userQuotations.getLast());
-//                    }
-//                    else{
-//                        System.out.println("Недопустимая команда!");
-//                    }
-//                }*/
-//                if ("exit".equalsIgnoreCase(inputLine)) {
-////                    if(isAuthorized) {
-////                        String timeDisconnect = formatter.format(new Date());
-////                        Log log = new Log(info, timeConnect, timeDisconnect, userQuotations);
-////                        writeLog(log);
-////                    }
-//                    out.println("До свидания, "+authUser);
-//                    break;
-//                }else{
-//                    out.println("Echo: " + inputLine);
-//                }
+
 //            }
 //        } catch (IOException e) {
 //            System.err.println();        }

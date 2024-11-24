@@ -11,10 +11,31 @@ public class GetQuotationClient {
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
             String userInput;
+            String serverAnswer = "";
+            boolean isAuthorized = false;
+
+            //out.println("HELLO");
+            System.out.println("Нажмите Enter...");
+
             while ((userInput = stdIn.readLine()) != null) {
                 out.println(userInput);
-                System.out.println("Server response: " + in.readLine());
-                if ("exit".equalsIgnoreCase(userInput)) break;
+                serverAnswer = in.readLine();
+
+                if ("q".equalsIgnoreCase(userInput)){
+                    System.out.println(serverAnswer);
+                    break;
+                }else{
+                    if(serverAnswer.equals("AUTH")) {
+                        isAuthorized = true;
+                        System.out.println("Пользователь авторизован успешно!");
+                    }
+                    else if(serverAnswer != null) {
+                        System.out.println("[SRV] " + serverAnswer);
+                    }
+                    if(isAuthorized)
+                        System.out.print("Введите 'n' для получения новой цитаты или 'q' - для выхода: ");
+
+                }
             }
         } catch (IOException e) {
             System.err.println("Something went wrong...");        }
