@@ -8,9 +8,9 @@ import javax.websocket.DeploymentException;
 
 import java.util.Scanner;
 
-public class ChatServerRunner {
+public class GameServerRunner {
     public static void main(String[] args) {
-        Server server = new Server("localhost",80,"/ws",null, ChatServer.class);
+        Server server = new Server("localhost",80,"/ws",null, GameServer.class);
 
         try{
             server.start();
