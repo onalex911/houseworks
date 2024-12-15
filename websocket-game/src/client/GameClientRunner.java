@@ -9,33 +9,66 @@ import javax.websocket.WebSocketContainer;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class GameClientRunner {
     public static void main(String[] args) throws IOException {
 //        for (int i = 0; i < 10; i++) {
 //
-        Player player = new Player("","");
-        System.out.println("\nHello, " + player.getName() + "!");
-        Player rival = new Player(); //компьютер
+        String tempName = Player.generateName();
+        System.out.println("\nHello, " + tempName + "!");
+
 //        }
         String uri = "ws://localhost:80/ws/chat";
         Session session = null;
         try{
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            GameClient client = new GameClient(player.getName());
+            GameClient client = new GameClient(tempName);
             session = container.connectToServer(client, URI.create(uri));
 
-            Scanner scn = new Scanner(System.in);
+            Scanner scn,scn1;
             boolean doExitGame = false;
-            boolean doExitRound = false;
             boolean doExitAttempt = false;
 
             while(true) {   //основной цикл
 
                 Game game = new Game();
-                game.startGame();
+                Player player, rival;
+                int response = 0;
+                while(true) { //устанавливаем режим игры
+                    System.out.println("Select game mode");
+                    System.out.println("  0 - computer-computer");
+                    System.out.println("  1 - human-computer");
+                    System.out.println("  2 - human-human");
+                    System.out.print("Enter your choice: ");
+                    try{
+                        scn1 = new Scanner(System.in);
+                        response = scn1.nextInt();
+                        if(response < 0 || response > 2){
+                            System.out.println("Wrong choice! Try again.");
+                            continue;
+                        }
+                        break;
+                    }catch(InputMismatchException imc){
+                        System.err.println("Wrong choice! (" + imc.getMessage() + ")\nTry again.");
+                    }
+                }
+                game.setGameMode(response);  //0 - comp-comp; 1 - human-comp; 2 - human-human
+                player = new Player(tempName,"");
 
+                if(response == 0){
+                    player = new Player(tempName + " (computer)","");
+                }
+                if(response <= 1){
+                    rival = new Player(); //компьютер
+                }else{
+                    rival = client.getFreeUser();
+                }
+
+                game.startGame();
+                scn = new Scanner(System.in);
                 for (int i = 0; i < Game.NumRounds; i++) {
                     GameRound gRound = new GameRound(player, rival);
 
@@ -44,15 +77,26 @@ public class GameClientRunner {
                         System.out.println("                ROUND #" + (i + 1));
                         System.out.printf("Player 1: %s   Player 2: %s\n", player.getName(), rival.getName());
                         System.out.println("-----------------------------------------------");
-                        System.out.println("1 - stone");
-                        System.out.println("2 - scissors");
-                        System.out.println("3 - paper");
-                        System.out.println("4 - offer a draw");
-                        System.out.println("999 - I give up");
+                        String choice = "";
+                        if(game.getGameMode() > 0) {
+                            System.out.println("  1 - stone");
+                            System.out.println("  2 - scissors");
+                            System.out.println("  3 - paper");
+                            System.out.println("  4 - offer a draw");
+                            System.out.println("  999 - I give up");
+                        }else{
+                            System.out.println("Press any key for start.");
+                        }
                         System.out.println("'exit' for quit...");
                         System.out.print("Enter your choice: ");
-                        String choice = scn.nextLine();
+                        choice = scn.nextLine();
+
                         if (!"exit".equalsIgnoreCase(choice)) {
+
+                            if(game.getGameMode() == 0){
+                                Random rndPlayer = new Random();
+                                choice = String.valueOf(rndPlayer.nextInt(3) + 1);
+                            }
 
                             switch (choice) {
                                 case "1":
@@ -84,7 +128,7 @@ public class GameClientRunner {
                     }
                     if (doExitGame) break;
 
-                    System.out.println("You are selected " + player.getGestureName());
+                    System.out.println(player.getName() + " selected " + player.getGestureName());
 
                     client.clearBuffer();
                     client.sendMessage(new ServerMsg("MOVE", "").getMessage());
@@ -135,7 +179,9 @@ public class GameClientRunner {
                     if (winner != null)
                         result = "Winner - " + winner.getName();
                 }
-                System.out.println("\nGame result: " + result);
+
+                System.out.println("\n===============================================================");
+                System.out.println("Game result: " + result);
                 long[] elps = Game.getPartedTime(game.getGameTime());
                 System.out.printf("Elapsed time: %02d:%02d:%02d\n",elps[0],elps[1],elps[2]);
                 System.out.println("===============================================================");

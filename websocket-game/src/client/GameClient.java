@@ -92,6 +92,9 @@ public class GameClient {
         newMsg = false;
     }
 
+    public Player getFreeUser(){
+        return new Player("","");
+    }
 //    public void printBuffer(){
 //        for(ServerMsg msg:msgBuffer){
 //            System.out.println(msg);

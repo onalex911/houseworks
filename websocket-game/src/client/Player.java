@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Player implements Serializable {
+public class Player {
     private String name;
     private final String sessionId;
 //    private final Session session;
@@ -17,7 +17,7 @@ public class Player implements Serializable {
     public Gesture gesture; //последний выбранный жест
     private List<Game> games = new ArrayList<>();   //история всех игр
     private int gameNum = 0; // id текущей игры
-    private final String[] namePart = new String[]{
+    private static final String[] namePart = new String[]{
             "alex","andr","ax","ey","rom","bor","gen","eg","lax","iy","ol","max","an","lya","olg","a","na","mari","iri","gali","tam","ara","jur","no","oy","milian","is","aya","al","la","o","i"
     };
 
@@ -93,7 +93,7 @@ public class Player implements Serializable {
         this.gameNum = gameNum;
     }
 
-    public String generateName(){
+    public static String generateName(){
         Random rnd = new Random();
         while (true){
             String str = namePart[rnd.nextInt(namePart.length - 1)] + namePart[rnd.nextInt(namePart.length - 1)];

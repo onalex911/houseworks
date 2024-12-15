@@ -14,6 +14,7 @@ public class Game {
     Player pl2;
     private boolean isDraw = false;
     private boolean playerGaveUp = false;
+    private int gameMode; //0 - comp-comp; 1 - human-comp; 2 - human-human
 //    private long timeElapse;
 
     public Game(){
@@ -104,5 +105,13 @@ public class Game {
         out[1] = (mlSeconds / (1000 * 60)) % 60;    //minutes
         out[2] = (mlSeconds / 1000) % 60;           //seconds
         return out;
+    }
+
+    public void setGameMode(int gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public int getGameMode() {
+        return gameMode;
     }
 }
