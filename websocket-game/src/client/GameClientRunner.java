@@ -101,8 +101,9 @@ public class GameClientRunner {
                     doGame(singleGame, player, rival, client,false);
                     matchInfo.add(singleGame);
                 }
+                System.out.println("================== Game statistics ==================");
                 getPopularUnpopular(matchInfo);
-                System.out.print("Play again? ('n' - no, any key - yes): ");
+                System.out.print("\nPlay again? ('n' - no, any key - yes): ");
 
                 if(new Scanner(System.in).nextLine().equals("n")) break;
                 matchInfo.clear();
@@ -264,30 +265,11 @@ public class GameClientRunner {
             }
         }
         for (int i = 0; i < gestArray.length; i++) {
-            System.out.println(gestArray[i]);
+            System.out.println(Gesture.getNameByPower(i) + ": " + gestArray[i]);
+//            System.out.println(gestArray[i]);
         }
 //        return out;
     }
 
-        public static List<Integer> getMax(int[] array){
-            List<Integer> out = new ArrayList<>();
-            int max = array[0];
-            //out.add(max);
-            int k = 0;
-            for (int i = 1; i < array.length; i++) {
-                if(array[i] > max){
-                    max = array[i];
-                }
-            }
-            return max;
-        }
-        public static int getMin(int[] array){
-            int min = array[0];
-            for (int i = 1; i < array.length; i++) {
-                if(array[i] < max){
-                    max = array[i];
-                }
-            }
-            return max;
-        }
+
 }

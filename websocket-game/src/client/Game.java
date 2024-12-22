@@ -137,7 +137,7 @@ public class Game {
             GameRound gr = gameArray.get(i);
 
             out += (i + 1) + ") " + gr.getPl1().getName() + ": " + Gesture.getNameByPower(gr.getGestures()[0]);
-            out += ", " + gr.getPl1().getName() + ": " + Gesture.getNameByPower(gr.getGestures()[1]);
+            out += ", " + gr.getPl2().getName() + ": " + Gesture.getNameByPower(gr.getGestures()[1]);
             out += " Result: " + (gr.isDraw() ? "DRAW" : "Winner - " + gr.getWinner().getName()) + "\n";
 
         }
