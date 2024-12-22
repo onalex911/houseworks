@@ -259,7 +259,9 @@ public class GameClientRunner {
                 int[] roundGestures = gRound.getGestures();
 
                 for (int k = 0; k < Gesture.values().length; k++) {
-                    if(roundGestures[0] == k || roundGestures[1] == k)
+                    if(roundGestures[0] == k)
+                        gestArray[k]++;
+                    if(roundGestures[1] == k)
                         gestArray[k]++;
                 }
             }

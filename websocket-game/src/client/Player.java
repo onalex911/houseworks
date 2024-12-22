@@ -19,7 +19,7 @@ public class Player {
     private List<Game> games = new ArrayList<>();   //история всех игр
     private int gameNum = 0; // id текущей игры
     private static final String[] namePart = new String[]{
-            "alex","andr","ax","ey","rom","bor","gen","eg","lax","iy","ol","max","an","lya","olg","a","na","mari","iri","gali","tam","ara","jur","no","oy","milian","is","aya","al","la","o","i"
+            "eugen","sof","alex","andr","ax","ey","rom","bor","gen","eg","lax","iy","ol","max","an","0","olg","a","na","mari","iri","gali","tam","ara","jur","no","oy","milian","is","aya","al","la","o","i"
     };
 
     public Player() {
