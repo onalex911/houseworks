@@ -17,8 +17,8 @@ public class Game {
     private int gameMode; //0 - comp-comp; 1 - human-comp; 2 - human-human
 //    private long timeElapse;
 
-    public Game(){
-
+    public Game(int gameMode){
+        this.gameMode = gameMode;
     }
     public Game(Player pl1, Player pl2) {
 //        this.id = id;
@@ -56,8 +56,11 @@ public class Game {
                 }else
                     cntDraw++;
             }
-            if(cntDraw == NumRounds) return new Player("NOBODY (it's a draw)","");
-            return cnt1 == cnt2 ? null : (cnt1 > cnt2 ? pl1 : pl2);
+            if(cntDraw == NumRounds || cnt1 == cnt2){
+                isDraw = true;
+                return new Player("NOBODY (it's a draw)","");
+            }
+            return  cnt1 > cnt2 ? pl1 : pl2;
         }else return null;
     }
 
@@ -113,5 +116,17 @@ public class Game {
 
     public int getGameMode() {
         return gameMode;
+    }
+
+    public String getGameInfo(){
+        String out = "";
+        for (int i = 0; i < gameArray.size(); i++) {
+            GameRound gr = gameArray.get(i);
+            out += (i + 1) + ") " + gr.getPl1().getName() + ": " + gr.getPl1().getGestureName();
+            out += ", " + gr.getPl2().getName() + ": " + gr.getPl2().getGestureName();
+            out += " Result: " + (gr.isDraw() ? "DRAW" : "Winner - " + gr.getWinner().getName()) + "\n";
+            gr = null;
+        }
+        return out;
     }
 }
