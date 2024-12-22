@@ -11,7 +11,6 @@ public class Game {
     public static int NumRounds = 5;
 
     List<GameRound> gameArray = new ArrayList<>();
-    private int counter = NumRounds;
     private long timeStart;
     Player pl1;
     Player pl2;
@@ -19,13 +18,11 @@ public class Game {
     private boolean isDraw = false;
     private boolean playerGaveUp = false;
     private int gameMode; //0 - comp-comp; 1 - human-comp; 2 - human-human
-//    private long timeElapse;
 
     public Game(int gameMode){
         this.gameMode = gameMode;
     }
     public Game(Player pl1, Player pl2) {
-//        this.id = id;
         this.pl1 = pl1;
         this.pl2 = pl2;
     }
@@ -38,12 +35,7 @@ public class Game {
     }
 
     public void addRoundToGame(GameRound round){
-//        if(counter > 0) {
             gameArray.add(round);
-//            counter--;
-//            return true;
-//        }
-//        return false;
     }
 
     public Player calcGameWinner(){
@@ -81,24 +73,6 @@ public class Game {
         return gameArray.size();
     }
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-
-    public void setPl1(Player pl1) {
-        this.pl1 = pl1;
-    }
-
-    public void setPl2(Player pl2) {
-        this.pl2 = pl2;
-    }
-
-    public Player getPl1() {
-        return pl1;
-    }
-    public Player getPl2() {
-        return pl2;
-    }
     public void setDraw(boolean draw) {
         isDraw = draw;
     }
@@ -111,6 +85,10 @@ public class Game {
         this.playerGaveUp = playerGaveUp;
     }
 
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
     public boolean isPlayerGaveUp() {
         return playerGaveUp;
     }
@@ -121,10 +99,6 @@ public class Game {
         out[1] = (mlSeconds / (1000 * 60)) % 60;    //minutes
         out[2] = (mlSeconds / 1000) % 60;           //seconds
         return out;
-    }
-
-    public void setGameMode(int gameMode) {
-        this.gameMode = gameMode;
     }
 
     public int getGameMode() {

@@ -4,14 +4,11 @@ import common.ServerMsg;
 
 import javax.websocket.Session;
 import javax.websocket.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @ClientEndpoint
 public class GameClient {
     private Session session;
     private final String playerName;
-//    private final List<ServerMsg> msgBuffer = new ArrayList<>();
     private boolean newMsg = false;
     private String newMsgTxt = "";
 
@@ -31,13 +28,10 @@ public class GameClient {
 
     @OnMessage
     public void onMessage(String message){
-
         if(!message.isEmpty()){
             newMsg = true;
             newMsgTxt = message;
-            //addMsgToBuffer(new ServerMsg(message));
         }
-        //System.out.println("Incoming message: " + message);
     }
 
     @OnClose
@@ -59,25 +53,6 @@ public class GameClient {
         }
     }
 
-//    public ServerMsg getMsgFromBuffer(int ind) {
-//        if(!newMsgTxt.isEmpty()) {
-////            if (ind < 0) ind = msgBuffer.size() - 1;
-//            return new ServerMsg(newMsgTxt);
-//        }
-//        return null;
-//    }
-//    public void removeMsgFromBuffer(int ind) {
-//        if(msgBuffer.size() > 0) {
-//            if (ind < 0)
-//                ind = msgBuffer.size() - 1;
-//            msgBuffer.remove(ind);
-//        }
-//    }
-
-//    public void addMsgToBuffer(ServerMsg msg) {
-//        msgBuffer.add(msg);
-//        newMsg = true;
-//    }
 
     public boolean isNewMsg() {
         return newMsg;
@@ -92,16 +67,4 @@ public class GameClient {
         newMsg = false;
     }
 
-    public Player getFreeUser(){
-        return new Player("","");
-    }
-//    public void printBuffer(){
-//        for(ServerMsg msg:msgBuffer){
-//            System.out.println(msg);
-//        }
-//    }
-
-//    public int getBufferSize(){
-//        return msgBuffer.size();
-//    }
 }

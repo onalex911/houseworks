@@ -43,14 +43,6 @@ public class ServerMsg {
         return (isCmdExists() ? cmd + cmdDelim : "") + msg;
     }
 
-    public boolean isComplete() {
-        return complete;
-    }
-
-    public void setComplete(boolean complete) {
-        this.complete = complete;
-    }
-
     @Override
     public String toString() {
         return getMessage();

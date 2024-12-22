@@ -40,7 +40,7 @@ public class GameClientRunner {
                 "Type your name or press 'Enter' to get automatic name: ");
 
         String tempName = new Scanner(System.in).nextLine();
-        if(tempName.trim().isEmpty()) Player.generateName();
+        if(tempName.trim().isEmpty()) tempName = Player.generateName();
 
         System.out.println("\nHello, " + tempName + "!");
 
@@ -95,35 +95,38 @@ public class GameClientRunner {
                         System.out.println("                   MATCH                      ");
                         System.out.println("                GAME #" + (i + 1));
                         System.out.printf("Player 1: %s   Player 2: %s\n", player.getName(), rival.getName());
-                        System.out.println("==============================================");
+                        System.out.println("==============================================\n");
                         Game game = new Game(response);
                         doGame(game, player, rival, client,false);
                         matchInfo.add(game);
                     }
 
                     System.out.println("\n================== RESULTS OF THE MATCH ==================");
-
                     int[] winners = new int[3];
                     for (int i = 0; i < GamesInMatch; i++) {
                         Player matchWinner = matchInfo.get(i).getGameWinner();
-                        if(matchWinner.equals(player)){
-                            winners[0]++;
-                        }else if(matchWinner.equals(rival)) {
-                            winners[1]++;
-                        }else winners[2]++;
-                        System.out.println("Game " + (i+1) + ": " + matchWinner.getName());
+                        if(matchWinner != null) {
+                            if (matchWinner.equals(player)) {
+                                winners[0]++;
+                            } else if (matchWinner.equals(rival)) {
+                                winners[1]++;
+                            } else winners[2]++;
+                            System.out.println("Game " + (i + 1) + ": " + matchWinner.getName());
+                        }else
+                            System.out.println("Winner of the game is not defined...");
                     }
                     String absolutWinner = winners[0] > winners[1] ? player.getName() : (winners[1] > winners[0] ? rival.getName() : Game.NOBODY_WINS);
                     System.out.println("Winner of the Match is: " + absolutWinner);
                     if(!absolutWinner.equals(Game.NOBODY_WINS))
                         System.out.println("Congratulations!!!");
+
+                    System.out.println("\n================== Game statistics ==================");
+                    getPopularUnpopular(matchInfo);
                 }else {
                     Game singleGame = new Game(response);
                     doGame(singleGame, player, rival, client,false);
                     matchInfo.add(singleGame);
                 }
-                System.out.println("================== Game statistics ==================");
-                getPopularUnpopular(matchInfo);
                 System.out.print("\nPlay again? ('n' - no, any key - yes): ");
 
                 if(new Scanner(System.in).nextLine().equals("n")) break;
@@ -156,7 +159,7 @@ public class GameClientRunner {
                     System.out.println("  2 - scissors");
                     System.out.println("  3 - paper");
                     System.out.println("  4 - offer a draw");
-                    System.out.println("  999 - I give up");
+                    System.out.println("  0 - I give up");
                     System.out.println("'exit' for quit...");
                     System.out.print("Enter your choice: ");
                 }else{
@@ -188,7 +191,7 @@ public class GameClientRunner {
                         case "4": game.setDraw(true);
                             doExitGame = true;
                             break;
-                        case "999": game.setPlayerGaveUp(true);
+                        case "0": game.setPlayerGaveUp(true);
                             doExitGame = true;
                             break;
                         default:
@@ -249,7 +252,8 @@ public class GameClientRunner {
         if(game.isDraw()) {
             result = "DRAW";
         }else if(game.isPlayerGaveUp()){
-            result = "Winner - %s (%s gave up)\n";
+            result = "Winner - " + rival.getName() + " (" + player.getName() + " gave up)\n";
+            game.setWinner(rival);
         }else if (game.getGameArraySize() == Game.NumRounds) {
             Player winner = game.getGameWinner();
             if (winner != null)

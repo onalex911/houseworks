@@ -33,7 +33,6 @@ public class GameServer {
     public void onMessage(String message, Session session){
 //        System.out.println("Received message: " + message + " from " + session.getId());
         String msg = "";
-        //broadcasting(msg);
         String senderId = session.getId();
 //        System.out.println("Sender ID: " + senderId);
         ServerMsg inMsg = new ServerMsg(message);
@@ -46,7 +45,6 @@ public class GameServer {
                     Random rnd = new Random();
                     int computerChoice = rnd.nextInt(gestures.length);
                     String outMessage = new ServerMsg("MOVE",String.valueOf(computerChoice)).getMessage();
-//                    System.out.println(outMessage);
                     sentToUser(senderId,outMessage);
                     break;
                 default:

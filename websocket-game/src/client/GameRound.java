@@ -5,14 +5,11 @@ public class GameRound {
     private final Player pl2;
     private boolean isDraw;
     private Player winner;
-//    private final GameType gType;
     private final int[] gestures = new int[2];
 
-//    public GameRound(Player player1, Player player2, GameType gType) {
     public GameRound(Player player1, Player player2) {
         this.pl1 = player1;
         this.pl2 = player2;
-//        this.gType = gType;
     }
 
     public void play() {
