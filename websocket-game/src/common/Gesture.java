@@ -6,7 +6,13 @@ public enum Gesture {
     STONE("stone");
     private final String name;
     private final int power;
+    private int[] gesturesArray = new int[3];
 
+    {
+        for (int i = 0; i < Gesture.values().length; i++) {
+            gesturesArray[i] = i;
+        }
+    }
     Gesture(String name) {
         this.name = name;
         this.power = this.ordinal();
@@ -18,4 +24,14 @@ public enum Gesture {
         return this.power;
     }
 
+    public static String getNameByPower(int power){
+        Gesture[] gestureVal = Gesture.values();
+        if(power >= 0 || power < gestureVal.length)
+            return gestureVal[power].getGestureName();
+        else return "";
+    }
+
+    public int[] getGesturesArray() {
+        return gesturesArray;
+    }
 }

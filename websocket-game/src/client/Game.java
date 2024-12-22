@@ -1,10 +1,13 @@
 package client;
 
+import common.Gesture;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
 
+    public static final String NOBODY_WINS = "NOBODY (it's a draw)";
     public static int NumRounds = 5;
 
     List<GameRound> gameArray = new ArrayList<>();
@@ -12,6 +15,7 @@ public class Game {
     private long timeStart;
     Player pl1;
     Player pl2;
+    Player winner = null;
     private boolean isDraw = false;
     private boolean playerGaveUp = false;
     private int gameMode; //0 - comp-comp; 1 - human-comp; 2 - human-human
@@ -42,7 +46,7 @@ public class Game {
 //        return false;
     }
 
-    public Player getGameWinner(){
+    public Player calcGameWinner(){
         if(gameArray.size() == NumRounds) {
             int cntDraw = 0;
             int cnt1 = 0;
@@ -58,10 +62,19 @@ public class Game {
             }
             if(cntDraw == NumRounds || cnt1 == cnt2){
                 isDraw = true;
-                return new Player("NOBODY (it's a draw)","");
+                return new Player(NOBODY_WINS,"");
             }
-            return  cnt1 > cnt2 ? pl1 : pl2;
+            winner = cnt1 > cnt2 ? pl1 : pl2; //запоминаем победителя раунда
+            return winner;
         }else return null;
+    }
+
+    public Player getGameWinner() {
+        return winner != null ? winner : calcGameWinner();
+    }
+
+    public List<GameRound> getGameArray() {
+        return gameArray;
     }
 
     public int getGameArraySize(){
@@ -122,10 +135,11 @@ public class Game {
         String out = "";
         for (int i = 0; i < gameArray.size(); i++) {
             GameRound gr = gameArray.get(i);
-            out += (i + 1) + ") " + gr.getPl1().getName() + ": " + gr.getPl1().getGestureName();
-            out += ", " + gr.getPl2().getName() + ": " + gr.getPl2().getGestureName();
+
+            out += (i + 1) + ") " + gr.getPl1().getName() + ": " + Gesture.getNameByPower(gr.getGestures()[0]);
+            out += ", " + gr.getPl1().getName() + ": " + Gesture.getNameByPower(gr.getGestures()[1]);
             out += " Result: " + (gr.isDraw() ? "DRAW" : "Winner - " + gr.getWinner().getName()) + "\n";
-            gr = null;
+
         }
         return out;
     }

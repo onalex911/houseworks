@@ -6,6 +6,7 @@ import javax.websocket.Session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Player {
@@ -51,6 +52,18 @@ public class Player {
 
     public String getSessionId() {
         return sessionId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(name, player.name) && Objects.equals(sessionId, player.sessionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, sessionId);
     }
 
     public boolean isAuthorized() {

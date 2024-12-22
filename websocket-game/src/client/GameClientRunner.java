@@ -62,6 +62,7 @@ public class GameClientRunner {
                 }
 //                if(response <= 1){
                     rival = new Player(); //компьютер
+
 //                }else{
 //                    rival = client.getFreeUser();
 //                }
@@ -78,16 +79,33 @@ public class GameClientRunner {
                         doGame(game, player, rival, client,false);
                         matchInfo.add(game);
                     }
-                    System.out.println("================== RESULTS OF THR MATCH ==================");
+
+                    System.out.println("================== RESULTS OF THE MATCH ==================");
+
+                    int[] winners = new int[3];
                     for (int i = 0; i < GamesInMatch; i++) {
-                        System.out.println("Game " + (i+1) + ": " + matchInfo.get(i).getGameWinner().getName());
+                        Player matchWinner = matchInfo.get(i).getGameWinner();
+                        if(matchWinner.equals(player)){
+                            winners[0]++;
+                        }else if(matchWinner.equals(rival)) {
+                            winners[1]++;
+                        }else winners[2]++;
+                        System.out.println("Game " + (i+1) + ": " + matchWinner.getName());
                     }
+                    String absolutWinner = winners[0] > winners[1] ? player.getName() : (winners[1] > winners[0] ? rival.getName() : Game.NOBODY_WINS);
+                    System.out.println("Winner of the Match is: " + absolutWinner);
+                    if(!absolutWinner.equals(Game.NOBODY_WINS))
+                        System.out.println("Congratulations!!!");
                 }else {
-                    doGame(new Game(response), player, rival, client,false);
+                    Game singleGame = new Game(response);
+                    doGame(singleGame, player, rival, client,false);
+                    matchInfo.add(singleGame);
                 }
+                getPopularUnpopular(matchInfo);
                 System.out.print("Play again? ('n' - no, any key - yes): ");
 
                 if(new Scanner(System.in).nextLine().equals("n")) break;
+                matchInfo.clear();
 
             }
         } catch (Exception e) {
@@ -224,4 +242,52 @@ public class GameClientRunner {
         System.out.print(gameInfo);
         System.out.println("===============================================================");
     }
+
+//    public static String[] getPopularUnpopular(List<Game> matchInfo){
+    public static void getPopularUnpopular(List<Game> matchInfo){
+        String[] out = new String[2];
+        int[] gestArray = new int[Gesture.values().length];
+//        for (int i = 0; i < gestArray.length; i++) {
+//            gestArray[i] = 0;
+//        }
+        //подсчет всех жестов в игре
+        for (int i = 0; i < matchInfo.size(); i++) {
+            Game game = matchInfo.get(i);
+            for (int j = 0; j < game.getGameArray().size(); j++) {
+                GameRound gRound = game.getGameArray().get(j);
+                int[] roundGestures = gRound.getGestures();
+
+                for (int k = 0; k < Gesture.values().length; k++) {
+                    if(roundGestures[0] == k || roundGestures[1] == k)
+                        gestArray[k]++;
+                }
+            }
+        }
+        for (int i = 0; i < gestArray.length; i++) {
+            System.out.println(gestArray[i]);
+        }
+//        return out;
+    }
+
+        public static List<Integer> getMax(int[] array){
+            List<Integer> out = new ArrayList<>();
+            int max = array[0];
+            //out.add(max);
+            int k = 0;
+            for (int i = 1; i < array.length; i++) {
+                if(array[i] > max){
+                    max = array[i];
+                }
+            }
+            return max;
+        }
+        public static int getMin(int[] array){
+            int min = array[0];
+            for (int i = 1; i < array.length; i++) {
+                if(array[i] < max){
+                    max = array[i];
+                }
+            }
+            return max;
+        }
 }
