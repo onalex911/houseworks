@@ -9,18 +9,39 @@ import javax.websocket.WebSocketContainer;
 
 import java.io.IOException;
 import java.net.URI;
-import java.sql.SQLOutput;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class GameClientRunner {
     public static int GamesInMatch = 3;
-    public static int DELAY = 1000;
+    public static int DELAY = 500;
     public static List<Game> matchInfo = new ArrayList<>();
 
+    private static class IndAndVals{
+        int index;
+        List<Integer> values;
+
+        public IndAndVals(int index, List<Integer> values) {
+            this.index = index;
+            this.values = values;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+        public List<Integer> getValues() {
+            return values;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
-//        for (int i = 0; i < 10; i++) {
-//
-        String tempName = Player.generateName();
+
+        System.out.print("\nWelcome to the game 'Stone-Scissors-Paper'!\n" +
+                "Type your name or press 'Enter' to get automatic name: ");
+
+        String tempName = new Scanner(System.in).nextLine();
+        if(tempName.trim().isEmpty()) Player.generateName();
+
         System.out.println("\nHello, " + tempName + "!");
 
 //        }
@@ -42,7 +63,7 @@ public class GameClientRunner {
                     System.out.println("Select game mode");
                     System.out.println("  0 - computer-computer");
                     System.out.println("  1 - human-computer");
-                    System.out.println("  2 - human-human");
+//                    System.out.println("  2 - human-human");
                     System.out.print("Enter your choice: ");
                     try{
                         response = new Scanner(System.in).nextInt();
@@ -80,7 +101,7 @@ public class GameClientRunner {
                         matchInfo.add(game);
                     }
 
-                    System.out.println("================== RESULTS OF THE MATCH ==================");
+                    System.out.println("\n================== RESULTS OF THE MATCH ==================");
 
                     int[] winners = new int[3];
                     for (int i = 0; i < GamesInMatch; i++) {
@@ -244,13 +265,10 @@ public class GameClientRunner {
         System.out.println("===============================================================");
     }
 
-//    public static String[] getPopularUnpopular(List<Game> matchInfo){
     public static void getPopularUnpopular(List<Game> matchInfo){
         String[] out = new String[2];
         int[] gestArray = new int[Gesture.values().length];
-//        for (int i = 0; i < gestArray.length; i++) {
-//            gestArray[i] = 0;
-//        }
+
         //подсчет всех жестов в игре
         for (int i = 0; i < matchInfo.size(); i++) {
             Game game = matchInfo.get(i);
@@ -266,12 +284,54 @@ public class GameClientRunner {
                 }
             }
         }
-        for (int i = 0; i < gestArray.length; i++) {
-            System.out.println(Gesture.getNameByPower(i) + ": " + gestArray[i]);
-//            System.out.println(gestArray[i]);
+        IndAndVals max = getExtremums(gestArray,true);
+        IndAndVals min = getExtremums(gestArray,false);
+
+        String gestName = "";
+        String art = "is";
+        if(max.getValues().size() > 1){
+            art = "are";
+            for (int i = 0; i < max.getValues().size(); i++) {
+                gestName += Gesture.getNameByPower(max.getValues().get(i));
+                if(i < max.getValues().size() - 1) gestName += ", ";
+            }
+        }else{
+            gestName = Gesture.getNameByPower(max.getValues().get(0));
         }
-//        return out;
+        System.out.print("Most popular gesture " + art + ": " + gestName + " (" + max.getIndex()+ ")\n");
+
+        gestName = "";
+        art = "is";
+        if(min.getValues().size() > 1){
+            art = "are";
+            for (int i = 0; i < min.getValues().size(); i++) {
+                gestName += Gesture.getNameByPower(min.getValues().get(i));
+                if(i < min.getValues().size() - 1) gestName += ", ";
+            }
+        }else{
+            gestName = Gesture.getNameByPower(min.getValues().get(0));
+        }
+        System.out.print("Most unpopular gesture " + art + ": " + gestName + " (" + min.getIndex() + ")\n");
     }
 
+    public static IndAndVals getExtremums(int[] inpArray, boolean isMax) {
 
+        OptionalInt maxOptional = isMax? IntStream.of(inpArray).max() : IntStream.of(inpArray).min();
+
+        // Проверяем, найдено ли максимальное значение
+        if (maxOptional.isPresent()) {
+            int maxValue = maxOptional.getAsInt();
+
+            // Получаем все индексы, соответствующие максимальному значению
+            List<Integer> maxIndices = new ArrayList<>();
+            IntStream.range(0, inpArray.length)
+                    .filter(i -> inpArray[i] == maxValue)
+                    .forEach(i -> maxIndices.add(i));
+
+            IndAndVals out = new IndAndVals(maxValue,maxIndices);
+            return out;
+
+        }
+        return null;
+    }
 }
