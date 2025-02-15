@@ -1,5 +1,6 @@
 package FactoryMethod;
 
+//класс для описания конкретного продукта
 public class Eskimo implements Nation {
 
 

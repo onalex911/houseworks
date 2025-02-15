@@ -16,8 +16,9 @@ import static org.example.notebooks.Utils.rootPath;
 public class ItemServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+        String type = request.getParameter("t");
         int id = Integer.parseInt(request.getParameter("id"));
-        String csvFile = rootPath + "notebooks.csv";
+        String csvFile = rootPath + (type.equals("prod") ? "notebooks.csv" : "news.csv");
         String title = "";
 
         List<Notebook> nbList = new ArrayList<>();
@@ -25,17 +26,27 @@ public class ItemServlet extends HttpServlet {
         try(InputStreamReader fr = new InputStreamReader(new FileInputStream(file), "UTF-8")){
             BufferedReader br = new BufferedReader(fr);
             String line = "";
+            request.setAttribute("nav", readResourceFile("top-menu.html"));
             while ((line = br.readLine()) != null) {
                 String[] lineArray = line.split(";");
                 if(Integer.parseInt(lineArray[0]) == id) {
-                    title = lineArray[1];
-                    request.setAttribute("title", title);
-                    request.setAttribute("mainHeading", title);
-                    request.setAttribute("description", lineArray[2]);
-                    request.setAttribute("photoPath", "images/production/" + lineArray[3]);
-                    request.setAttribute("price", Integer.parseInt(lineArray[4]));
-                    request.setAttribute("nav", readResourceFile("top-menu.html"));
-                    getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
+                    if(type.equals("prod")) {
+                        title = lineArray[1];
+                        request.setAttribute("title", title);
+                        request.setAttribute("mainHeading", title);
+                        request.setAttribute("description", lineArray[2]);
+                        request.setAttribute("photoPath", "images/production/" + lineArray[3]);
+                        request.setAttribute("price", Integer.parseInt(lineArray[4]));
+                        getServletContext().getRequestDispatcher("/product.jsp").forward(request, response);
+                    }else{
+                        title = lineArray[3];
+                        request.setAttribute("title", title);
+                        request.setAttribute("mainHeading", title);
+                        request.setAttribute("date", lineArray[1]);
+                        request.setAttribute("photoPath", "images/news/" + lineArray[2]);
+                        request.setAttribute("text", lineArray[4]);
+                        getServletContext().getRequestDispatcher("/news-item.jsp").forward(request, response);
+                    }
                     break;
                 }
             }

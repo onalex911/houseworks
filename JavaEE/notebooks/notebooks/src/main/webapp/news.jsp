@@ -7,6 +7,9 @@
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -26,19 +29,20 @@
     <div id="center">
         <h1 class="main_heading">${mainHeading}</h1>
 
-        <h3><c:out value="${head}"/></h3>
+<%--        <h3><c:out value="${head}"/></h3>--%>
         <div class="production">
 
             <c:forEach var="item" items="${list}">
 
                 <div class="prod-item">
                     <div class="item-preview">
-                        <a href="item?id=${item.id}"><img src="${item.photoPath}"></a>
+                        <a href="item?t=news&id=${item.id}"><img src="${item.imagePath}"></a>
                     </div>
                     <div class="item-info">
-                        <h3>${item.name}</h3>
-                        <p>${item.price} Tgr</p>
-                        <p><a href="item?id=${item.id}">Описание</a></p>
+                        <fmt:formatDate value="${item.date}" pattern="dd.MM.yyyy" />
+                        <p>${formatDate}</p>
+                        <h3>${item.title}</h3>
+                        <p><a href="item?t=news&id=${item.id}">Подробнее...</a></p>
                     </div>
 
                 </div>

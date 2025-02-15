@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: onale
   Date: 08.02.2025
-  Time: 15:54
+  Time: 20:43
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -26,24 +26,14 @@
     <div id="center">
         <h1 class="main_heading">${mainHeading}</h1>
 
-        <h3><c:out value="${head}"/></h3>
-        <div class="production">
+<%--        <h3><c:out value="${title}"/></h3>--%>
+        <div class="container">
 
-            <c:forEach var="item" items="${list}">
-
-                <div class="prod-item">
-                    <div class="item-preview">
-                        <a href="item?id=${item.id}"><img src="${item.photoPath}"></a>
-                    </div>
-                    <div class="item-info">
-                        <h3>${item.name}</h3>
-                        <p>${item.price} Tgr</p>
-                        <p><a href="item?id=${item.id}">Описание</a></p>
-                    </div>
-
-                </div>
-            </c:forEach>
+            <img src="${photoPath}" alt="${title}">
+            <p>${date}</p>
+            <div class="news-text">${text}</div>
         </div>
+        <div class="go-back"><a href="list?t=news">&lt;&lt;Назад</a></div>
     </div>
 
     <div id="footer">Template by: <a href="http://www.csstemplateheaven.com">CssTemplateHeaven</a>

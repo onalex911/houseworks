@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 public class GameClientRunner {
     public static int GamesInMatch = 3;
-    public static int DELAY = 500;
+    public static int DELAY = 1000;
     public static List<Game> matchInfo = new ArrayList<>();
 
     private static class IndAndVals{

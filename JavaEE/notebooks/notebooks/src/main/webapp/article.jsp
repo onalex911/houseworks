@@ -25,7 +25,7 @@
         </div>
         <div class="go-back" style="display:<c:out value="${displayBack}" default="none"/>">&lt;&lt;Назад</div>
 
-        <div class="seperator"></div>
+
     </div>
 
     <div id="footer">Template by: <a href="http://www.csstemplateheaven.com">CssTemplateHeaven</a>

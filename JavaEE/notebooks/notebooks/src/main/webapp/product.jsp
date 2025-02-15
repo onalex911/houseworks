@@ -32,9 +32,7 @@
       <p>${description}</p>
       <p>${price} Tgr</p>
     </div>
-    <div class="go-back"><a href="production">&lt;&lt;Назад</a></div>
-
-    <div class="seperator"></div>
+    <div class="go-back"><a href="list?t=prod">&lt;&lt;Назад</a></div>
   </div>
 
   <div id="footer">Template by: <a href="http://www.csstemplateheaven.com">CssTemplateHeaven</a>

@@ -33,12 +33,12 @@
 
                 <div class="prod-item">
                     <div class="item-preview">
-                        <a href="item?id=${item.id}"><img src="${item.photoPath}"></a>
+                        <a href="item?t=prod&id=${item.id}"><img src="${item.photoPath}"></a>
                     </div>
                     <div class="item-info">
                         <h3>${item.name}</h3>
                         <p>${item.price} Tgr</p>
-                        <p><a href="item?id=${item.id}">Описание</a></p>
+                        <p><a href="item?t=prod&id=${item.id}">Описание</a></p>
                     </div>
 
                 </div>
