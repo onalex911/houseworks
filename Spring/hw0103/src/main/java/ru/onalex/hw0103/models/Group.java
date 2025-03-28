@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "Groups")
 public class Group {
@@ -25,4 +28,10 @@ public class Group {
     @OneToOne
     @JoinColumn(name = "DepartmentId",referencedColumnName = "id")
     private Department department;
+
+    @OneToMany(mappedBy = "group")
+    private Set<GroupsCurators> groupsCurators = new HashSet<>();
+
+    @OneToMany(mappedBy = "group")
+    private Set<GroupsLectures> groupsLectures = new HashSet<>();
 }

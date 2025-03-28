@@ -20,4 +20,5 @@ public class Subject {
     private String name;
 
     @OneToOne(mappedBy = "subject")
-    private Lecture lecture;}
+    private Lecture lecture;
+}

@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class HomeController {
-    List<Person> people;
+    private List<Person> people;
     public HomeController() {
         people = new ArrayList<>();
         people.addAll(List.of(

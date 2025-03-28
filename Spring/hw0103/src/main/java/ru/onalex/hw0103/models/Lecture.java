@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -25,5 +26,8 @@ public class Lecture {
     @OneToOne
     @JoinColumn(name = "TeacherId",referencedColumnName = "id")
     private Teacher teacher;
+
+    @OneToMany(mappedBy = "lecture")
+    private Set<GroupsLectures> groupsLectures = new HashSet<>();
 
 }

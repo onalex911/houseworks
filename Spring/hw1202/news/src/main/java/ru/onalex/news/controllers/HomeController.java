@@ -22,8 +22,8 @@ public class HomeController {
 //получаем новости с агрегатора по запросу (computer, java и т.п.) и получаем результаты на заданных языках, начиная с установленной даты
 //результаты выводятся в порядке убывания даты (от новых к старым)
     private final String baseUrl = "https://newsapi.org/v2/everything";
-    private final String apiKey = "ae0595727e284fb3be698f5c3732b8ae";
-    private final String from = "2025-02-22"; //
+    private final String apiKey = "4cdef0e7a9fc4cf786aafde4a470dd7e";
+    private final String from = "2025-03-22"; //
     private final List<String> langs = new ArrayList<>();
 
     {

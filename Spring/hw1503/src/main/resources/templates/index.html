@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">My First MVC project</title>
+<!--    <link rel="stylesheet" href="/hw1503/css/styles.css">-->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1 class="qqq">List of teachers</h1>
+<div class="error"><p th:text="${error}"></p></div>
+
+<table class="main-table">
+    <thead>
+    <tr>
+        <th><a href="http://localhost:8081/home/sorted/id">Id</a></th>
+        <th><a href="http://localhost:8081/home/sorted/name">Name</a></th>
+        <th><a href="http://localhost:8081/home/sorted/surname">Surname</a></th>
+        <th><a href="http://localhost:8081/home/sorted/position">Position</a></th>
+        <th><a href="http://localhost:8081/home/sorted/empdate">Employment date</a></th>
+        <th><a href="http://localhost:8081/home/sorted/salary">Salary</a></th>
+        <th><a href="http://localhost:8081/home/sorted/premium">Premium</a></th>
+        <th>Assistant</th>
+        <th>Professor</th>
+<!--        <th>Assist/Prof</th>-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${teachers}">
+        <td th:text="${t.getId()}"></td>
+        <td th:text="${t.getName()}"></td>
+        <td th:text="${t.getSurname()}"></td>
+        <td th:text="${t.getPosition()}"></td>
+        <td th:text="${t.getEmploymentDate()}"></td>
+        <td th:text="'$'+${t.getSalary()}"></td>
+        <td th:text="'$'+${t.getPremium()}"></td>
+        <td th:text="${t.getIsAssistant() ? '✅' : ''}"></td>
+        <td th:text="${t.getIsProfessor() ? '✅' : ''}"></td>
+<!--        <td th:text="${t.getIsProfessor()} ? 'Professor' : (${t.getIsAssistant()} ? 'Assistant' : '')"></td>-->
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
