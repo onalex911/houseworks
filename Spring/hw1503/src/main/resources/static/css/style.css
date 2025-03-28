@@ -1,0 +1,21 @@
+.main-table th, .main-table td {
+  padding: 5px 7px;
+}
+.main-table th {
+  background-color: antiquewhite;
+}
+.main-table td {
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+.error {
+  font-size: 24px;
+  color: red;
+}
+
+.qqq {
+  color: orangered;
+}
+
+/*# sourceMappingURL=style.css.map */
