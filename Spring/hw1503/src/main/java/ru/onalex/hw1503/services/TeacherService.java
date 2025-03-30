@@ -1,7 +1,10 @@
 package ru.onalex.hw1503.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -28,11 +31,23 @@ public class TeacherService {
     @Autowired
     private TeacherRepositorySpec teacherRepositorySpec;
 
-    public String getTeachersSpec(Model model,String name,String surname,String position,String startEmpDate,String salaryFrom,String premiumFrom) {
+    public String getTeachersSpec(
+            Model model,
+            String name,
+            String surname,
+            String position,
+            String startEmpDate,
+            String salaryFrom,
+            String premiumFrom,
+            int page,
+            int size,
+            String sortDirection,
+            String sortField) {
         Date startDate = new Date();
         Double salaryFromValue = Double.valueOf(salaryFrom);
         Double premiumFromValue = Double.valueOf(premiumFrom);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        StringBuilder paramsBuilder = new StringBuilder();
 
         try {
             startDate = formatter.parse(startEmpDate);
@@ -41,24 +56,41 @@ public class TeacherService {
 
             if (name != null && !name.isEmpty()) {
                 spec = spec.and(TeacherSpecifications.nameMatches(name));
+                paramsBuilder.append("&name=").append(name);
             }
             if (surname != null && !surname.isEmpty()) {
                 spec = spec.and(TeacherSpecifications.surnameMatches(surname));
+                paramsBuilder.append("&surname=").append(surname);
             }
             if (position != null && !position.isEmpty()) {
                 spec = spec.and(TeacherSpecifications.positionMatches(position));
+                paramsBuilder.append("&position=").append(position);
             }
             if (salaryFromValue >= 1) {
                 spec = spec.and(TeacherSpecifications.salaryGreater(salaryFromValue));
+                paramsBuilder.append("&salary-from=").append(salaryFromValue);
             }
             if (premiumFromValue >= 1) {
                 spec = spec.and(TeacherSpecifications.premiumGreater(premiumFromValue));
+                paramsBuilder.append("&premium-from=").append(premiumFromValue);
             }
             if (startEmpDate != null) {
                 spec = spec.and(TeacherSpecifications.hasEmpoyeeDateAfter(startDate));
+                paramsBuilder.append("&emp-date=").append(startEmpDate);
             }
-            List<Teacher> teachers = teacherRepositorySpec.findAll(spec);
+            Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
+            paramsBuilder.append("&sort-field=").append(sortField);
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+            Page<Teacher> teachers = teacherRepositorySpec.findAll(spec,pageable);
             model.addAttribute("teachers", teachers);
+            model.addAttribute("page", page);
+            model.addAttribute("pages", teachers.getTotalPages());
+            model.addAttribute("size", size);
+            model.addAttribute("params", paramsBuilder.toString());
+
+            long count = teacherRepositorySpec.count(spec);
+            model.addAttribute("count", count);
         } catch (ParseException e) {
             model.addAttribute("error","Ошибка преобразования: " + e.getMessage());
         }

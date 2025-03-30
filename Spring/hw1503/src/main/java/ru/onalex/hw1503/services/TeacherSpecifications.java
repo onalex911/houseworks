@@ -48,9 +48,4 @@ public class TeacherSpecifications {
             return (root, query, criteriaBuilder) ->
                     criteriaBuilder.greaterThan(root.get("employmentDate"), empDate);
         }
-
-
-
-
-
 }

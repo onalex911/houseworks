@@ -20,37 +20,12 @@ public class HomeController {
     @Autowired
     private TeacherService teacherService;
 
-//    @GetMapping
-//    public String home(Model model) {
-//        return teacherService.getHomePage(model);
-//    }
     @GetMapping()
     public String home(Model model,
                        @RequestParam(name="page",required = false ,defaultValue = "0") int page,
                        @RequestParam(name="size",required = false ,defaultValue = "10") int size) {
         PageRequest pageable = PageRequest.of(page, size);
         return teacherService.getTeacherPage(model,pageable);
-    }
-
-//    @GetMapping()()
-//        public String homeFiltered(Model model,
-//                           @RequestParam(name="page",required = false ,defaultValue = "0") int page,
-//                           @RequestParam(name="size",required = false ,defaultValue = "10") int size) {
-//            PageRequest pageable = PageRequest.of(page, size);
-//            return teacherService.getTeacherPage(model,pageable);
-//        }
-
-    @GetMapping("/sorted/{field}")
-    public String getSorted(Model model, @PathVariable String field) {
-        return teacherService.getTeachersSorted(model, field);
-    }
-    @GetMapping("/sortedby/{field}")
-    public String getSortedBy(Model model, @PathVariable String field) {
-        return teacherService.getTeachersSortedBy(model, field);
-    }
-    @GetMapping("/filtered-by/{field}/{substring}")
-    public String getSorted(Model model, @PathVariable String field,@PathVariable String substring) {
-        return teacherService.getTeachersFilteredOrderedBy(model, field, substring);
     }
 
     @GetMapping("/filter")
@@ -60,7 +35,13 @@ public class HomeController {
         @RequestParam(name = "position", defaultValue = "",required = false) String position,
         @RequestParam(name = "emp-date",defaultValue = "1900-01-01",required = false) String empDate,
         @RequestParam(name = "salary-from",defaultValue = "1.00",required = false) String salaryFrom,
-        @RequestParam(name = "premium-from",defaultValue = "1.00",required = false) String premiumFrom){
-            return teacherService.getTeachersSpec(model, name, surname, position, empDate, salaryFrom, premiumFrom);
+        @RequestParam(name = "premium-from",defaultValue = "1.00",required = false) String premiumFrom,
+          @RequestParam(name = "page", required = false ,defaultValue = "0") int page,
+          @RequestParam(name = "size", required = false ,defaultValue = "10") int size,
+          @RequestParam(name = "sort-dir", required = false ,defaultValue = "ASC") String sortDirection,
+          @RequestParam(name = "sort-field", required = false ,defaultValue = "id") String sortField){
+
+            return teacherService.getTeachersSpec(
+                    model, name, surname, position, empDate, salaryFrom, premiumFrom, page,size,sortDirection,sortField);
     }
 }
