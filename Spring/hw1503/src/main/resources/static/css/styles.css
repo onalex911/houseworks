@@ -1,4 +1,6 @@
-
+.main-table{
+    width:100%;
+}
 .main-table th,td{padding:5px 7px;}
 .main-table th{
         background-color: antiquewhite;
@@ -11,4 +13,21 @@
 .error{
     font-size: 24px;
     color: red;
+}
+
+.container{
+    width:1024px;
+}
+.controls{
+    display: flex;
+    justify-content: center;
+}
+.controls .pg-button{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid darkblue;
+    text-align: center;
+    margin: 2px;
+    align-content: center;
 }
