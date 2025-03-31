@@ -12,24 +12,56 @@
 <body style="margin:30px">
 <div class="container" >
     <h1 class="qqq">List of teachers</h1>
-    <div class="error"><p th:text="${error}"></p></div>
-    <div class="founs-box" th:if="${count} != null" th:text="'Found ' + ${count} + ' records'"></div>
-    <table class="table">
+
+
+    <form method="get" action="home/filter">
+        <div class="error"><p th:text="${error}"></p></div>
+        <div class="top">
+            <div class="found-box" th:if="${count} != null" th:text="'Found ' + ${count} + ' records'"></div>
+        </div><table class="table">
         <thead>
+        <tr><td colspan="9">
+            <div class="right-btn">
+                <button class="btn btn-primary" type="button" onclick="reload()">Apply</button>
+                <button class="btn btn-secondary" type="reset" onclick="document.location.href = '/home/filter'">Reset</button>
+            </div>
+        </td></tr>
         <tr>
-            <th><a href="http://localhost:8081/home/sorted/id">Id</a></th>
-            <th><a href="http://localhost:8081/home/sorted/name">Name</a></th>
-            <th><a href="http://localhost:8081/home/sorted/surname">Surname</a></th>
-            <th><a href="http://localhost:8081/home/sorted/position">Position</a></th>
-            <th><a href="http://localhost:8081/home/sorted/empdate">Employment date</a></th>
-            <th><a href="http://localhost:8081/home/sorted/salary">Salary</a></th>
-            <th><a href="http://localhost:8081/home/sorted/premium">Premium</a></th>
+            <th><a th:href="@{${params}+'&sort-field=id'}">Id</a></th>
+            <th><a th:href="@{${params}+'&sort-field=name'}">Name</a>
+                <div>
+                    <input type="text" class="filter form-control-sm" id="name" name="name" th:value="${name}">
+                </div>
+            </th>
+            <th><a th:href="@{${params}+'&sort-field=surname'}">Surname</a>
+                <div>
+                    <input type="text" class="filter form-control-sm" id="surname" name="surname" th:value="${surname}">
+                </div></th>
+            <th><a th:href="@{${params}+'&sort-field=position'}">Position</a>
+                <div>
+                    <input type="text" class="filter form-control-sm" id="position" name="position" th:value="${position}">
+                </div></th>
+            <th><a th:href="@{${params}+'&sort-field=employmentDate'}">Employment date</a>
+                <div>
+                    <label class="sm" for="empdate">past...</label>
+                    <input type="text" class="filter form-control-sm" id="empdate" name="empdate" placeholder="YYYY-MM-DD" th:value="${empdate}">
+                </div></th>
+            <th><a th:href="@{${params}+'&sort-field=salary'}">Salary</a>
+                <div>
+                    <label class="sm" for="salaryfrom">from...</label>
+                    <input type="text" class="filter form-control-sm" id="salaryfrom" name="salaryfrom" th:value="${salaryfrom}">
+                </div></th>
+            <th><a th:href="@{${params}+'&sort-field=premium'}">Premium</a>
+                <div>
+                    <label class="sm" for="premiumfrom">from...</label>
+                    <input type="text" class="filter form-control-sm" id="premiumfrom" name="premiumfrom" th:value="${premiumfrom}">
+                </div></th>
             <th>Assistant</th>
             <th>Professor</th>
-    <!--        <th>Assist/Prof</th>-->
-        </tr>
+          </tr>
         </thead>
         <tbody>
+    </form>
         <tr th:each="t : ${teachers.content}">
             <td th:text="${t.id}"></td>
             <td th:text="${t.name}"></td>
@@ -40,26 +72,34 @@
             <td th:text="'$'+${t.premium}"></td>
             <td class="centered" th:text="${t.isAssistant ? '✅' : ''}"></td>
             <td class="centered" th:text="${t.isProfessor ? '✅' : ''}"></td>
-    <!--        <td th:text="${t.getIsProfessor()} ? 'Professor' : (${t.getIsAssistant()} ? 'Assistant' : '')"></td>-->
-        </tr>
+            </tr>
         </tbody>
     </table>
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" th:if="${count} >= ${size}">
         <ul class="pagination justify-content-center" th:each="i : ${#numbers.sequence(1,pages)}">
-<!--            <li class="page-item"><a class="page-link" href="#">Previous</a></li>-->
-            <li class="page-item" th:classappend="${i-1 == page}? 'active'"><a th:href="@{'/home/filter?'+${params}+'&page='+${(i-1)}}" th:text="${i}">1</a></li>
-
-<!--            <li class="page-item"><a class="page-link" href="#">Next</a></li>-->
+            <li class="page-item" th:classappend="${i-1 == page}? 'active'"><a th:href="@{${params}+${sortparam}+'&page='+${(i-1)}}" th:text="${i}">1</a></li>
         </ul>
     </nav>
-<!--    <div class="controls">-->
-        <span th:text="${params}"></span>
-        <span th:text="${pages}"></span>
-<!--        <div class="pg-button" th:each="i : ${#numbers.sequence(1,pages)}">-->
-<!--            <a th:href="@{'/home/filter?'+${params}+'&page='+${(i-1)}}" th:text="${i}"></a>-->
-<!--        </div>-->
-<!--    </div>-->
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    //формируем запрос только из указанных фильтров
+    function reload(){
+        let params = '';
+        let fields = document.querySelectorAll('.filter');
+        console.log(fields.length);
+        let i = 0;
+        for(let field of fields){
+            if(field.value != ''){
+                if(i > 0){
+                    params += "&"
+                }
+                params += field.name + "=" + field.value;
+            }
+            i++;
+        }
+        document.location.href = "/home/filter?"+params;
+    }
+</script>
 </body>
 </html>

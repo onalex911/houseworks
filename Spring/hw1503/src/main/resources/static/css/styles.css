@@ -54,3 +54,16 @@ nav .page-item{
 nav .page-item a{
     text-decoration: none;
 }
+.top{
+    display:flex;
+}
+.top .found-box{
+    justify-content: start;
+}
+.right-btn{
+    display: flex;
+    justify-content: end;
+}
+.right-btn button{
+    margin:0 0 0 20px;
+}

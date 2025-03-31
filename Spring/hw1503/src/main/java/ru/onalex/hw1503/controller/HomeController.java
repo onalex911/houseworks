@@ -20,22 +20,14 @@ public class HomeController {
     @Autowired
     private TeacherService teacherService;
 
-    @GetMapping()
-    public String home(Model model,
-                       @RequestParam(name="page",required = false ,defaultValue = "0") int page,
-                       @RequestParam(name="size",required = false ,defaultValue = "10") int size) {
-        PageRequest pageable = PageRequest.of(page, size);
-        return teacherService.getTeacherPage(model,pageable);
-    }
-
     @GetMapping("/filter")
     public String getFilteredSpec(Model model,
         @RequestParam(name = "name", defaultValue = "",required = false) String name,
         @RequestParam(name = "surname", defaultValue = "",required = false) String surname,
         @RequestParam(name = "position", defaultValue = "",required = false) String position,
-        @RequestParam(name = "emp-date",defaultValue = "1900-01-01",required = false) String empDate,
-        @RequestParam(name = "salary-from",defaultValue = "1.00",required = false) String salaryFrom,
-        @RequestParam(name = "premium-from",defaultValue = "1.00",required = false) String premiumFrom,
+        @RequestParam(name = "empdate",defaultValue = "1900-01-01",required = false) String empDate,
+        @RequestParam(name = "salaryfrom",defaultValue = "1.00",required = false) String salaryFrom,
+        @RequestParam(name = "premiumfrom",defaultValue = "1.00",required = false) String premiumFrom,
           @RequestParam(name = "page", required = false ,defaultValue = "0") int page,
           @RequestParam(name = "size", required = false ,defaultValue = "10") int size,
           @RequestParam(name = "sort-dir", required = false ,defaultValue = "ASC") String sortDirection,
