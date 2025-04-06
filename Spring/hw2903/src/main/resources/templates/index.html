@@ -34,7 +34,7 @@
         </thead>
         <tbody>
     <tr th:each="t : ${teachers}" th:attr="data-id=${t.id}">
-            <td th:text="${t.id}"></td>
+<!--            <td th:text="${t.id}"></td>-->
             <td th:text="${t.name}"></td>
             <td th:text="${t.surname}"></td>
             <td th:text="${t.position}"></td>
@@ -45,7 +45,8 @@
             <td class="centered" th:text="${t.isAssistant ? '✅' : ''}"></td>
             <td class="centered" th:text="${t.isProfessor ? '✅' : ''}"></td>
 <!--            <td><a class="btn-del" th:href="@{/home/delete/{id}(id=${t.id})}">🗑️</a></td>-->
-            <td><a class="btn-del" th:onclick="'deleteTeacher('+${t.id}+')'">🗑️</a></td>
+            <td><a class="btn-edit" th:href="@{/home/edit/{id}(id=${t.id})}" title="Edit teacher">✏️️</a></td>
+            <td><a class="btn-del" th:onclick="'deleteTeacher('+${t.id}+')'" title="Delete teacher">🗑️</a></td>
             </tr>
         </tbody>
     </table>
@@ -61,30 +62,13 @@
             });
 
             if (response.ok) {
-                console.log("Udalen");
-                console.log(await response.text())
+                //console.log("Udalen");
                 document.querySelector(`tr[data-id='${id}']`).remove();
+                alert(await response.text())
             } else {
                 console.log("error")
             }
         }
-    }
-    //формируем запрос только из указанных фильтров
-    function reload(){
-        let params = '';
-        let fields = document.querySelectorAll('.filter');
-        console.log(fields.length);
-        let i = 0;
-        for(let field of fields){
-            if(field.value != ''){
-                if(i > 0){
-                    params += "&"
-                }
-                params += field.name + "=" + field.value;
-            }
-            i++;
-        }
-        document.location.href = "/home/filter?"+params;
     }
 </script>
 </body>

@@ -1,16 +1,12 @@
 package ru.onalex.hw2903.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-//import ru.onalex.hw1503.DTO.TeacherDTO;
 
 @Entity
 @Table(name = "Teachers")
@@ -32,15 +28,15 @@ public class Teacher {
     private String surname;
 
     @Column(name = "Position", columnDefinition = "nvarchar(max)")
-    @NotBlank
+    @NotBlank(message = "Position must not be blank!")
     @NotNull
     private String position;
 
     @Column(name = "EmploymentDate")
     @NotNull
-//    private Date employmentDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    @Min(value = 946666800L) //2000-01-01 00:00:00
+    @PastOrPresent(message="Employment date must be in the past or present")
+//    private Date employmentDate;
     private LocalDate employmentDate;
 
     @Column(name = "IsAssistant")
@@ -78,12 +74,4 @@ public class Teacher {
     public Teacher() {
 
     }
-
-
-//    @OneToOne(mappedBy = "teacher")
-//    private Lecture lecture;
-
-//    public TeacherDTO getDTO(){
-//        return new TeacherDTO(id,employmentDate,isAssistant,isProfessor,name,position,premium,salary,surname);
-//    }
 }

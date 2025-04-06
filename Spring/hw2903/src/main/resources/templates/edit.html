@@ -3,24 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${title}">My First MVC project</title>
-<!--    <link rel="stylesheet" href="/hw1503/css/styles.css">-->
-
+    <title th:text="${title}">Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body style="margin:30px">
-<div class="container" >
-    <h1 class="qqq">Add a teacher</h1>
+<body>
+<div class="container">
+<h1>Add a teacher</h1>
+<form th:action="@{/home/edit/{id}(id=${teacher.getId()})}" method="post" th:object="${teacher}">
+    <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="id" th:field="*{id}">
+    <br>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="name-label">Name :</span>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" th:field="*{name}">
+        <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="surname-label">Surname :</span>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" th:field="*{surname}">
+        <span style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></span>
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="position-label">Position :</span>
+        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" th:field="*{position}">
+        <span style="color: red" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></span>
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="employmentDate-label">Employment Date :</span>
+        <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" th:field="*{employmentDate}">
+        <span style="color: red" th:if="${#fields.hasErrors('employmentDate')}" th:errors="*{employmentDate}"></span>
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="salary-label">Salary :</span>
+        <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" th:field="*{salary}">
+        <span style="color: red" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></span>
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="premium-label">Premium :</span>
+        <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" th:field="*{premium}">
+        <span style="color: red" th:if="${#fields.hasErrors('premium')}" th:errors="*{premium}"></span>
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-text">is Assistant:&nbsp;&nbsp;
+            <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Assistant" th:field="*{isAssistant}">
+        </div>
+<!--        <input type="text" class="form-control" aria-label="Text input with checkbox">-->
+        <span style="color: red" th:if="${#fields.hasErrors('isAssistant')}" th:errors="*{isAssistant}"></span><br>
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-text">is Professor:&nbsp;&nbsp;
+            <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Professor" th:field="*{isProfessor}">
+        </div>
+<!--        <input type="text" class="form-control" aria-label="Text input with checkbox">-->
+        <span style="color: red" th:if="${#fields.hasErrors('isProfessor')}" th:errors="*{isProfessor}"></span><br>
+    </div>
 
 
-    <form method="post" action="home/edit">
-        <input hidden name="id">
-    </form>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+
+</form>
+<div th:if="${error}" th:text="${error}" style="color: red">
+
+
+</div>
+<p><a th:href="@{/home}">Back to list</a></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script>
-
-</script>
 </body>
 </html>

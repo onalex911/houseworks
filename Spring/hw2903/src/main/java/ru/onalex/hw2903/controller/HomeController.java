@@ -8,14 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.onalex.hw2903.entity.Teacher;
-import ru.onalex.hw2903.models.TeacherModel;
 import ru.onalex.hw2903.repository.TeacherRepository;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,53 +31,32 @@ public class HomeController {
 
     List<Teacher> teachers = new ArrayList<>();
 
-//    public HomeController(Faker faker, TeacherRepository teacherRepository) {
-//        this.faker = faker;
-//        this.teacherRepository = teacherRepository;
-//
-//        try {
-//            initData();
-//
-//        }catch (ParseException e){
-//            System.out.println(e.getMessage());
-//        }
-//    }
+    private void initData() {
 
-    private void initData() throws ParseException {
-//        if (teacherRepository.count()==0){
-//        List<Teacher> teachers = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date startDate = sdf.parse("01/01/2000");
-        Date endDate = new Date();
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = LocalDate.of(2020,1,1);
         TimeUnit timeUnit = TimeUnit.DAYS;
         for (int i = 0; i < 10; i++) {
             String name = faker.name().name();
             String lastName = faker.name().lastName();
             String position = faker.company().profession();
-//            Date empDate = faker.date().past((int)(ChronoUnit.DAYS.between( (Temporal) startDate, (Temporal) endDate)),timeUnit);
-//            Date empDate = faker.date().birthday();
-            Date empDate = faker.date().past();
-            LocalDate empDateLD = dateToLocalDate(empDate);
-
+            Date empDateTmp = faker.date().past((int)(ChronoUnit.DAYS.between(startDate,endDate)),timeUnit);
+            LocalDate empDate = dateToLocalDate(empDateTmp);
             double salary = Double.parseDouble(faker.commerce().price(10000.0,99999.0).replace(',','.'));
             double premuim = Double.parseDouble(faker.commerce().price(1000.0,9999.0).replace(',','.'));
             boolean isAssist = faker.bool().bool();
             boolean isProf = faker.bool().bool();
-            teachers.add(new Teacher(name,lastName,position,empDateLD,isAssist,isProf,salary,premuim));
+            teachers.add(new Teacher(name,lastName,position,empDate,isAssist,isProf,salary,premuim));
         }
-            teacherRepository.saveAll(teachers);
-//        return teachers;
+
+        teacherRepository.saveAll(teachers);
     }
 
     @GetMapping("/generate")
     public String generate(Model model) {
-        try {
-            initData();
-            model.addAttribute("teachers", teachers);
-        }catch (ParseException e){
-            model.addAttribute("error",e.getMessage());
-        }
-            return "index";
+        initData();
+        model.addAttribute("teachers", teachers);
+        return "index";
     }
 
     @GetMapping
@@ -95,11 +69,13 @@ public class HomeController {
     @ResponseBody
     @DeleteMapping("/delete/{id}")
     public  String removePersonAjax(@PathVariable int id){
-        Optional<Teacher> person = teacherRepository.findById(id);
-//        Person person = personRepository.getById(id);
-        teacherRepository.delete(person.get());
-        String answer = "Person deleted => " + person.isPresent();
-        return answer;
+        Optional<Teacher> teacher = teacherRepository.findById(id);
+        if(teacher.isPresent()) {
+            teacherRepository.delete(teacher.get());
+            return "Teacher => " + teacher.get().getName() + " is deleted";
+        }else{
+            return "Teacher with id=" + id + " is not found!";
+        }
     }
 
     @GetMapping("/create")
@@ -111,26 +87,48 @@ public class HomeController {
 
     @PostMapping("/create")
     public String create(@Valid Teacher teacher, BindingResult bindir, Model model){
-        ///////////////////////////////////////////////////////////////////
-
-//        bindir.hasErrors()-> kakie libo osibki
-//        bindir.hasFieldErrors("age")-> konkretnaya osibka
-//        bindir.getAllErrors("age")-> spisok vsex osibok
-//        bindir.getFieldErrors("age")-> soobsenie konkretnoy osibok
-//        bindir.getFieldError("age")-> 1 soobsenie konkretnoy osibok
-//         bindir.reject("errorrrrrrrr");
-//         bindir.reject("age","errorrrrrrrr");
 
         if (bindir.hasErrors()){
             model.addAttribute("error","Check your input");
             model.addAttribute("teacher",teacher);
-//            model.addAttribute("errors",bindir.getAllErrors());
             return "create";
         }
         teacherRepository.save(teacher);
         model.addAttribute("title","Home Page");
         model.addAttribute("teachers",teacherRepository.findAll());
         return "index";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(Model model, @PathVariable int id){
+        Teacher teacher = teacherRepository.findById(id).get();
+        model.addAttribute("title","Create Page");
+        model.addAttribute("teacher",teacher);
+        return "edit";
+    }
+
+    @PutMapping("/edit/{id}")
+    public String edit(@Valid Teacher teacher, BindingResult bindir, Model model,@PathVariable int id){
+        LocalDate minDate = LocalDate.of(2000, 1, 1); // Установите минимальную дату
+        String errors = "";
+
+        if (bindir.hasErrors()){
+            model.addAttribute("error","Check your input");
+            model.addAttribute("teacher",teacher);
+            return "edit";
+        }
+        if(teacher.getEmploymentDate().isBefore(minDate)) {
+            errors += "Date of birth cannot be before " + minDate;
+        }
+
+        if(teacherRepository.findById(id).isPresent() && errors.isEmpty()){
+            teacherRepository.save(teacher);
+            model.addAttribute("title","Home Page");
+            model.addAttribute("teachers",teacherRepository.findAll());
+            return "index";
+        }
+        model.addAttribute("error",errors);
+        return "edit";
     }
 
 }
