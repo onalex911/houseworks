@@ -11,7 +11,7 @@
 </head>
 <body style="margin:30px">
 <div class="container" >
-    <h1 class="qqq">List of teachers</h1>
+    <h1 class="qqq">List of teachers <a title="Add a teacher" th:href="@{/home/create}">➕🧑‍🏫</a></h1>
 
 
     <form method="get" action="home/filter">
@@ -38,8 +38,8 @@
             <td th:text="${t.name}"></td>
             <td th:text="${t.surname}"></td>
             <td th:text="${t.position}"></td>
-<!--            <td th:text="${t.employmentDate}"></td>-->
-            <td th:text="${#dates.format(t.employmentDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${t.employmentDate}"></td>
+<!--            <td th:text="${#dates.format(t.employmentDate, 'yyyy-MM-dd')}"></td>-->
             <td th:text="'$'+${t.salary}"></td>
             <td th:text="'$'+${t.premium}"></td>
             <td class="centered" th:text="${t.isAssistant ? '✅' : ''}"></td>

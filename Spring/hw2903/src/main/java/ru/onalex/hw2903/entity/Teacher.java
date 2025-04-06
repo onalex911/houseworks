@@ -1,12 +1,14 @@
 package ru.onalex.hw2903.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 //import ru.onalex.hw1503.DTO.TeacherDTO;
 
@@ -35,9 +37,11 @@ public class Teacher {
     private String position;
 
     @Column(name = "EmploymentDate")
-//    @Min(value = "1990-01-01")
     @NotNull
-    private Date employmentDate;
+//    private Date employmentDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+//    @Min(value = 946666800L) //2000-01-01 00:00:00
+    private LocalDate employmentDate;
 
     @Column(name = "IsAssistant")
     @NotNull
@@ -58,7 +62,7 @@ public class Teacher {
     @Positive(message = "Salary must be greater than 0!")
     private double salary;
 
-    public Teacher(String name, String surname, String position, Date empDate, boolean isAssist, boolean isProfessor, double salary, double premium) {
+    public Teacher(String name, String surname, String position, LocalDate empDate, boolean isAssist, boolean isProfessor, double salary, double premium) {
             this.id = id;
             this.employmentDate = empDate;
             this.isAssistant = isAssist;
