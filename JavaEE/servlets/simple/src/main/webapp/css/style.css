@@ -1,0 +1,23 @@
+body {
+    margin:0;
+    padding:0;
+    font-family: Roboto, Arial, sans-serif;
+}
+.container{
+    margin:20px;
+    background-color: antiquewhite;
+    padding:15px 30px;
+}
+.ui-elems{
+    display:flex;
+    align-items: center;
+    flex-flow: column;
+    width: 100%;
+    border: 1px solid #c93;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+.ui-elem, input, button{
+    padding:5px;
+    font-size: 16px;
+}

@@ -1,0 +1,87 @@
+$controls-width:30px;
+body{
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto',Arial, Helvetica, sans-serif;
+}
+
+.container{
+      margin:20px;
+      padding:20px 30px;
+     background-color: antiquewhite; 
+     .calculator{
+           width:100%;
+           border:1px solid #c93;
+           padding-top:10px;
+           padding-bottom:25px;
+           .top{
+                  display: flex;            
+               flex-direction: row;               
+               justify-content:center;
+               .operands{
+                  display: flex;            
+                  // flex-wrap: nowrap;
+                  flex-direction:column;
+                  justify-content: center;
+                  // border:1px solid greenyellow;
+                  // height:200px;
+                  .operand{
+                        display: flex;                                    
+                        margin:10px;
+                        label{ 
+                              text-align: right;
+                              width:100px;
+                              margin:10px;
+                              // border:1px solid orange;
+                        }
+                  }
+                  width:800px;
+                  input{
+                        width:calc(100% - $controls-width);
+                        font-size:26px;
+                        text-align: right;
+                  }
+            }
+                  .controls{                  
+                  // height:200px;
+                  // border:1px solid red;                  
+                  // width:200px;
+                  // .control{}
+                  .controls-list{
+                        margin:0;
+                        padding:10px;
+                        list-style: none;
+                        font-size: large;
+                        font-weight: bold;
+                        display: flex;
+                        flex-direction: column;
+                        li{
+                              display: flex;
+                              label{
+                                    display: block;
+                                    margin:3px;
+                                    // border:1px solid violet;
+                                    width:$controls-width;
+                                    text-align: center;}
+                              }
+                        }
+                  }
+            }
+            .bottom{
+                  display: flex;            
+                  flex-direction: row;               
+                  justify-content:center;
+                  button{
+                        display: block;
+                        font-size: 26px;
+                        margin-left:10px;
+                        #but-equals{
+                              width:300px;
+                        }
+                        #but-reset{
+                              width:120px;
+                        }
+                  }
+            }
+      }
+}

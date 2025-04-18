@@ -1,0 +1,4 @@
+1	Petr	Pervyi	23-45-67-89-09
+2	Petr	Vtoroy	+1-23-45-67-89-08
+3	Petr	Tretij	+1-23-45-67-89-07
+4	Petr	Chetvertyi	+1-23-45-67-89-06

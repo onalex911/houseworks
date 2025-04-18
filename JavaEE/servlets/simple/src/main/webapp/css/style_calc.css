@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
+.container {
+    margin: 20px;
+    padding: 20px 30px;
+    background-color: antiquewhite;
+}
+.container .calculator {
+    width: 100%;
+    border: 1px solid #c93;
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+.container .calculator .top {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.container .calculator .top .operands {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 800px;
+}
+.container .calculator .top .operands .operand {
+    display: flex;
+    margin: 10px;
+}
+.container .calculator .top .operands .operand label {
+    text-align: right;
+    width: 100px;
+    margin: 10px;
+}
+.container .calculator .top .operands input {
+    width: calc(100% - 30px);
+    font-size: 26px;
+    text-align: right;
+}
+.container .calculator .top .controls .controls-list {
+    margin: 0;
+    padding: 10px;
+    list-style: none;
+    font-size: large;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+.container .calculator .top .controls .controls-list li {
+    display: flex;
+}
+.container .calculator .top .controls .controls-list li label {
+    display: block;
+    margin: 3px;
+    width: 30px;
+    text-align: center;
+}
+.container .calculator .bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.container .calculator .bottom button {
+    display: block;
+    font-size: 26px;
+    margin-left: 10px;
+}
+.container .calculator .bottom button #but-equals {
+    width: 300px;
+}
+.container .calculator .bottom button #but-reset {
+    width: 120px;
+}/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,37 @@
+7	Boriv	Aritva	+1 (123) 435 67 89
+8	Borit	Britva	+1 (124) 435 67 89
+9	Boris	Critva	+1 (125) 435 67 89
+10	Borir	Dritva	+1 (126) 435 67 89
+11	Boriq	Eritva	+1 (127) 435 67 89
+12	Borip	Fritva	+1 (128) 435 67 89
+13	Borio	Gritva	+1 (129) 435 67 89
+14	Qorin	Hritva	+1 (130) 435 67 89
+15	Borim	Iritva	+1 (131) 435 67 89
+16	Eoril	Jritva	+1 (132) 435 67 89
+17	Borik	Kritva	+1 (122) 435 67 89
+18	Borij	Lritva	+1 (143) 435 67 89
+19	Zorii	Mritva	+1 (192) 435 67 89
+20	Borih	Nritva	+1 (183) 435 67 89
+21	Borig	Oritva	+1 (174) 435 67 89
+22	Borif	Pritva	+1 (165) 435 67 89
+23	Morie	Qritva	+1 (156) 435 67 89
+24	Borid	Rritva	+1 (147) 435 67 89
+25	Boric	Sritva	+1 (138) 435 67 89
+26	Borib	Tritva	+1 (129) 435 67 89
+27	Boria	Uritva	+1 (110) 435 67 89
+28	Boris	Vritva	+1 (101) 435 67 89
+29	Lvan	Wertov	+7 912 234-56-73
+30	Iwan der	Zertov	001
+31	Bolvas	Hertov Zdunayskiy	009
+32	Lesly	Nilsen	+1 (234) 567-89-90
+33	Avan	Yertov	89132345678
+34	Bvan	Xertov	89142345678
+35	Dvan	Wertov	89172345678
+36	Evan	Mertov	89162345678
+37	Han	Kertov	89122345679
+38	Zvan	Bertov	89122345677
+39	Uvan	Certov	89122345676
+40	Yvan	Nertov	89122345675
+41	Kvan	Tertov	89122345674
+42	Dart	Weider	+1 (234) 567 89 00
+43	Lesly	Wilsen	+8 712 342-12-51

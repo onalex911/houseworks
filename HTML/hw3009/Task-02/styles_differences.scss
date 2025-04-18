@@ -1,0 +1,78 @@
+body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 0;
+      margin: 0;
+      font-size: 1.1rem;
+      color: white;
+}
+.container{
+      h1{
+            font-size: 3.0rem;
+            width:100%;
+            @media (max-width:599px){
+                  font-size: 2.5rem;
+            }
+      }
+      background-color: #014242;
+      width: calc(100% - 200px);
+      padding:100px;
+      @media (max-width:599px){
+            padding:50px;
+            width: calc(100% - 100px);
+      }
+
+      .breadcrumbs{
+            margin:0;            
+            ul{
+                  list-style: none;
+                  margin:0;padding:0;
+                  li{
+                        display: inline;
+                        color: rgba(255,255,255,0.5);
+                        a{
+                              color: rgba(255,255,255,0.5);
+                              text-decoration: none;
+                        }
+                        a:hover{
+                              color: rgba(255,255,255,1.0);
+                              text-decoration: underline;
+                        }
+                  }
+            }
+      }
+      .wrapper{
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            .avatar{
+                  margin: 0 20px 0 0;
+                  img{
+                        width:100px;
+                        height:100px;
+                  }
+                  
+            }
+            .stats{
+                  display: flex;
+                  flex-flow: row nowrap;
+                  align-items: flex-start;
+                  justify-content: space-around;
+                  .block{
+                        font-size: 0.9rem;
+                        width:25%;
+                        margin:0 15px 15px 0;
+                        .head{
+                              color:rgba(255,255,255,0.5);
+                        }
+                  }
+                  @media (max-width:599px){
+                        flex-flow: row wrap;
+                        align-items: flex-start;
+                        
+                        .block{
+                              width:40%;
+                        }
+                  }
+            }
+      }
+}

@@ -1,0 +1,20 @@
+package org.example.models;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Student {
+    private long id;
+    private String firstName;
+    private String lastName;
+
+    private List<Course> courses; //список курсов, на которые записан студент
+}
